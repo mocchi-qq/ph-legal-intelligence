@@ -17,9 +17,8 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "paths": {
-      "@phli/*": ["packages/*/src"]
+      "@phli/*": ["./packages/*/src"]
     }
   },
   "exclude": ["node_modules", "dist", "build"]
