@@ -1,0 +1,21 @@
+{
+  "name": "@phli/benchmark",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "run": "node dist/index.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "@phli/legal-schema": "workspace:*",
+    "@phli/citation-engine": "workspace:*",
+    "@phli/legal-search": "workspace:*",
+    "@phli/ai-orchestrator": "workspace:*"
+  }
+}
