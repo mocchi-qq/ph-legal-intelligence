@@ -1,0 +1,57 @@
+{
+  "comparison": {
+    "Anycase.ai": {
+      "coverage": "Philippines-only: 160,000+ laws, cases, issuances; daily updates",
+      "ai_features": "Semantic search, AI legal analysis with citations, AI drafting (DocDraft), document review",
+      "pricing": "Free tier; Pro ₱999/month; Education ₱599/month",
+      "api_availability": "No public API documented",
+      "philippines_focus": "Primary focus — built specifically for Philippine legal research"
+    },
+    "LexisNexis": {
+      "coverage": "50-state US federal/state case law, statutes, regulations; minimal Philippines coverage",
+      "ai_features": "Lexis+ AI with Protégé personalized assistant, AI-assisted research, document analysis",
+      "pricing": "From $114/month (Solo); enterprise quotes required",
+      "api_availability": "Enterprise API only (LexisNexis API)",
+      "philippines_focus": "Secondary/incidental — Philippines materials not a focus"
+    },
+    "Westlaw": {
+      "coverage": "Comprehensive US federal/state case law; minimal Philippines coverage",
+      "ai_features": "Westlaw Edge AI-Assisted Research, KeyCite citator, Practical Law",
+      "pricing": "From $155.35/month for AI-Assisted Research",
+      "api_availability": "Enterprise API only (Westlaw API)",
+      "philippines_focus": "Secondary/incidental — Philippines materials not a focus"
+    },
+    "vLex": {
+      "coverage": "1B+ documents from 100+ countries; Philippines included but not optimized",
+      "ai_features": "Vincent AI legal research assistant, global document analysis",
+      "pricing": "No public pricing; quotes $69–$399/user/month; free via 40+ bar memberships",
+      "api_availability": "Enterprise API only",
+      "philippines_focus": "Present in corpus but not Philippines-optimized"
+    },
+    "Harvey": {
+      "coverage": "Contract and transactional law focus; litigation/trial prep not supported; PH-specific unclear",
+      "ai_features": "Custom legal LLM, contract analysis, due diligence, research, drafting, Word integration",
+      "pricing": "Custom enterprise only; reported 20-seat minimum, 12-month contracts",
+      "api_availability": "Enterprise integrations (Microsoft Word, etc.)",
+      "philippines_focus": "Not a stated focus; training data scope unclear for PH law"
+    },
+    "ChatGPT": {
+      "coverage": "General knowledge up to training cutoff; no authoritative legal corpus",
+      "ai_features": "General reasoning, file analysis, code interpreter, web browsing, custom GPTs",
+      "pricing": "Plus $23/month, Pro $103/month",
+      "api_availability": "OpenAI API (pay-per-token)",
+      "philippines_focus": "No Philippines-specific legal grounding; 17–34% citation hallucination rate"
+    },
+    "Philippine legal databases": {
+      "coverage": "Official sources: SC decisions (1901+), statutes, presidential issuances, laws",
+      "ai_features": "None — no AI-assisted search, analysis, or drafting",
+      "pricing": "Free (SC E-Library, LawPhil, Official Gazette); advanced LawPhil features paid",
+      "api_availability": "No public API",
+      "philippines_focus": "Official primary sources for Philippine law"
+    }
+  },
+  "metadata": {
+    "retrieval_date": "2026-11-09",
+    "note": "All data from public sources. Pricing converted to USD where necessary. Features may change."
+  }
+}
