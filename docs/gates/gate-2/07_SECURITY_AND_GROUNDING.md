@@ -39,12 +39,13 @@
 
 ## 4. Findings
 
-| ID    | Severity | Finding                                                                                             | Disposition                                                                |
-| ----- | -------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| G2-S1 | Medium   | PDF extraction shells out to Poppler; a malicious PDF is untrusted input to that process            | Timeout, size cap, private temp file, no shell. Sandboxing not implemented |
-| G2-S2 | Medium   | Support remains lexical without an annotation; a reworded claim can pass or a valid paraphrase fail | Classified as `LEXICAL_ONLY`; not presented as entailment                  |
-| G2-S3 | Low      | Acquisition transport is absent, so redirect/truncation/retry behaviour is unverified               | Recorded as not implemented; no claim                                      |
-| G2-S4 | Info     | `robots.txt` was the only source evidence gathered                                                  | Counsels packet still requires full terms review                           |
+| ID    | Severity | Finding                                                                                                                           | Disposition                                                                |
+| ----- | -------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| G2-S1 | Medium   | PDF extraction shells out to Poppler; a malicious PDF is untrusted input to that process                                          | Timeout, size cap, private temp file, no shell. Sandboxing not implemented |
+| G2-S2 | Medium   | Support remains lexical without an annotation; a reworded claim can pass or a valid paraphrase fail                               | Classified as `LEXICAL_ONLY`; not presented as entailment                  |
+| G2-S3 | Low      | Acquisition transport is absent, so redirect/truncation/retry behaviour is unverified                                             | Recorded as not implemented; no claim                                      |
+| G2-S4 | Info     | `robots.txt` was the only source evidence gathered                                                                                | Counsels packet still requires full terms review                           |
+| G2-S5 | Low      | SSRF guard is hostname-textual: no DNS resolution, no IPv4-mapped IPv6 or decimal/hex IP normalisation, no post-redirect re-check | Latent; must be implemented before any transport exists                    |
 
 ## 5. Result
 
