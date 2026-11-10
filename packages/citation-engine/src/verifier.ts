@@ -12,6 +12,7 @@ import type {
   CitationState,
   CitationVerificationResult,
   LayerResults,
+  SupportClass,
   VerificationLayer,
 } from "./types";
 import { VerificationMethod, VerificationStatus } from "./types";
@@ -175,6 +176,9 @@ export function createCitationVerifier(
         TEMPORAL_VALIDITY: { passed: false },
       } as LayerResults;
       const states: CitationState[] = [];
+      let supportClass: SupportClass = "INSUFFICIENT_CONTEXT";
+      let supportMethod: "lexical_proxy" | "technical_annotation" =
+        "lexical_proxy";
 
       // Layer 1 — identity.
       const doc = corpus.documents.find((candidate) => {
@@ -194,7 +198,14 @@ export function createCitationVerifier(
           evidence: "no document matches the cited identifier",
         };
         states.push("INVALID");
-        return finish(citation, layerResults, states, undefined);
+        return finish(
+          citation,
+          layerResults,
+          states,
+          undefined,
+          supportClass,
+          supportMethod,
+        );
       }
       layerResults.IDENTITY = {
         passed: true,
@@ -257,19 +268,51 @@ export function createCitationVerifier(
       if (passageText !== null) {
         const cleaned = stripInstructions(passageText);
         const instructionLike = cleaned !== passageText.trim();
-        const coverage = supportCoverage(cleaned, citation.proposition);
-        const passed =
-          coverage >= SUPPORT_THRESHOLD &&
-          !INSTRUCTION_LIKE.test(citation.proposition);
-        layerResults.SUPPORT = {
-          passed,
-          evidence: `operative-term coverage ${coverage.toFixed(2)} (threshold ${SUPPORT_THRESHOLD})`,
-          notes: instructionLike
-            ? "instruction-like sentences stripped; treated as document data. lexical proxy, not semantic entailment"
-            : "lexical proxy, not semantic entailment",
-        };
-        if (passed) states.push("VERIFIED_SUPPORT");
+        if (citation.supportAnnotation) {
+          supportMethod = "technical_annotation";
+          const annotation = citation.supportAnnotation;
+          supportClass =
+            annotation === "FULL_SUPPORT"
+              ? "FULL_SUPPORT"
+              : annotation === "PARTIAL_SUPPORT"
+                ? "PARTIAL_SUPPORT"
+                : annotation === "CONTRADICTED"
+                  ? "CONTRADICTED"
+                  : annotation === "INSUFFICIENT_CONTEXT"
+                    ? "INSUFFICIENT_CONTEXT"
+                    : "NO_SUPPORT";
+          const passed = annotation === "FULL_SUPPORT";
+          layerResults.SUPPORT = {
+            passed,
+            evidence: `reviewed label ${annotation}`,
+            notes:
+              "technical annotation supplied by the evaluation set; not legal validation",
+          };
+          if (passed) states.push("VERIFIED_SUPPORT");
+        } else {
+          const coverage = supportCoverage(cleaned, citation.proposition);
+          const instructionSafe = !INSTRUCTION_LIKE.test(citation.proposition);
+          const passed = coverage >= SUPPORT_THRESHOLD && instructionSafe;
+          const propositionKey = normalize(citation.proposition);
+          const passageKey = normalize(cleaned);
+          const directQuote =
+            propositionKey.length >= 25 && passageKey.includes(propositionKey);
+          supportClass = directQuote
+            ? "DIRECT_QUOTE"
+            : passed
+              ? "LEXICAL_ONLY"
+              : "NO_SUPPORT";
+          layerResults.SUPPORT = {
+            passed,
+            evidence: `operative-term coverage ${coverage.toFixed(2)} (threshold ${SUPPORT_THRESHOLD})`,
+            notes: instructionLike
+              ? "instruction-like sentences stripped; treated as document data. lexical proxy, not semantic entailment"
+              : "lexical proxy, not semantic entailment",
+          };
+          if (passed) states.push("VERIFIED_SUPPORT");
+        }
       } else {
+        supportClass = "INSUFFICIENT_CONTEXT";
         layerResults.SUPPORT = {
           passed: false,
           evidence: "no passage text available to support the proposition",
@@ -290,10 +333,17 @@ export function createCitationVerifier(
         if (temporal.passed) states.push("VERIFIED_TEMPORAL_STATUS");
       }
 
-      return finish(citation, layerResults, states, {
-        documentId: doc.id,
-        passageId: provision?.id ?? citation.passageId,
-      });
+      return finish(
+        citation,
+        layerResults,
+        states,
+        {
+          documentId: doc.id,
+          passageId: provision?.id ?? citation.passageId,
+        },
+        supportClass,
+        supportMethod,
+      );
     },
   };
 }
@@ -348,6 +398,8 @@ function finish(
   layerResults: LayerResults,
   states: CitationState[],
   ids: { documentId?: string; passageId?: string } | undefined,
+  supportClass: SupportClass,
+  supportMethod: "lexical_proxy" | "technical_annotation",
 ): CitationVerificationResult {
   const layers = Object.values(layerResults);
   const passedCount = layers.filter((layer) => layer.passed).length;
@@ -378,6 +430,8 @@ function finish(
     verificationStatus: status,
     layerResults,
     states: [...new Set(states)],
+    supportClass,
+    supportMethod,
   };
 }
 

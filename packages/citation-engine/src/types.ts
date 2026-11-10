@@ -29,6 +29,24 @@ export enum VerificationMethod {
   HYBRID = "HYBRID",
 }
 
+/** How the cited passage relates to the proposition. */
+export type SupportClass =
+  | "FULL_SUPPORT"
+  | "DIRECT_QUOTE"
+  | "LEXICAL_ONLY"
+  | "NO_SUPPORT"
+  | "INSUFFICIENT_CONTEXT"
+  | "PARTIAL_SUPPORT"
+  | "CONTRADICTED";
+
+/** Human-reviewed labels supplied by an evaluation set, never by the model. */
+export type SupportAnnotation =
+  | "FULL_SUPPORT"
+  | "PARTIAL_SUPPORT"
+  | "NO_SUPPORT"
+  | "CONTRADICTED"
+  | "INSUFFICIENT_CONTEXT";
+
 /** Explicit per-layer states. `VERIFIED` is never used as a blanket status. */
 export type CitationState =
   | "VERIFIED_IDENTITY"
@@ -62,6 +80,11 @@ export interface CitationInput {
   proposition: string;
   /** ISO date (YYYY-MM-DD) for temporal validity evaluation. */
   relevantDate?: string;
+  /**
+   * Optional label from an independently reviewed evaluation set. When absent,
+   * support is decided by the deterministic lexical proxy only.
+   */
+  supportAnnotation?: SupportAnnotation;
 }
 
 /** Complete result of citation verification across all four layers. */
@@ -90,4 +113,8 @@ export interface CitationVerificationResult {
   layerResults: LayerResults;
   /** Explicit states; never a blanket `VERIFIED`. */
   states?: CitationState[];
+  /** Classification of the support relationship; never a single opaque score. */
+  supportClass?: SupportClass;
+  /** `technical_annotation` when a reviewed label was supplied, else `lexical_proxy`. */
+  supportMethod?: "lexical_proxy" | "technical_annotation";
 }

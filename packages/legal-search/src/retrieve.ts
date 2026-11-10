@@ -302,7 +302,7 @@ export function retrieve(
         a.entry.chunkId.localeCompare(b.entry.chunkId),
     )
     .slice(0, limit)
-    .map(({ entry, score, lexical, exact }) => {
+    .map(({ entry, score, lexical }) => {
       const metadata: ChunkMetadata = {
         documentId: entry.documentId,
         documentType: entry.documentType,

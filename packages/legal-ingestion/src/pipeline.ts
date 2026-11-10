@@ -303,7 +303,7 @@ export function ingestArtifact(
     extracted.normalizedText,
     artifact.documentType,
   );
-  const provisions: LegalProvision[] = provisionSeeds.map((seed, index) => ({
+  const provisions: LegalProvision[] = provisionSeeds.map((seed) => ({
     id: id("prov", `${version.id}:${seed.ordinal}`),
     documentId: document.id,
     versionId: version.id,

@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-11-10",
+  "synthetic_regression": {
+    "reference": "docs/gates/gate-1/08_benchmark-results.json",
+    "sha256": "7fca3b67a347f634f6b88d274804d5d17662d6ea837c425f5f55a83030bfb0a5",
+    "status": "PRESERVED",
+    "note": "Gate 1 results are unchanged and are not merged with real-corpus results."
+  },
+  "pdf_extraction": {
+    "synthetic": true,
+    "note": "Synthetic PDF, not a legal document.",
+    "tools": {
+      "pdftotext": true,
+      "pdfinfo": true
+    },
+    "inspection": {
+      "status": "OK",
+      "pageCount": 1
+    },
+    "extraction": {
+      "status": "OK",
+      "method": "native_text",
+      "characters": 148,
+      "flags": []
+    }
+  },
+  "real_corpus": {
+    "status": "BLOCKED",
+    "documents": 0,
+    "reason": "no source authorization and no Philippine counsel sign-off",
+    "authorized_sources": 0,
+    "metrics": null,
+    "note": "Not attempted. Public accessibility is not treated as permission."
+  },
+  "semantic_retrieval": {
+    "status": "NOT_IMPLEMENTED",
+    "note": "No embedding model has been selected, downloaded or evaluated.",
+    "metrics": null
+  },
+  "reranking": {
+    "status": "NOT_IMPLEMENTED",
+    "metrics": null
+  },
+  "ocr": {
+    "status": "UNAVAILABLE",
+    "reason": "no OCR engine installed on this host (tesseract missing)",
+    "pages_processed": 0
+  }
+}
