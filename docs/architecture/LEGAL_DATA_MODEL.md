@@ -20,12 +20,12 @@ from, nor reconcile conflicts between copies.
 
 The model therefore separates four objects, each with one responsibility:
 
-| # | Object | Interface | Responsibility |
-|---|--------|-----------|----------------|
-| 1 | **Source** | `SourceManifestation` | One retrieval of a document from one source |
-| 2 | **Canonical** | `LegalDocument`, `DocumentVersion` | The identity and authoritative versions of the instrument |
-| 3 | **Extracted** | `ExtractedText`, `LegalProvision` | Machine-readable text and provision structure |
-| 4 | **Chunks** | `DocumentChunk` | Retrievable slices with provenance back to the source |
+| #   | Object        | Interface                          | Responsibility                                            |
+| --- | ------------- | ---------------------------------- | --------------------------------------------------------- |
+| 1   | **Source**    | `SourceManifestation`              | One retrieval of a document from one source               |
+| 2   | **Canonical** | `LegalDocument`, `DocumentVersion` | The identity and authoritative versions of the instrument |
+| 3   | **Extracted** | `ExtractedText`, `LegalProvision`  | Machine-readable text and provision structure             |
+| 4   | **Chunks**    | `DocumentChunk`                    | Retrievable slices with provenance back to the source     |
 
 Edges and records bind them together: `DocumentCitation`,
 `DocumentRelationship` and `VerificationRecord`.
@@ -142,13 +142,13 @@ Deterministic keys, in priority order:
 
 Outcomes:
 
-| Outcome | Action |
-|---|---|
-| Exact identifier match | Attach manifestation/version to the existing document |
-| `identityKey` collision | Attach; flag for verification |
-| Title match, no identifier | Attach and set `verificationStatus = PENDING_REVIEW` |
-| Similar text, ambiguous | Create candidate link, do **not** merge, queue review |
-| No match | Create a new `LegalDocument` with `verificationStatus = UNVERIFIED` |
+| Outcome                    | Action                                                              |
+| -------------------------- | ------------------------------------------------------------------- |
+| Exact identifier match     | Attach manifestation/version to the existing document               |
+| `identityKey` collision    | Attach; flag for verification                                       |
+| Title match, no identifier | Attach and set `verificationStatus = PENDING_REVIEW`                |
+| Similar text, ambiguous    | Create candidate link, do **not** merge, queue review               |
+| No match                   | Create a new `LegalDocument` with `verificationStatus = UNVERIFIED` |
 
 Every automated decision writes a `VerificationRecord` with `method` and
 `findings`, so the resolution can be audited and reversed. A merge or split

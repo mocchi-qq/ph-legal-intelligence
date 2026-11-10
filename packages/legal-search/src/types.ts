@@ -20,19 +20,19 @@
  * - `professional` — retrieval biased toward authoritative, verified sources.
  */
 export type RetrievalMode =
-  | 'quick'
-  | 'standard'
-  | 'deep'
-  | 'comparison'
-  | 'statutory'
-  | 'educational'
-  | 'professional';
+  | "quick"
+  | "standard"
+  | "deep"
+  | "comparison"
+  | "statutory"
+  | "educational"
+  | "professional";
 
 /** How two or more ranked lists are combined into one. */
 export type RankFusionMethod =
-  | 'reciprocal_rank_fusion'
-  | 'weighted_score'
-  | 'max_score';
+  | "reciprocal_rank_fusion"
+  | "weighted_score"
+  | "max_score";
 
 /**
  * A user query. `text` is always present; structured filters and a temporal

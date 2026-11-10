@@ -29,6 +29,7 @@ pnpm dev
 ```
 
 This starts:
+
 - `apps/web/` — React Vite dev server at http://localhost:5173
 - `apps/api/` — Cloudflare Workers dev server at http://localhost:8787
 - `apps/ingestion/` — Ingestion worker dev server
@@ -68,10 +69,11 @@ pnpm build
 **Do not use `wrangler publish` or any deployment command to push to production.**
 
 This is a local-development-only setup. Production deployment requires:
+
 - Separate Cloudflare account and workspace
 - Approved deployment pipeline (not configured in this repository)
 - Security review and compliance validation
 
 To stop local servers, press `Ctrl+C` in the terminal.
 
-*This guide covers local Wrangler dev setup only. Production deploy is intentionally omitted.*
+_This guide covers local Wrangler dev setup only. Production deploy is intentionally omitted._

@@ -1,10 +1,7 @@
 // @phli/citation-engine — Verifier interface
 // Responsibility: see docs/architecture/CITATION_VERIFICATION.md
 
-import type {
-  CitationInput,
-  CitationVerificationResult,
-} from './types';
+import type { CitationInput, CitationVerificationResult } from "./types";
 
 /**
  * Interface for citation verification implementations.

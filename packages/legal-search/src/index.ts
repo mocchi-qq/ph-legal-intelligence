@@ -5,4 +5,4 @@
 // docs/architecture/SEARCH_SPECIFICATION.md for the architecture these types
 // encode.
 
-export * from './types';
+export * from "./types";

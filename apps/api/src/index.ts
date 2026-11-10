@@ -1,7 +1,7 @@
-export default {
-  fetch(req: Request, env: Env, ctx: ExecutionContext): Response {
-    return new Response("PHLI API", { status: 200 });
-  }
-} satisfies ExportedHandler<Env>;
+type Env = Record<string, unknown>;
 
-interface Env {}
+export default {
+  fetch(_req: Request, _env: Env, _ctx: ExecutionContext): Response {
+    return new Response("PHLI API", { status: 200 });
+  },
+} satisfies ExportedHandler<Env>;

@@ -3,78 +3,78 @@
 
 /** Platform-level roles. */
 export enum Role {
-  PLATFORM_ADMIN = 'platform_admin',
-  ORG_ADMIN = 'org_admin',
-  LAWYER = 'lawyer',
-  RESEARCHER = 'researcher',
-  STUDENT = 'student',
-  PUBLIC_USER = 'public_user',
+  PLATFORM_ADMIN = "platform_admin",
+  ORG_ADMIN = "org_admin",
+  LAWYER = "lawyer",
+  RESEARCHER = "researcher",
+  STUDENT = "student",
+  PUBLIC_USER = "public_user",
 }
 
 /** Resource-action permissions. Format: `resource:action`. */
 export enum Permission {
   // Research
-  RESEARCH_QUERY = 'research:query',
-  RESEARCH_HISTORY_READ = 'research:history:read',
-  RESEARCH_HISTORY_DELETE = 'research:history:delete',
-  RESEARCH_EXPORT = 'research:export',
+  RESEARCH_QUERY = "research:query",
+  RESEARCH_HISTORY_READ = "research:history:read",
+  RESEARCH_HISTORY_DELETE = "research:history:delete",
+  RESEARCH_EXPORT = "research:export",
   // Library
-  LIBRARY_READ = 'library:read',
-  LIBRARY_SEARCH = 'library:search',
-  LIBRARY_BOOKMARK = 'library:bookmark',
-  LIBRARY_DOWNLOAD = 'library:download',
+  LIBRARY_READ = "library:read",
+  LIBRARY_SEARCH = "library:search",
+  LIBRARY_BOOKMARK = "library:bookmark",
+  LIBRARY_DOWNLOAD = "library:download",
   // Documents
-  DOCUMENTS_UPLOAD = 'documents:upload',
-  DOCUMENTS_READ = 'documents:read',
-  DOCUMENTS_ANALYZE = 'documents:analyze',
-  DOCUMENTS_DELETE = 'documents:delete',
-  DOCUMENTS_SHARE = 'documents:share',
+  DOCUMENTS_UPLOAD = "documents:upload",
+  DOCUMENTS_READ = "documents:read",
+  DOCUMENTS_ANALYZE = "documents:analyze",
+  DOCUMENTS_DELETE = "documents:delete",
+  DOCUMENTS_SHARE = "documents:share",
   // Drafts
-  DRAFTS_CREATE = 'drafts:create',
-  DRAFTS_READ = 'drafts:read',
-  DRAFTS_UPDATE = 'drafts:update',
-  DRAFTS_DELETE = 'drafts:delete',
-  DRAFTS_EXPORT = 'drafts:export',
-  DRAFTS_COLLABORATE = 'drafts:collaborate',
+  DRAFTS_CREATE = "drafts:create",
+  DRAFTS_READ = "drafts:read",
+  DRAFTS_UPDATE = "drafts:update",
+  DRAFTS_DELETE = "drafts:delete",
+  DRAFTS_EXPORT = "drafts:export",
+  DRAFTS_COLLABORATE = "drafts:collaborate",
   // Matters
-  MATTERS_CREATE = 'matters:create',
-  MATTERS_READ = 'matters:read',
-  MATTERS_UPDATE = 'matters:update',
-  MATTERS_DELETE = 'matters:delete',
-  MATTERS_ASSIGN = 'matters:assign',
+  MATTERS_CREATE = "matters:create",
+  MATTERS_READ = "matters:read",
+  MATTERS_UPDATE = "matters:update",
+  MATTERS_DELETE = "matters:delete",
+  MATTERS_ASSIGN = "matters:assign",
   // Org
-  ORG_READ = 'org:read',
-  ORG_UPDATE = 'org:update',
-  ORG_MEMBERS_INVITE = 'org:members:invite',
-  ORG_MEMBERS_REMOVE = 'org:members:remove',
-  ORG_BILLING_READ = 'org:billing:read',
+  ORG_READ = "org:read",
+  ORG_UPDATE = "org:update",
+  ORG_MEMBERS_INVITE = "org:members:invite",
+  ORG_MEMBERS_REMOVE = "org:members:remove",
+  ORG_BILLING_READ = "org:billing:read",
   // Admin
-  ADMIN_USERS_READ = 'admin:users:read',
-  ADMIN_USERS_UPDATE = 'admin:users:update',
-  ADMIN_SOURCES_MANAGE = 'admin:sources:manage',
-  ADMIN_INGESTION_TRIGGER = 'admin:ingestion:trigger',
+  ADMIN_USERS_READ = "admin:users:read",
+  ADMIN_USERS_UPDATE = "admin:users:update",
+  ADMIN_SOURCES_MANAGE = "admin:sources:manage",
+  ADMIN_INGESTION_TRIGGER = "admin:ingestion:trigger",
 }
 
 /** Resource access decision. */
 export enum ResourceAccess {
-  ALLOW = 'ALLOW',
-  DENY = 'DENY',
-  CONDITIONAL = 'CONDITIONAL',
+  ALLOW = "ALLOW",
+  DENY = "DENY",
+  CONDITIONAL = "CONDITIONAL",
 }
 
 /** User account categories (dossier §5.1). */
 export enum UserCategory {
-  PUBLIC = 'public',
-  PROFESSIONAL = 'professional',
-  INSTITUTIONAL = 'institutional',
+  PUBLIC = "public",
+  PROFESSIONAL = "professional",
+  INSTITUTIONAL = "institutional",
 }
 
 /** Professional verification status — separate from account category. */
 export enum VerificationStatus {
-  UNVERIFIED = 'UNVERIFIED',
-  PENDING = 'PENDING',
-  VERIFIED = 'VERIFIED',
-  REJECTED = 'REJECTED',
+  UNVERIFIED = "UNVERIFIED",
+  PENDING = "PENDING",
+  VERIFIED = "VERIFIED",
+  REJECTED = "REJECTED",
 }
 
 /** Assignment of a role to a user within an organization. */
@@ -107,11 +107,16 @@ export interface EffectivePermissions {
 
 /** A resource being accessed. */
 export interface ResourceDescriptor {
-  type: 'document' | 'draft' | 'matter' | 'research' | 'library' | 'org';
+  type: "document" | "draft" | "matter" | "research" | "library" | "org";
   id: string;
   orgId: string;
   ownerId?: string;
-  classification: 'public' | 'internal' | 'private' | 'confidential' | 'highly_restricted';
+  classification:
+    | "public"
+    | "internal"
+    | "private"
+    | "confidential"
+    | "highly_restricted";
   sharedWith?: string[];
 }
 

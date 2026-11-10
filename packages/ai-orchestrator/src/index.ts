@@ -5,4 +5,4 @@
 // docs/architecture/AI_RESEARCH_SPECIFICATION.md for the architecture these
 // types encode.
 
-export * from './types';
+export * from "./types";

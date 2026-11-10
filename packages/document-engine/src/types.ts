@@ -6,16 +6,16 @@
  * Each category maps to a curated template family.
  */
 export type DraftCategory =
-  | 'affidavit'
-  | 'demand_letter'
-  | 'special_power_of_attorney'
-  | 'motion'
-  | 'pleading'
-  | 'corporate_resolution'
-  | 'employment_agreement';
+  | "affidavit"
+  | "demand_letter"
+  | "special_power_of_attorney"
+  | "motion"
+  | "pleading"
+  | "corporate_resolution"
+  | "employment_agreement";
 
 /** Lifecycle of a draft. A draft can only be finalized after human approval. */
-export type DraftStatus = 'draft' | 'in_review' | 'approved' | 'finalized';
+export type DraftStatus = "draft" | "in_review" | "approved" | "finalized";
 
 /** A drafting matter: one editable legal document owned by a tenant. */
 export interface Draft {
@@ -65,7 +65,7 @@ export interface Template {
 
 /** A supported export target for a finalized draft. */
 export interface ExportFormat {
-  format: 'pdf' | 'docx' | 'markdown' | 'txt';
+  format: "pdf" | "docx" | "markdown" | "txt";
   mimeType: string;
   extension: string;
 }
@@ -87,7 +87,7 @@ export interface InlineAssistance {
   requestId: string;
   draftId: string;
   sectionId?: string;
-  mode: 'suggest' | 'rewrite' | 'cite' | 'summarize';
+  mode: "suggest" | "rewrite" | "cite" | "summarize";
   prompt: string;
   suggestion: string;
   citations: CitationAttachment[];

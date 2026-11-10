@@ -25,6 +25,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 
 Types:
+
 - `feat` — New feature
 - `fix` — Bug fix
 - `docs` — Documentation only
@@ -36,6 +37,7 @@ Types:
 - `ci` — CI/CD changes
 
 Examples:
+
 ```
 feat(legal-schema): add DocumentType enum for all PH legal document categories
 fix(citation-engine): correct temporal validity check for repealed laws
@@ -56,6 +58,7 @@ docs(architecture): add SEARCH_SPECIFICATION.md with hybrid retrieval design
 ### Code Review
 
 Every PR requires:
+
 - Tests added/updated for new behavior
 - Type checking passes
 - Linting passes

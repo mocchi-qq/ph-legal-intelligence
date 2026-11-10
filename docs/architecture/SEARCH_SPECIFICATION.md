@@ -74,15 +74,15 @@ space and returns nearest neighbours by cosine similarity.
 Filters narrow the eligible corpus **before** scoring. They are expressed as
 `SearchFilters` and matched against `ChunkMetadata`:
 
-| Filter | Applies to | Example |
-| --- | --- | --- |
-| `court` | Decisions, resolutions | `Supreme Court`, `Court of Appeals`, `Sandiganbayan` |
-| `documentType` | Every document | `CONSTITUTION`, `REPUBLIC_ACT`, `COURT_DECISION`, `AGENCY_REGULATION` |
-| `jurisdiction` | Every document | `PH`, a local government unit code |
-| `dateRange` | Promulgation/publication | `{ from: "1987-02-02", to: "2026-11-09" }` |
-| `agency` | Regulations, orders | `BIR`, `SEC`, `DOLE`, `IC` |
-| `topic` | Tagged material | `labor`, `tax`, `criminal_procedure` |
-| `verificationStatus` | Trust gating | `VERIFIED`, `PENDING_REVIEW`, `CONFLICT_DETECTED` |
+| Filter               | Applies to               | Example                                                               |
+| -------------------- | ------------------------ | --------------------------------------------------------------------- |
+| `court`              | Decisions, resolutions   | `Supreme Court`, `Court of Appeals`, `Sandiganbayan`                  |
+| `documentType`       | Every document           | `CONSTITUTION`, `REPUBLIC_ACT`, `COURT_DECISION`, `AGENCY_REGULATION` |
+| `jurisdiction`       | Every document           | `PH`, a local government unit code                                    |
+| `dateRange`          | Promulgation/publication | `{ from: "1987-02-02", to: "2026-11-09" }`                            |
+| `agency`             | Regulations, orders      | `BIR`, `SEC`, `DOLE`, `IC`                                            |
+| `topic`              | Tagged material          | `labor`, `tax`, `criminal_procedure`                                  |
+| `verificationStatus` | Trust gating             | `VERIFIED`, `PENDING_REVIEW`, `CONFLICT_DETECTED`                     |
 
 `court`, `documentType`, `jurisdiction`, `agency`, `topic` and
 `verificationStatus` are OR within a field and AND across fields. `dateRange` is
@@ -196,16 +196,16 @@ From the Cloudflare Vectorize [Limits page](https://developers.cloudflare.com/ve
 (last updated 2026-10-30) and the [AI Search overview](https://developers.cloudflare.com/ai-search/)
 (last updated 2026-10-01):
 
-| Limit | Current value | Consequence for this platform |
-| --- | --- | --- |
-| Maximum dimensions per vector | **1536 dimensions** (32-bit float) | The embedding model must output ≤ 1536 dims. `text-embedding-3-small` (1536) fits; any larger model must be dimension-reduced or replaced. |
-| Maximum returned results (`topK`) with values or metadata | **50** | One semantic call returns at most 50 candidates **with** metadata. A larger candidate set needs paging or namespaces. |
-| Maximum returned results (`topK`) without values/metadata | 100 | Use only when metadata can be fetched separately; not the default. |
-| Maximum vectors per index | **20,000,000** | A single index holds up to 20M chunks. At our corpus scale this is ample, but it is the migration trigger if the corpus grows past it. |
-| Metadata per vector | 10 KiB | Our `ChunkMetadata` fits comfortably; long passages are not stored as metadata. |
-| Maximum metadata indexes per Vectorize index | 10 | We need at most 7 filter fields; within budget. |
-| Maximum namespaces per index | 50,000 (Paid) / 1000 (Free) | Tenant isolation via namespaces caps free-tier tenants at 1000. |
-| Maximum upsert batch size | 1000 (Workers) / 5000 (HTTP API) | Ingestion batches chunks accordingly. |
+| Limit                                                     | Current value                      | Consequence for this platform                                                                                                              |
+| --------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Maximum dimensions per vector                             | **1536 dimensions** (32-bit float) | The embedding model must output ≤ 1536 dims. `text-embedding-3-small` (1536) fits; any larger model must be dimension-reduced or replaced. |
+| Maximum returned results (`topK`) with values or metadata | **50**                             | One semantic call returns at most 50 candidates **with** metadata. A larger candidate set needs paging or namespaces.                      |
+| Maximum returned results (`topK`) without values/metadata | 100                                | Use only when metadata can be fetched separately; not the default.                                                                         |
+| Maximum vectors per index                                 | **20,000,000**                     | A single index holds up to 20M chunks. At our corpus scale this is ample, but it is the migration trigger if the corpus grows past it.     |
+| Metadata per vector                                       | 10 KiB                             | Our `ChunkMetadata` fits comfortably; long passages are not stored as metadata.                                                            |
+| Maximum metadata indexes per Vectorize index              | 10                                 | We need at most 7 filter fields; within budget.                                                                                            |
+| Maximum namespaces per index                              | 50,000 (Paid) / 1000 (Free)        | Tenant isolation via namespaces caps free-tier tenants at 1000.                                                                            |
+| Maximum upsert batch size                                 | 1000 (Workers) / 5000 (HTTP API)   | Ingestion batches chunks accordingly.                                                                                                      |
 
 The `rerankTopK` default is therefore constrained to ≤ 50 per semantic call
 unless paging is used; the default configuration uses `rerankTopK = 50` with
@@ -234,16 +234,16 @@ paging reserved for `mode: 'deep'`.
 
 ## 6. Interface mapping
 
-| Concept | `@phli/legal-search` type |
-| --- | --- |
-| Incoming query | `SearchQuery` |
-| Structured constraints | `SearchFilters` |
-| Returned passage | `SearchResult` |
-| Index metadata | `ChunkMetadata` |
-| Weights and cut-offs | `RetrievalConfig` |
-| Retrieval shape | `RetrievalMode` |
-| Fusion strategy | `RankFusionMethod` |
-| Score breakdown | `RetrievalScoreBreakdown` |
+| Concept                | `@phli/legal-search` type |
+| ---------------------- | ------------------------- |
+| Incoming query         | `SearchQuery`             |
+| Structured constraints | `SearchFilters`           |
+| Returned passage       | `SearchResult`            |
+| Index metadata         | `ChunkMetadata`           |
+| Weights and cut-offs   | `RetrievalConfig`         |
+| Retrieval shape        | `RetrievalMode`           |
+| Fusion strategy        | `RankFusionMethod`        |
+| Score breakdown        | `RetrievalScoreBreakdown` |
 
 ## 7. Evaluation
 

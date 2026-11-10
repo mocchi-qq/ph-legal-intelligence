@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Added
+
 - Repository initialization with pnpm monorepo workspace
 - All app scaffolds: web, api, ingestion, admin, benchmark
 - All package scaffolds: contracts, domain, database, auth, legal-schema, legal-ingestion, legal-search, legal-graph, ai-orchestrator, model-gateway, citation-engine, document-engine, document-parser, permissions, observability, shared
@@ -14,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - Root configuration files: package.json, pnpm-workspace.yaml, tsconfig.base.json, biome.json, .gitignore, .editorconfig, .env.example
 
 ### Documentation
+
 - COMPETITOR_RESEARCH.md — Competitor analysis with clear separation of observed vs planned scope
 - DATA_SOURCE_REGISTER.md — Philippine legal source inventory (Tiers 1–4)
 - SOURCE_ACQUISITION_POLICY.md — Five-status acquisition policy
@@ -35,6 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - ADR-0001 through ADR-0012 — Architecture decision record stubs
 
 ### Infrastructure
+
 - D1 migration 0001_legal_documents.sql — Legal documents schema
 - Cloudflare infrastructure configuration stubs
 - CI/CD workflow template

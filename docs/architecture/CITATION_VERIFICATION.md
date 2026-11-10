@@ -20,6 +20,7 @@ is only considered fully verified when all four layers pass.
 and have the claimed jurisdiction?
 
 **Checks:**
+
 - Court exists in the Supreme Court / Court of Appeals / RTC registry
 - Republic Act number exists in the Official Gazette index
 - Executive Order number matches Presidential Records
@@ -38,6 +39,7 @@ agencies, repealed courts.
 in the identified authority?
 
 **Checks:**
+
 - Case: Paragraph number exists in the decision text
 - Statute: Section/article number exists in the enrolled bill text
 - Regulation: Section exists in the published IRR
@@ -55,6 +57,7 @@ document length, citations to non-existent provisions.
 **Question:** Does the cited text actually say what the answer claims it says?
 
 **Checks:**
+
 - Semantic entailment: cited passage → proposition (not mere keyword overlap)
 - No cherry-picking: surrounding context does not contradict the claim
 - Quoted text matches the canonical text exactly (allowing normalization)
@@ -73,6 +76,7 @@ provisions, overgeneralizing a narrow holding.
 legal question?
 
 **Checks:**
+
 - `effectivityDate <= relevantDate < effectiveTo` (or `effectiveTo` is null)
 - For cases: decision not reversed or overruled as of relevant date
 - For statutes: not repealed, not amended in relevant provisions
@@ -92,10 +96,10 @@ ignoring amendment that changed the cited text, using superseded case law.
 
 ```typescript
 enum VerificationLayer {
-  IDENTITY = 'IDENTITY',
-  LOCATION = 'LOCATION',
-  SUPPORT = 'SUPPORT',
-  TEMPORAL_VALIDITY = 'TEMPORAL_VALIDITY',
+  IDENTITY = "IDENTITY",
+  LOCATION = "LOCATION",
+  SUPPORT = "SUPPORT",
+  TEMPORAL_VALIDITY = "TEMPORAL_VALIDITY",
 }
 
 interface LayerResult {
@@ -107,16 +111,16 @@ interface LayerResult {
 type LayerResults = Record<VerificationLayer, LayerResult>;
 
 enum VerificationMethod {
-  AUTOMATED = 'AUTOMATED',
-  MANUAL = 'MANUAL',
-  HYBRID = 'HYBRID',
+  AUTOMATED = "AUTOMATED",
+  MANUAL = "MANUAL",
+  HYBRID = "HYBRID",
 }
 
 enum VerificationStatus {
-  VERIFIED = 'VERIFIED',
-  PARTIALLY_VERIFIED = 'PARTIALLY_VERIFIED',
-  FAILED = 'FAILED',
-  PENDING = 'PENDING',
+  VERIFIED = "VERIFIED",
+  PARTIALLY_VERIFIED = "PARTIALLY_VERIFIED",
+  FAILED = "FAILED",
+  PENDING = "PENDING",
 }
 
 interface CitationVerificationResult {
@@ -136,19 +140,19 @@ interface CitationVerificationResult {
 
 ### Field Definitions
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `citationId` | `string` | UUID for this verification run |
-| `documentId` | `string` | `LegalDocument.id` of the cited authority |
-| `passageId` | `string` | `DocumentChunk.id` or `LegalProvision.id` cited |
-| `citationText` | `string` | Human-readable citation (e.g., "People v. Smith, G.R. No. 12345, Jan 15 2020") |
-| `identityVerified` | `boolean` | Layer 1 result |
-| `passageVerified` | `boolean` | Layer 2 result |
-| `propositionSupported` | `boolean` | Layer 3 result |
-| `temporalValidity` | `boolean` | Layer 4 result |
-| `verificationMethod` | `VerificationMethod` | How verification was performed |
-| `verificationStatus` | `VerificationStatus` | Aggregated status |
-| `layerResults` | `LayerResults` | Per-layer detail with evidence/notes |
+| Field                  | Type                 | Description                                                                    |
+| ---------------------- | -------------------- | ------------------------------------------------------------------------------ |
+| `citationId`           | `string`             | UUID for this verification run                                                 |
+| `documentId`           | `string`             | `LegalDocument.id` of the cited authority                                      |
+| `passageId`            | `string`             | `DocumentChunk.id` or `LegalProvision.id` cited                                |
+| `citationText`         | `string`             | Human-readable citation (e.g., "People v. Smith, G.R. No. 12345, Jan 15 2020") |
+| `identityVerified`     | `boolean`            | Layer 1 result                                                                 |
+| `passageVerified`      | `boolean`            | Layer 2 result                                                                 |
+| `propositionSupported` | `boolean`            | Layer 3 result                                                                 |
+| `temporalValidity`     | `boolean`            | Layer 4 result                                                                 |
+| `verificationMethod`   | `VerificationMethod` | How verification was performed                                                 |
+| `verificationStatus`   | `VerificationStatus` | Aggregated status                                                              |
+| `layerResults`         | `LayerResults`       | Per-layer detail with evidence/notes                                           |
 
 ### Aggregation Rules
 
@@ -169,6 +173,7 @@ interface CitationVerificationResult {
 `People of the Philippines v. Juan Dela Cruz, G.R. No. 256789, January 15, 2024, Supreme Court En Banc, Official Gazette, ¶ 12 [Open Original]`
 
 **Fields:**
+
 - `caseTitle`: Full case title as promulgated
 - `grNumber`: `docketNumber` from `LegalDocument`
 - `promulgationDate`: `promulgationDate` from `LegalDocument`
@@ -185,6 +190,7 @@ interface CitationVerificationResult {
 `Republic Act No. 11900, § 5, Approved July 30, 2022, Effectivity August 14, 2022, Amended by RA 12001 (2024) [Official Gazette]`
 
 **Fields:**
+
 - `raNumber`: Republic Act number (or CA/PD/BP/EO/AO as applicable)
 - `section`: `LegalProvision.label` (e.g., "Section 5", "Article 3")
 - `approvedDate`: `approvalDate` from `LegalDocument`
@@ -200,14 +206,14 @@ The AI **must refuse** to make definitive legal claims when any of the
 following conditions hold. The response must explicitly state the refusal
 reason and surface the verification gaps.
 
-| Condition | Refusal Template |
-|-----------|------------------|
-| No supporting authority found | "I cannot find a controlling authority for this proposition. [Details of search performed]." |
-| Source unavailable | "The cited source [citation] is not available in the platform's verified corpus. [Reason: not ingested / access restricted / conflicting manifestations]." |
-| Law version cannot be established | "I cannot determine which version of [law] applies to your date [date]. The amendment history shows [conflict/gap]." |
-| Authorities conflict | "There is a conflict between [authority A] and [authority B] on this point. [Summary of conflict]. This requires legal analysis beyond automated verification." |
-| Cited passage doesn't support statement | "The passage cited ([citation]) does not support the proposition that [claim]. The text states: '[excerpt]'." |
-| Question depends on facts not provided | "This question depends on factual determinations not provided (e.g., [missing fact]). I can explain the legal framework but cannot apply it." |
+| Condition                               | Refusal Template                                                                                                                                                |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No supporting authority found           | "I cannot find a controlling authority for this proposition. [Details of search performed]."                                                                    |
+| Source unavailable                      | "The cited source [citation] is not available in the platform's verified corpus. [Reason: not ingested / access restricted / conflicting manifestations]."      |
+| Law version cannot be established       | "I cannot determine which version of [law] applies to your date [date]. The amendment history shows [conflict/gap]."                                            |
+| Authorities conflict                    | "There is a conflict between [authority A] and [authority B] on this point. [Summary of conflict]. This requires legal analysis beyond automated verification." |
+| Cited passage doesn't support statement | "The passage cited ([citation]) does not support the proposition that [claim]. The text states: '[excerpt]'."                                                   |
+| Question depends on facts not provided  | "This question depends on factual determinations not provided (e.g., [missing fact]). I can explain the legal framework but cannot apply it."                   |
 
 ### Enforcement
 
@@ -228,10 +234,10 @@ reason and surface the verification gaps.
 ```typescript
 interface CitationInput {
   citationText: string;
-  documentId?: string;        // If known
-  passageId?: string;         // If known
-  proposition: string;        // The claim the citation is offered to support
-  relevantDate?: string;      // ISO date for temporal validity (Layer 4)
+  documentId?: string; // If known
+  passageId?: string; // If known
+  proposition: string; // The claim the citation is offered to support
+  relevantDate?: string; // ISO date for temporal validity (Layer 4)
 }
 
 interface CitationVerifier {

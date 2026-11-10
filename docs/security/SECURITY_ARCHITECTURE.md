@@ -103,15 +103,15 @@ Tenant isolation is enforced at **six independent layers** — failure of any si
 
 ```typescript
 interface AccessTokenClaims {
-  sub: string;           // user_id
-  org_id: string;        // organization_id (required for all but public)
-  role: Role;            // platform role
+  sub: string; // user_id
+  org_id: string; // organization_id (required for all but public)
+  role: Role; // platform role
   permissions: string[]; // flattened permission strings
-  tier: 'public' | 'professional' | 'institutional';
+  tier: "public" | "professional" | "institutional";
   iat: number;
   exp: number;
-  iss: 'phli-auth';
-  aud: 'phli-api';
+  iss: "phli-auth";
+  aud: "phli-api";
 }
 ```
 
@@ -127,28 +127,28 @@ interface AccessTokenClaims {
 
 ### 4.1 Roles (Platform-Level)
 
-| Role | Description | Default Permissions |
-|------|-------------|---------------------|
-| `platform_admin` | Full system access | All permissions |
-| `org_admin` | Organization administration | `org:*`, `members:*`, `billing:*` |
-| `lawyer` | Verified legal professional | `research:*`, `draft:*`, `matters:*` |
-| `researcher` | Legal researcher | `research:*`, `library:read` |
-| `student` | Law student | `research:educational`, `library:read` |
-| `public_user` | Unverified public | `research:public`, `library:read` |
+| Role             | Description                 | Default Permissions                    |
+| ---------------- | --------------------------- | -------------------------------------- |
+| `platform_admin` | Full system access          | All permissions                        |
+| `org_admin`      | Organization administration | `org:*`, `members:*`, `billing:*`      |
+| `lawyer`         | Verified legal professional | `research:*`, `draft:*`, `matters:*`   |
+| `researcher`     | Legal researcher            | `research:*`, `library:read`           |
+| `student`        | Law student                 | `research:educational`, `library:read` |
+| `public_user`    | Unverified public           | `research:public`, `library:read`      |
 
 ### 4.2 Permissions (Resource-Action)
 
 Format: `resource:action` (e.g., `documents:read`, `matters:create`, `admin:users:delete`)
 
-| Resource | Actions |
-|----------|---------|
-| `research` | `query`, `history:read`, `history:delete`, `export` |
-| `library` | `read`, `search`, `bookmark`, `download` |
-| `documents` | `upload`, `read`, `analyze`, `delete`, `share` |
-| `drafts` | `create`, `read`, `update`, `delete`, `export`, `collaborate` |
-| `matters` | `create`, `read`, `update`, `delete`, `assign`, `deadline` |
-| `org` | `read`, `update`, `members:invite`, `members:remove`, `billing:read` |
-| `admin` | `users:read`, `users:update`, `sources:manage`, `ingestion:trigger` |
+| Resource    | Actions                                                              |
+| ----------- | -------------------------------------------------------------------- |
+| `research`  | `query`, `history:read`, `history:delete`, `export`                  |
+| `library`   | `read`, `search`, `bookmark`, `download`                             |
+| `documents` | `upload`, `read`, `analyze`, `delete`, `share`                       |
+| `drafts`    | `create`, `read`, `update`, `delete`, `export`, `collaborate`        |
+| `matters`   | `create`, `read`, `update`, `delete`, `assign`, `deadline`           |
+| `org`       | `read`, `update`, `members:invite`, `members:remove`, `billing:read` |
+| `admin`     | `users:read`, `users:update`, `sources:manage`, `ingestion:trigger`  |
 
 ### 4.3 ABAC Policies (Resource-Level)
 
@@ -207,13 +207,13 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 ### 6.1 Encryption
 
-| State | Mechanism | Key Management |
-|-------|-----------|----------------|
-| In Transit | TLS 1.3 (Cloudflare managed) | Cloudflare |
-| At Rest (D1) | AES-256 (Cloudflare managed) | Cloudflare |
-| At Rest (R2) | AES-256 (Cloudflare managed) | Cloudflare |
-| At Rest (Vectorize) | AES-256 (Cloudflare managed) | Cloudflare |
-| Secrets | Workers Secrets (HSM-backed) | Cloudflare |
+| State               | Mechanism                    | Key Management |
+| ------------------- | ---------------------------- | -------------- |
+| In Transit          | TLS 1.3 (Cloudflare managed) | Cloudflare     |
+| At Rest (D1)        | AES-256 (Cloudflare managed) | Cloudflare     |
+| At Rest (R2)        | AES-256 (Cloudflare managed) | Cloudflare     |
+| At Rest (Vectorize) | AES-256 (Cloudflare managed) | Cloudflare     |
+| Secrets             | Workers Secrets (HSM-backed) | Cloudflare     |
 
 ### 6.2 Key Separation
 
@@ -252,40 +252,40 @@ R2 Bucket Structure:
 
 ### 7.1 Audit Event Categories
 
-| Category | Events | Retention |
-|----------|--------|-----------|
-| Authentication | login, logout, mfa_challenge, token_refresh, revocation | 2 years |
-| Authorization | access_granted, access_denied, policy_evaluation | 2 years |
-| Data Access | document_read, document_download, search_query, export | 1 year |
-| Data Modification | document_upload, document_delete, draft_create, draft_update | 7 years |
-| Admin | user_create, user_update, role_assign, source_manage, config_change | 7 years |
-| Security | threat_detected, anomaly_alert, incident_created, incident_resolved | 7 years |
-| AI | research_query, citation_verification, draft_generation, provider_call | 1 year |
-| Billing | subscription_change, payment_success, payment_failed, credit_use | 7 years |
+| Category          | Events                                                                 | Retention |
+| ----------------- | ---------------------------------------------------------------------- | --------- |
+| Authentication    | login, logout, mfa_challenge, token_refresh, revocation                | 2 years   |
+| Authorization     | access_granted, access_denied, policy_evaluation                       | 2 years   |
+| Data Access       | document_read, document_download, search_query, export                 | 1 year    |
+| Data Modification | document_upload, document_delete, draft_create, draft_update           | 7 years   |
+| Admin             | user_create, user_update, role_assign, source_manage, config_change    | 7 years   |
+| Security          | threat_detected, anomaly_alert, incident_created, incident_resolved    | 7 years   |
+| AI                | research_query, citation_verification, draft_generation, provider_call | 1 year    |
+| Billing           | subscription_change, payment_success, payment_failed, credit_use       | 7 years   |
 
 ### 7.2 Audit Log Structure
 
 ```typescript
 interface AuditEvent {
-  id: string;                 // UUID v7 (time-ordered)
-  timestamp: string;          // ISO 8601 UTC
+  id: string; // UUID v7 (time-ordered)
+  timestamp: string; // ISO 8601 UTC
   actor: {
-    type: 'user' | 'system' | 'admin';
-    id: string;               // user_id or service name
+    type: "user" | "system" | "admin";
+    id: string; // user_id or service name
     org_id?: string;
     role?: string;
   };
-  action: string;             // e.g., "documents.upload"
+  action: string; // e.g., "documents.upload"
   resource: {
-    type: string;             // e.g., "document"
+    type: string; // e.g., "document"
     id: string;
     org_id: string;
   };
-  outcome: 'success' | 'failure' | 'partial';
-  metadata: Record<string, unknown>;  // Context (no PII)
+  outcome: "success" | "failure" | "partial";
+  metadata: Record<string, unknown>; // Context (no PII)
   // Tamper-evidence
-  prev_hash: string;          // SHA-256 of previous event
-  hash: string;               // SHA-256 of this event (incl. prev_hash)
+  prev_hash: string; // SHA-256 of previous event
+  hash: string; // SHA-256 of this event (incl. prev_hash)
 }
 ```
 
@@ -299,13 +299,13 @@ interface AuditEvent {
 
 ## 8. Backup & Recovery
 
-| Component | Backup Strategy | RPO | RTO | Test Cadence |
-|-----------|-----------------|-----|-----|--------------|
-| D1 (metadata) | Point-in-time recovery (Cloudflare) | <1 min | <15 min | Quarterly |
-| R2 (documents) | Cross-region replication + versioning | 0 | <1 hr | Quarterly |
-| Vectorize | Re-index from R2/D1 source of truth | N/A | <4 hr | Semi-annual |
-| Workers code | Git (source of truth) | 0 | <5 min | Per deploy |
-| Secrets | Workers Secrets (manual backup) | 0 | <1 hr | Quarterly |
+| Component      | Backup Strategy                       | RPO    | RTO     | Test Cadence |
+| -------------- | ------------------------------------- | ------ | ------- | ------------ |
+| D1 (metadata)  | Point-in-time recovery (Cloudflare)   | <1 min | <15 min | Quarterly    |
+| R2 (documents) | Cross-region replication + versioning | 0      | <1 hr   | Quarterly    |
+| Vectorize      | Re-index from R2/D1 source of truth   | N/A    | <4 hr   | Semi-annual  |
+| Workers code   | Git (source of truth)                 | 0      | <5 min  | Per deploy   |
+| Secrets        | Workers Secrets (manual backup)       | 0      | <1 hr   | Quarterly    |
 
 ---
 
@@ -350,20 +350,20 @@ interface AuditEvent {
 
 ## 11. Compliance Mapping (Dossier Section 13.1)
 
-| Requirement | Architecture Control | Evidence |
-|-------------|---------------------|----------|
-| Secure sessions, MFA, revocation | §3 JWT + refresh, MFA, revocation list | Auth service impl |
-| RBAC + resource-level access | §4 Roles, permissions, ABAC policies | `@phli/permissions` |
-| Tenant isolation | §2 Six-layer isolation | Data access layer |
-| API schema validation, rate limits | §5 Zod, Cloudflare limits | API middleware |
-| Least-privilege DB access | §3.3 Repository pattern, parameterized queries | D1 usage |
-| Private buckets, signed URLs | §6.3 R2 structure, signed URLs | Ingestion impl |
-| Secrets in Workers Secrets | §6.2 Key separation | No env secrets |
-| TLS + encryption at rest | §6.1 Encryption table | Cloudflare defaults |
-| Immutable audit records | §7.2 Hash-chained append-only | Audit service |
-| Recovery tests, retention | §8 Backup table | Runbook |
-| Prompt injection defense | §9.1 Static prompts, isolation | AI gateway |
-| Privileged access restrictions | §10.1 Break-glass, dual approval | Admin workflow |
+| Requirement                        | Architecture Control                           | Evidence            |
+| ---------------------------------- | ---------------------------------------------- | ------------------- |
+| Secure sessions, MFA, revocation   | §3 JWT + refresh, MFA, revocation list         | Auth service impl   |
+| RBAC + resource-level access       | §4 Roles, permissions, ABAC policies           | `@phli/permissions` |
+| Tenant isolation                   | §2 Six-layer isolation                         | Data access layer   |
+| API schema validation, rate limits | §5 Zod, Cloudflare limits                      | API middleware      |
+| Least-privilege DB access          | §3.3 Repository pattern, parameterized queries | D1 usage            |
+| Private buckets, signed URLs       | §6.3 R2 structure, signed URLs                 | Ingestion impl      |
+| Secrets in Workers Secrets         | §6.2 Key separation                            | No env secrets      |
+| TLS + encryption at rest           | §6.1 Encryption table                          | Cloudflare defaults |
+| Immutable audit records            | §7.2 Hash-chained append-only                  | Audit service       |
+| Recovery tests, retention          | §8 Backup table                                | Runbook             |
+| Prompt injection defense           | §9.1 Static prompts, isolation                 | AI gateway          |
+| Privileged access restrictions     | §10.1 Break-glass, dual approval               | Admin workflow      |
 
 ---
 
@@ -371,12 +371,12 @@ interface AuditEvent {
 
 ### 12.1 Severity Levels
 
-| Level | Definition | Response Time | Escalation |
-|-------|------------|---------------|------------|
-| SEV-1 | Active breach, data exfiltration, service down | 15 min | CTO, Legal, NPC (if PII) |
-| SEV-2 | Vulnerability exploited, partial outage | 1 hr | Security Lead, Platform Lead |
-| SEV-3 | Suspicious activity, degraded performance | 4 hr | On-call engineer |
-| SEV-4 | Security hygiene, config drift | 24 hr | Team lead |
+| Level | Definition                                     | Response Time | Escalation                   |
+| ----- | ---------------------------------------------- | ------------- | ---------------------------- |
+| SEV-1 | Active breach, data exfiltration, service down | 15 min        | CTO, Legal, NPC (if PII)     |
+| SEV-2 | Vulnerability exploited, partial outage        | 1 hr          | Security Lead, Platform Lead |
+| SEV-3 | Suspicious activity, degraded performance      | 4 hr          | On-call engineer             |
+| SEV-4 | Security hygiene, config drift                 | 24 hr         | Team lead                    |
 
 ### 12.2 Response Phases
 

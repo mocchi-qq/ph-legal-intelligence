@@ -6,19 +6,19 @@
 
 This roadmap covers Gates 0 through 10, guiding the Philippine Legal Intelligence Platform from foundation through controlled production launch. Each gate represents a completed phase with documented acceptance evidence.
 
-| Gate | Title |
-|------|-------|
-| 0 | Foundation |
-| 1 | Legal Data Foundation |
-| 2 | Search Infrastructure |
-| 3 | Legal AI Engine |
-| 4 | Application Workspace |
-| 5 | Document Intelligence/DocDraft |
-| 6 | Legal Knowledge Graph |
-| 7 | Education/Practice Management |
-| 8 | Billing/Governance/Admin |
-| 9 | Independent QA |
-| 10 | Controlled Production Launch |
+| Gate | Title                          |
+| ---- | ------------------------------ |
+| 0    | Foundation                     |
+| 1    | Legal Data Foundation          |
+| 2    | Search Infrastructure          |
+| 3    | Legal AI Engine                |
+| 4    | Application Workspace          |
+| 5    | Document Intelligence/DocDraft |
+| 6    | Legal Knowledge Graph          |
+| 7    | Education/Practice Management  |
+| 8    | Billing/Governance/Admin       |
+| 9    | Independent QA                 |
+| 10   | Controlled Production Launch   |
 
 ## Gate 0 — Foundation
 
@@ -64,4 +64,4 @@ This roadmap covers Gates 0 through 10, guiding the Philippine Legal Intelligenc
 
 **Acceptance Evidence:** All gates 0-9 verified complete. Deployment guide documented for local Wrangler dev setup. Operations runbook created with source monitoring, ingestion ops, and incident response sections. Final acceptance report GATE0_REPORT.md confirmed. System ready for controlled production access.
 
-*Roadmap complete: Gates 0 through 10 provide the explicit implementation path from foundation to controlled production launch, with acceptance evidence documented per gate.*
+_Roadmap complete: Gates 0 through 10 provide the explicit implementation path from foundation to controlled production launch, with acceptance evidence documented per gate._

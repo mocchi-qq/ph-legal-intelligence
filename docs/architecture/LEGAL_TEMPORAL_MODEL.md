@@ -19,8 +19,8 @@ and takes **effect** fifteen days after publication unless it says otherwise. A
 court decision is **promulgated** on a date that is not its filing date nor its
 publication date. Some instruments are **amended** and **repealed** years later.
 Conflating these into one `date` column makes it impossible to answer the only
-question that matters in practice: *was this provision in force on the day of
-the act in question?*
+question that matters in practice: _was this provision in force on the day of
+the act in question?_
 
 The model therefore stores each date separately, each nullable, each meaning
 exactly one thing.
@@ -29,15 +29,15 @@ exactly one thing.
 
 Dates live on `LegalDocument`; retrieval time lives on `SourceManifestation`.
 
-| Field | Meaning | Typical instruments |
-|---|---|---|
-| `approvalDate` | Date the Executive/legislature approved or signed the instrument | Statutes, RAs, EOs, AOs |
-| `promulgationDate` | Date the instrument was officially issued/proclaimed | Court decisions, court rules, POs |
-| `publicationDate` | Date it was published (Official Gazette or newspaper) | Laws requiring publication |
-| `effectivityDate` | Date it became legally in force | All |
-| `amendmentDate` | Date of the most recent amendment | Amended instruments |
-| `repealDate` | Date it was expressly repealed | Repealed instruments |
-| `retrievedAt` | Date the platform fetched this manifestation | On `SourceManifestation`, not the document |
+| Field              | Meaning                                                          | Typical instruments                        |
+| ------------------ | ---------------------------------------------------------------- | ------------------------------------------ |
+| `approvalDate`     | Date the Executive/legislature approved or signed the instrument | Statutes, RAs, EOs, AOs                    |
+| `promulgationDate` | Date the instrument was officially issued/proclaimed             | Court decisions, court rules, POs          |
+| `publicationDate`  | Date it was published (Official Gazette or newspaper)            | Laws requiring publication                 |
+| `effectivityDate`  | Date it became legally in force                                  | All                                        |
+| `amendmentDate`    | Date of the most recent amendment                                | Amended instruments                        |
+| `repealDate`       | Date it was expressly repealed                                   | Repealed instruments                       |
+| `retrievedAt`      | Date the platform fetched this manifestation                     | On `SourceManifestation`, not the document |
 
 Rules:
 
@@ -59,21 +59,21 @@ Two status layers are maintained.
 
 ### 3.1 Document status (`LegalStatus`)
 
-| Status | Meaning |
-|---|---|
-| `NOT_YET_EFFECTIVE` | Enacted/approved but `effectivityDate` is in the future |
-| `IN_FORCE` | In effect and unamended |
-| `PARTIALLY_AMENDED` | Some provisions amended or repealed, the rest in force |
-| `AMENDED` | Amended as a whole; superseded text replaced |
-| `REPEALED` | Expressly repealed by a later instrument (`repealDate` set) |
-| `SUPERSEDED` | Replaced in practice without an express repeal clause |
-| `EXPIRED` | Lapsed by its own terms or a sunset clause |
-| `UNDER_REVIEW` | Status contested or awaiting verification |
-| `UNKNOWN` | Default until verified |
+| Status              | Meaning                                                     |
+| ------------------- | ----------------------------------------------------------- |
+| `NOT_YET_EFFECTIVE` | Enacted/approved but `effectivityDate` is in the future     |
+| `IN_FORCE`          | In effect and unamended                                     |
+| `PARTIALLY_AMENDED` | Some provisions amended or repealed, the rest in force      |
+| `AMENDED`           | Amended as a whole; superseded text replaced                |
+| `REPEALED`          | Expressly repealed by a later instrument (`repealDate` set) |
+| `SUPERSEDED`        | Replaced in practice without an express repeal clause       |
+| `EXPIRED`           | Lapsed by its own terms or a sunset clause                  |
+| `UNDER_REVIEW`      | Status contested or awaiting verification                   |
+| `UNKNOWN`           | Default until verified                                      |
 
 ### 3.2 Provision status (`LegalStatus` on `LegalProvision`)
 
-Provision status is *not* the document status copied down. A document may be
+Provision status is _not_ the document status copied down. A document may be
 `PARTIALLY_AMENDED` while most of its provisions are `IN_FORCE` and a few are
 `REPEALED`. Provision status is authoritative for point-in-time queries.
 

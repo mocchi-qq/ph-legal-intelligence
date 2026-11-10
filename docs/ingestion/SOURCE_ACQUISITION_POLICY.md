@@ -4,13 +4,13 @@
 
 Every legal source in the registry is assigned exactly one of the following statuses:
 
-| Status | Meaning | Action Required |
-|--------|---------|-----------------|
-| **Approved** | Collection and intended reuse reviewed and authorized | Proceed with automated ingestion per connector spec |
-| **Restricted** | Limited access or use conditions apply (e.g., rate limits, partial corpus, non-commercial only) | Document restrictions; design ingestion to comply; legal review required before production |
-| **Manual** | Human-assisted collection required (e.g., no API, CAPTCHA, login, physical documents) | Define manual workflow; assign responsible personnel; log each collection |
-| **Pending** | Technical or legal review outstanding | Block automated ingestion; queue for review |
-| **Rejected** | Acquisition method is prohibited or unacceptable (e.g., ToS violation, copyright restriction, ethical concern) | Document reason; do not attempt collection; monitor for policy changes |
+| Status         | Meaning                                                                                                        | Action Required                                                                            |
+| -------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Approved**   | Collection and intended reuse reviewed and authorized                                                          | Proceed with automated ingestion per connector spec                                        |
+| **Restricted** | Limited access or use conditions apply (e.g., rate limits, partial corpus, non-commercial only)                | Document restrictions; design ingestion to comply; legal review required before production |
+| **Manual**     | Human-assisted collection required (e.g., no API, CAPTCHA, login, physical documents)                          | Define manual workflow; assign responsible personnel; log each collection                  |
+| **Pending**    | Technical or legal review outstanding                                                                          | Block automated ingestion; queue for review                                                |
+| **Rejected**   | Acquisition method is prohibited or unacceptable (e.g., ToS violation, copyright restriction, ethical concern) | Document reason; do not attempt collection; monitor for policy changes                     |
 
 **Default status for all new sources: `Pending`**
 
@@ -89,19 +89,19 @@ If Rejected: Archive Reason → Monitor Quarterly
 
 Every source record must contain:
 
-| Field | Type | Required | Notes |
-|-------|------|----------|-------|
-| source_id | string | Yes | Unique, lowercase, snake_case |
-| name | string | Yes | Human-readable |
-| institution | string | Yes | Issuing authority |
-| authority_level | enum | Yes | official_primary, official_secondary, unofficial |
-| jurisdiction | string | Yes | ISO 3166-1 alpha-2 (e.g., "PH") |
-| coverage | string[] | Yes | Controlled vocabulary tags |
-| acquisition_status | enum | Yes | Approved, Restricted, Manual, Pending, Rejected |
-| access_method | string | Yes | reviewed_connector, manual, api, rss, etc. |
-| reuse_review | enum | Yes | required, completed, not_applicable |
-| last_checked_at | ISO 8601 / null | Yes | When source was last verified accessible |
-| last_successful_sync_at | ISO 8601 / null | Yes | When ingestion last completed successfully |
+| Field                   | Type            | Required | Notes                                            |
+| ----------------------- | --------------- | -------- | ------------------------------------------------ |
+| source_id               | string          | Yes      | Unique, lowercase, snake_case                    |
+| name                    | string          | Yes      | Human-readable                                   |
+| institution             | string          | Yes      | Issuing authority                                |
+| authority_level         | enum            | Yes      | official_primary, official_secondary, unofficial |
+| jurisdiction            | string          | Yes      | ISO 3166-1 alpha-2 (e.g., "PH")                  |
+| coverage                | string[]        | Yes      | Controlled vocabulary tags                       |
+| acquisition_status      | enum            | Yes      | Approved, Restricted, Manual, Pending, Rejected  |
+| access_method           | string          | Yes      | reviewed_connector, manual, api, rss, etc.       |
+| reuse_review            | enum            | Yes      | required, completed, not_applicable              |
+| last_checked_at         | ISO 8601 / null | Yes      | When source was last verified accessible         |
+| last_successful_sync_at | ISO 8601 / null | Yes      | When ingestion last completed successfully       |
 
 ---
 

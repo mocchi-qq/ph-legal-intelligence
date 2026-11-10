@@ -11,19 +11,19 @@ This document defines the independent evaluation system required before the firs
 
 ### 1.1 Initial Benchmark: 500 Questions
 
-| Category | Test Questions |
-|----------|----------------|
-| Constitutional law | 50 |
-| Civil law | 70 |
-| Criminal law | 60 |
-| Labor law | 60 |
-| Taxation | 50 |
-| Commercial law | 50 |
-| Remedial law | 60 |
-| Administrative law | 40 |
-| Legal research and citations | 30 |
-| Historical law versions | 30 |
-| **Total** | **500** |
+| Category                     | Test Questions |
+| ---------------------------- | -------------- |
+| Constitutional law           | 50             |
+| Civil law                    | 70             |
+| Criminal law                 | 60             |
+| Labor law                    | 60             |
+| Taxation                     | 50             |
+| Commercial law               | 50             |
+| Remedial law                 | 60             |
+| Administrative law           | 40             |
+| Legal research and citations | 30             |
+| Historical law versions      | 30             |
+| **Total**                    | **500**        |
 
 Fixtures live in `legal-data/benchmark-fixtures/questions.json`. Each question carries: a known legal issue, expected primary authorities, applicable date, expected legal conclusion or acceptable range, required citations, known ambiguities, and expert-review status. All initial entries are `PENDING` and must be authored and reviewed by qualified Philippine legal experts before the benchmark is valid.
 
@@ -48,19 +48,19 @@ Fixtures live in `legal-data/benchmark-fixtures/questions.json`. Each question c
 
 ## 2. Evaluation Metrics
 
-| Metric | What It Measures |
-|--------|------------------|
-| Recall@10 | Whether relevant authorities appear in the top ten |
-| Precision@5 | Whether retrieved authorities are relevant |
-| MRR | Ranking quality (mean reciprocal rank of first relevant result) |
-| Citation identity accuracy | Correctness of cited authority |
-| Citation passage accuracy | Correctness of cited passage |
-| Claim support rate | Whether sources support claims |
-| Temporal correctness | Correct historical law applied |
-| Abstention quality | Appropriate refusal when evidence is insufficient |
-| Answer completeness | Coverage of relevant legal issues |
-| Retrieval latency | Search performance |
-| Generation latency | AI response performance |
+| Metric                     | What It Measures                                                |
+| -------------------------- | --------------------------------------------------------------- |
+| Recall@10                  | Whether relevant authorities appear in the top ten              |
+| Precision@5                | Whether retrieved authorities are relevant                      |
+| MRR                        | Ranking quality (mean reciprocal rank of first relevant result) |
+| Citation identity accuracy | Correctness of cited authority                                  |
+| Citation passage accuracy  | Correctness of cited passage                                    |
+| Claim support rate         | Whether sources support claims                                  |
+| Temporal correctness       | Correct historical law applied                                  |
+| Abstention quality         | Appropriate refusal when evidence is insufficient               |
+| Answer completeness        | Coverage of relevant legal issues                               |
+| Retrieval latency          | Search performance                                              |
+| Generation latency         | AI response performance                                         |
 
 ### 2.1 Metric Definitions
 
@@ -80,18 +80,18 @@ Fixtures live in `legal-data/benchmark-fixtures/questions.json`. Each question c
 
 These are engineering targets to be validated, not claims about current performance. All must be met before public launch.
 
-| Quality Gate | Requirement |
-|--------------|-------------|
-| Canonical identity accuracy | ≥99% on audited records |
-| Citation identity accuracy | ≥99% |
-| Citation passage accuracy | ≥98% |
-| Material factual claims with traceable support | 100% |
-| Historical law selection | ≥98% on benchmark |
-| Retrieval Recall@10 | ≥95% |
-| Cross-tenant data leakage | 0 |
-| Critical security vulnerabilities | 0 |
-| Unverified source presented as verified | 0 |
-| Unsupported legal certainty | 0 in release benchmark |
+| Quality Gate                                   | Requirement             |
+| ---------------------------------------------- | ----------------------- |
+| Canonical identity accuracy                    | ≥99% on audited records |
+| Citation identity accuracy                     | ≥99%                    |
+| Citation passage accuracy                      | ≥98%                    |
+| Material factual claims with traceable support | 100%                    |
+| Historical law selection                       | ≥98% on benchmark       |
+| Retrieval Recall@10                            | ≥95%                    |
+| Cross-tenant data leakage                      | 0                       |
+| Critical security vulnerabilities              | 0                       |
+| Unverified source presented as verified        | 0                       |
+| Unsupported legal certainty                    | 0 in release benchmark  |
 
 For citation support, the 98% target must be independently evaluated. A citation that exists but does not support its associated claim counts as a failure.
 

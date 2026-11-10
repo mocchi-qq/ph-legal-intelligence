@@ -25,31 +25,31 @@ It covers personal data of users, their clients, and any data subject whose info
 
 ### 2.1 Lawful Basis for Processing
 
-| Processing Activity | Lawful Basis (DPA §12–13) |
-|---------------------|---------------------------|
-| Account creation and authentication | Contractual necessity; consent |
-| Service delivery (research, drafting) | Contractual necessity |
-| Professional verification | Consent; legitimate interest (fraud prevention) |
-| Billing and payments | Contractual necessity; legal obligation |
-| Security monitoring and audit | Legitimate interest; legal obligation |
-| AI processing of uploaded documents | Consent (explicit, per-upload); contractual necessity |
-| Marketing communications | Consent (opt-in) |
-| Legal compliance and records retention | Legal obligation |
+| Processing Activity                    | Lawful Basis (DPA §12–13)                             |
+| -------------------------------------- | ----------------------------------------------------- |
+| Account creation and authentication    | Contractual necessity; consent                        |
+| Service delivery (research, drafting)  | Contractual necessity                                 |
+| Professional verification              | Consent; legitimate interest (fraud prevention)       |
+| Billing and payments                   | Contractual necessity; legal obligation               |
+| Security monitoring and audit          | Legitimate interest; legal obligation                 |
+| AI processing of uploaded documents    | Consent (explicit, per-upload); contractual necessity |
+| Marketing communications               | Consent (opt-in)                                      |
+| Legal compliance and records retention | Legal obligation                                      |
 
 ### 2.2 Data Subject Rights (DPA §16–18)
 
 The platform must support, within statutory timelines:
 
-| Right | Implementation |
-|-------|----------------|
-| Right to be informed | Privacy notice at collection; just-in-time notices |
-| Right to object | Preference center; opt-out of non-essential processing |
-| Right to access | Self-service data export (JSON/CSV) within 15 days |
-| Right to rectification | Profile editing; correction request workflow |
+| Right                       | Implementation                                                 |
+| --------------------------- | -------------------------------------------------------------- |
+| Right to be informed        | Privacy notice at collection; just-in-time notices             |
+| Right to object             | Preference center; opt-out of non-essential processing         |
+| Right to access             | Self-service data export (JSON/CSV) within 15 days             |
+| Right to rectification      | Profile editing; correction request workflow                   |
 | Right to erasure / blocking | Account deletion + document purge (subject to legal retention) |
-| Right to damages | Documented complaint and escalation procedure |
-| Right to data portability | Machine-readable export |
-| Right to file a complaint | Link to NPC complaint process |
+| Right to damages            | Documented complaint and escalation procedure                  |
+| Right to data portability   | Machine-readable export                                        |
+| Right to file a complaint   | Link to NPC complaint process                                  |
 
 ### 2.3 NPC Registration and Compliance
 
@@ -65,17 +65,17 @@ The platform must support, within statutory timelines:
 
 The NPC's Guidelines on Artificial Intelligence (2024) require AI systems processing personal data to address:
 
-| Requirement | Platform Implementation |
-|-------------|------------------------|
-| Lawful basis and transparency | AI usage disclosed at onboarding; per-feature notices |
-| Purpose limitation | Uploaded documents used only for the requesting user's analysis, never for model training by default |
-| Data minimization | Only the minimum context needed is sent to model providers |
-| Accuracy and fairness | Citation verification; benchmark evaluation; known-limitations disclosure |
-| Human oversight | Human-in-the-loop for professional outputs; AI never issues final legal advice |
-| Security | §Security Architecture controls; encryption; access control |
-| Accountability | DPO, audit trails, DPIA, incident response |
-| Data subject rights | Export/erasure includes AI-derived artifacts |
-| Automated decision-making | No solely-automated decisions with legal effect; disclosures provided |
+| Requirement                   | Platform Implementation                                                                              |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Lawful basis and transparency | AI usage disclosed at onboarding; per-feature notices                                                |
+| Purpose limitation            | Uploaded documents used only for the requesting user's analysis, never for model training by default |
+| Data minimization             | Only the minimum context needed is sent to model providers                                           |
+| Accuracy and fairness         | Citation verification; benchmark evaluation; known-limitations disclosure                            |
+| Human oversight               | Human-in-the-loop for professional outputs; AI never issues final legal advice                       |
+| Security                      | §Security Architecture controls; encryption; access control                                          |
+| Accountability                | DPO, audit trails, DPIA, incident response                                                           |
+| Data subject rights           | Export/erasure includes AI-derived artifacts                                                         |
+| Automated decision-making     | No solely-automated decisions with legal effect; disclosures provided                                |
 
 ### 3.1 AI Disclosure Statement (user-facing)
 
@@ -85,27 +85,27 @@ The NPC's Guidelines on Artificial Intelligence (2024) require AI systems proces
 
 ## 4. Data Classification
 
-| Classification | Examples | Default Access | Retention |
-|----------------|----------|----------------|-----------|
-| Public | Published statutes, decisions | All users | Indefinite |
-| Internal | Platform operational records | Authorized personnel | Per retention schedule |
-| Private | Personal research, drafts | Owner only | Until deletion + 30 days |
-| Confidential | Client files, uploaded documents | Authorized workspace members | Per retention + legal hold |
-| Highly Restricted | Privileged/sensitive case materials | Explicitly authorized users | Per retention + legal hold |
+| Classification    | Examples                            | Default Access               | Retention                  |
+| ----------------- | ----------------------------------- | ---------------------------- | -------------------------- |
+| Public            | Published statutes, decisions       | All users                    | Indefinite                 |
+| Internal          | Platform operational records        | Authorized personnel         | Per retention schedule     |
+| Private           | Personal research, drafts           | Owner only                   | Until deletion + 30 days   |
+| Confidential      | Client files, uploaded documents    | Authorized workspace members | Per retention + legal hold |
+| Highly Restricted | Privileged/sensitive case materials | Explicitly authorized users  | Per retention + legal hold |
 
 ---
 
 ## 5. Data Processing Inventory (ROPA Summary)
 
-| Data Category | Source | Purpose | Recipients | Cross-Border Transfer | Retention |
-|---------------|--------|---------|------------|----------------------|-----------|
-| Identity data | User | Auth, account | Cloudflare (processor) | Yes (US/EU) with SCCs | Account life + 30d |
-| Professional credentials | User | Verification | Internal reviewers | No | Verification + 5y |
-| Research queries | User | Service delivery | AI providers (DPA) | Yes (contracted) | 1 year |
-| Uploaded documents | User | Analysis | AI providers (DPA), storage | Yes (contracted) | Until deletion + 30d |
-| Drafts | User | Service delivery | Storage only | Yes (contracted) | Until deletion + 30d |
-| Billing data | User | Payments | Payment processor | Yes (PCI-DSS) | 7 years (legal) |
-| Audit logs | System | Security, compliance | Internal | Yes (contracted) | 1–7 years |
+| Data Category            | Source | Purpose              | Recipients                  | Cross-Border Transfer | Retention            |
+| ------------------------ | ------ | -------------------- | --------------------------- | --------------------- | -------------------- |
+| Identity data            | User   | Auth, account        | Cloudflare (processor)      | Yes (US/EU) with SCCs | Account life + 30d   |
+| Professional credentials | User   | Verification         | Internal reviewers          | No                    | Verification + 5y    |
+| Research queries         | User   | Service delivery     | AI providers (DPA)          | Yes (contracted)      | 1 year               |
+| Uploaded documents       | User   | Analysis             | AI providers (DPA), storage | Yes (contracted)      | Until deletion + 30d |
+| Drafts                   | User   | Service delivery     | Storage only                | Yes (contracted)      | Until deletion + 30d |
+| Billing data             | User   | Payments             | Payment processor           | Yes (PCI-DSS)         | 7 years (legal)      |
+| Audit logs               | System | Security, compliance | Internal                    | Yes (contracted)      | 1–7 years            |
 
 ### 5.1 Cross-Border Transfers
 
@@ -120,35 +120,35 @@ The NPC's Guidelines on Artificial Intelligence (2024) require AI systems proces
 
 Before production, the following must exist and be reviewed by qualified Philippine privacy counsel:
 
-| Document | Status | Owner |
-|----------|--------|-------|
-| Privacy Policy | Pending | Legal + DPO |
-| Terms of Service | Pending | Legal |
-| AI Usage Disclosure | Pending | Legal + Product |
-| Data Processing Inventory (ROPA) | This document (draft) | DPO |
-| Privacy Impact Assessment (PIA) | Pending | DPO + Engineering |
-| Data Protection Impact Assessment (DPIA) for AI | Pending | DPO + AI Lead |
-| Data Retention Schedule | §7 below | DPO |
-| Data Subject Request Procedure | Pending | DPO + Support |
-| Incident Response Plan | §Security Architecture §12 | Security Lead |
-| Vendor and Subprocessors Register | Pending | Procurement + DPO |
-| Data Processing Agreements | Pending | Legal |
+| Document                                        | Status                     | Owner             |
+| ----------------------------------------------- | -------------------------- | ----------------- |
+| Privacy Policy                                  | Pending                    | Legal + DPO       |
+| Terms of Service                                | Pending                    | Legal             |
+| AI Usage Disclosure                             | Pending                    | Legal + Product   |
+| Data Processing Inventory (ROPA)                | This document (draft)      | DPO               |
+| Privacy Impact Assessment (PIA)                 | Pending                    | DPO + Engineering |
+| Data Protection Impact Assessment (DPIA) for AI | Pending                    | DPO + AI Lead     |
+| Data Retention Schedule                         | §7 below                   | DPO               |
+| Data Subject Request Procedure                  | Pending                    | DPO + Support     |
+| Incident Response Plan                          | §Security Architecture §12 | Security Lead     |
+| Vendor and Subprocessors Register               | Pending                    | Procurement + DPO |
+| Data Processing Agreements                      | Pending                    | Legal             |
 
 ---
 
 ## 7. Data Retention Schedule
 
-| Data Type | Retention Period | Trigger | Disposal Method |
-|-----------|------------------|---------|-----------------|
-| Account data | Account life + 30 days | Deletion request | Secure erase |
-| Research history | 1 year from creation | Auto-purge | Secure erase |
-| Uploaded documents | Until user deletion + 30 days | Deletion/retention expiry | Secure erase + R2 purge |
-| Drafts | Until user deletion + 30 days | Deletion | Secure erase |
-| Billing records | 7 years | Legal obligation | Archive |
-| Audit logs (security) | 7 years | Retention policy | Archive |
-| Audit logs (access) | 1 year | Retention policy | Purge |
-| AI request logs | 90 days | Auto-purge | Purge (no PII) |
-| Backups | 35 days rolling | Backup rotation | Overwrite |
+| Data Type             | Retention Period              | Trigger                   | Disposal Method         |
+| --------------------- | ----------------------------- | ------------------------- | ----------------------- |
+| Account data          | Account life + 30 days        | Deletion request          | Secure erase            |
+| Research history      | 1 year from creation          | Auto-purge                | Secure erase            |
+| Uploaded documents    | Until user deletion + 30 days | Deletion/retention expiry | Secure erase + R2 purge |
+| Drafts                | Until user deletion + 30 days | Deletion                  | Secure erase            |
+| Billing records       | 7 years                       | Legal obligation          | Archive                 |
+| Audit logs (security) | 7 years                       | Retention policy          | Archive                 |
+| Audit logs (access)   | 1 year                        | Retention policy          | Purge                   |
+| AI request logs       | 90 days                       | Auto-purge                | Purge (no PII)          |
+| Backups               | 35 days rolling               | Backup rotation           | Overwrite               |
 
 **Legal hold:** Records subject to litigation or investigation are retained beyond schedule until hold released.
 

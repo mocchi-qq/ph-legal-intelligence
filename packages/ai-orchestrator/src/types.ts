@@ -11,21 +11,21 @@
  * citation validation depth and the answer schema selected.
  */
 export type ResearchIntent =
-  | 'case_lookup'
-  | 'statute_lookup'
-  | 'doctrine'
-  | 'procedure'
-  | 'definition'
-  | 'comparison'
-  | 'drafting'
-  | 'education'
-  | 'general';
+  | "case_lookup"
+  | "statute_lookup"
+  | "doctrine"
+  | "procedure"
+  | "definition"
+  | "comparison"
+  | "drafting"
+  | "education"
+  | "general";
 
 /** Confidence expressed by the orchestrator about a grounded answer. */
-export type ConfidenceLevel = 'high' | 'medium' | 'low' | 'insufficient';
+export type ConfidenceLevel = "high" | "medium" | "low" | "insufficient";
 
 /** Which structured answer schema is being produced. */
-export type AnswerFormat = 'legal_research' | 'educational' | 'professional';
+export type AnswerFormat = "legal_research" | "educational" | "professional";
 
 /** A machine-verifiable citation backing a claim in the answer. */
 export interface AnswerCitation {
@@ -61,7 +61,7 @@ export interface GenerationRequest {
   /** Override token ceiling. */
   maxTokens?: number;
   /** `text` (default) or `json` to force structured output. */
-  responseFormat?: 'text' | 'json';
+  responseFormat?: "text" | "json";
   /** Correlation id shared with retrieval traces. */
   traceId?: string;
 }
@@ -92,7 +92,7 @@ export interface GenerationResult {
   /** Token accounting for the call. */
   usage: TokenUsage;
   /** Why generation stopped. */
-  finishReason: 'stop' | 'length' | 'content_filter' | 'error';
+  finishReason: "stop" | "length" | "content_filter" | "error";
   /** Generation latency in milliseconds. */
   latencyMs: number;
   /** Whether the model abstained from answering. */
@@ -104,18 +104,18 @@ export interface GenerationResult {
 /** A streaming generation chunk emitted by a provider that supports it. */
 export interface GenerationChunk {
   delta: string;
-  finishReason?: 'stop' | 'length' | 'content_filter' | 'error';
+  finishReason?: "stop" | "length" | "content_filter" | "error";
 }
 
 /** Provider capabilities advertised by the gateway. */
 export type ModelCapability =
-  | 'chat'
-  | 'completion'
-  | 'streaming'
-  | 'json_mode'
-  | 'system_prompt'
-  | 'function_calling'
-  | 'embedding';
+  | "chat"
+  | "completion"
+  | "streaming"
+  | "json_mode"
+  | "system_prompt"
+  | "function_calling"
+  | "embedding";
 
 /** Result of a provider health probe. */
 export interface ModelProviderHealth {
@@ -137,9 +137,7 @@ export interface ModelProvider {
   /** Generate a single answer for a grounded request. */
   generate(request: GenerationRequest): Promise<GenerationResult>;
   /** Optional streaming generation. */
-  generateStream?(
-    request: GenerationRequest,
-  ): AsyncIterable<GenerationChunk>;
+  generateStream?(request: GenerationRequest): AsyncIterable<GenerationChunk>;
   /** Optional provider health probe. */
   healthCheck?(): Promise<ModelProviderHealth>;
 }
@@ -182,7 +180,7 @@ export interface LegalAuthorityRef {
  * IRAC = Issue · Rule · Application · Conclusion.
  * ALAC = Answer · Law · Application · Conclusion.
  */
-export type LegalFramework = 'IRAC' | 'ALAC';
+export type LegalFramework = "IRAC" | "ALAC";
 
 export interface IracAnswer {
   issue: string;

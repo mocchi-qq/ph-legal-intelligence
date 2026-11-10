@@ -169,15 +169,15 @@ risk flag.
 
 The drafting engine ships curated template families for:
 
-| Category | Internal key | Typical use |
-|---|---|---|
-| Affidavit | `affidavit` | Sworn statements of fact |
-| Demand letter | `demand_letter` | Pre-litigation demands and money claims |
-| Special power of attorney | `special_power_of_attorney` | Limited authority for a specific act |
-| Motion | `motion` | Relief sought in a pending case |
-| Pleading | `pleading` | Complaints, answers, replies and other filings |
-| Corporate resolution | `corporate_resolution` | Board or stockholder approvals |
-| Employment agreement | `employment_agreement` | Hiring terms, confidentiality, termination |
+| Category                  | Internal key                | Typical use                                    |
+| ------------------------- | --------------------------- | ---------------------------------------------- |
+| Affidavit                 | `affidavit`                 | Sworn statements of fact                       |
+| Demand letter             | `demand_letter`             | Pre-litigation demands and money claims        |
+| Special power of attorney | `special_power_of_attorney` | Limited authority for a specific act           |
+| Motion                    | `motion`                    | Relief sought in a pending case                |
+| Pleading                  | `pleading`                  | Complaints, answers, replies and other filings |
+| Corporate resolution      | `corporate_resolution`      | Board or stockholder approvals                 |
+| Employment agreement      | `employment_agreement`      | Hiring terms, confidentiality, termination     |
 
 Each category defines required sections, jurisdiction-specific formatting,
 caption blocks for Philippine courts and a checklist of mandatory attachments.
@@ -249,11 +249,11 @@ human approval.**
 
 ## 9. Threats and controls
 
-| Threat | Control |
-|---|---|
-| Malicious upload | Allowlist validation, malware scanning, quarantine, fail-closed |
+| Threat                             | Control                                                          |
+| ---------------------------------- | ---------------------------------------------------------------- |
+| Malicious upload                   | Allowlist validation, malware scanning, quarantine, fail-closed  |
 | Prompt injection via document text | Data-delimited prompts, instruction stripping, no tool authority |
-| Cross-tenant data leak | Tenant-keyed storage, `tenant_id` + RLS, tenant-isolated index |
-| Sensitive data exposure | Detection, redaction before indexing, access controls |
-| Unauthorized filing | Human approval gate, immutable version audit |
-| Indefinite retention | Per-class retention, deletion jobs, legal holds |
+| Cross-tenant data leak             | Tenant-keyed storage, `tenant_id` + RLS, tenant-isolated index   |
+| Sensitive data exposure            | Detection, redaction before indexing, access controls            |
+| Unauthorized filing                | Human approval gate, immutable version audit                     |
+| Indefinite retention               | Per-class retention, deletion jobs, legal holds                  |

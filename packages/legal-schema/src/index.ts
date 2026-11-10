@@ -10,5 +10,5 @@
 // See docs/architecture/LEGAL_DATA_MODEL.md and
 // docs/architecture/LEGAL_TEMPORAL_MODEL.md for the model these types encode.
 
-export * from './taxonomy';
-export * from './types';
+export * from "./taxonomy";
+export * from "./types";

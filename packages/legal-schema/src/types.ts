@@ -19,7 +19,7 @@ import type {
   DocumentType,
   LegalStatus,
   VerificationStatus,
-} from './taxonomy';
+} from "./taxonomy";
 
 /** An ISO-8601 calendar date, e.g. `1987-02-02`. */
 export type IsoDateString = string;
@@ -29,36 +29,41 @@ export type IsoDateTimeString = string;
 
 /** The kind of edge between two canonical documents. */
 export type DocumentRelationshipType =
-  | 'AMENDS'
-  | 'REPEALS'
-  | 'SUPERSEDES'
-  | 'IMPLEMENTS'
-  | 'INTERPRETS'
-  | 'CITES'
-  | 'CONSOLIDATES'
-  | 'DERIVES_FROM'
-  | 'RELATED';
+  | "AMENDS"
+  | "REPEALS"
+  | "SUPERSEDES"
+  | "IMPLEMENTS"
+  | "INTERPRETS"
+  | "CITES"
+  | "CONSOLIDATES"
+  | "DERIVES_FROM"
+  | "RELATED";
 
 /** The structural level a provision occupies within a document. */
 export type ProvisionType =
-  | 'PREAMBLE'
-  | 'ARTICLE'
-  | 'SECTION'
-  | 'RULE'
-  | 'PARAGRAPH'
-  | 'SUBPARAGRAPH'
-  | 'CLAUSE'
-  | 'ITEM';
+  | "PREAMBLE"
+  | "ARTICLE"
+  | "SECTION"
+  | "RULE"
+  | "PARAGRAPH"
+  | "SUBPARAGRAPH"
+  | "CLAUSE"
+  | "ITEM";
 
 /** The pipeline stage a chunk is destined for. */
-export type ChunkKind = 'provision' | 'paragraph' | 'table' | 'footnote' | 'page';
+export type ChunkKind =
+  | "provision"
+  | "paragraph"
+  | "table"
+  | "footnote"
+  | "page";
 
 /** How a document was verified. */
 export type VerificationMethod =
-  | 'automated'
-  | 'manual'
-  | 'cross_source'
-  | 'operator_asserted';
+  | "automated"
+  | "manual"
+  | "cross_source"
+  | "operator_asserted";
 
 /**
  * Object 2 (canonical): the identity of a legal instrument, independent of any

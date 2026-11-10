@@ -148,12 +148,12 @@ Answers are stated as of a `asOfDate` (default: today). Temporal reasoning:
 
 The orchestrator must be willing to say "I don't know". Confidence is graded:
 
-| Level | When |
-| --- | --- |
-| `high` | Multiple verified, in-force authorities agree; every claim supported. |
-| `medium` | Evidence supports the answer but is thin, single-source or partly secondary. |
-| `low` | Evidence is conflicting, stale, or requires assumptions the user did not state. |
-| `insufficient` | The evidence does not answer the question; the system abstains. |
+| Level          | When                                                                            |
+| -------------- | ------------------------------------------------------------------------------- |
+| `high`         | Multiple verified, in-force authorities agree; every claim supported.           |
+| `medium`       | Evidence supports the answer but is thin, single-source or partly secondary.    |
+| `low`          | Evidence is conflicting, stale, or requires assumptions the user did not state. |
+| `insufficient` | The evidence does not answer the question; the system abstains.                 |
 
 Abstention behaviour:
 
@@ -194,7 +194,7 @@ definitions live in `packages/ai-orchestrator/src/types.ts`.
   "abstained": false,
   "uncertaintyNotes": [],
   "asOfDate": "2026-11-09",
-  "legalResearch": { }
+  "legalResearch": {}
 }
 ```
 

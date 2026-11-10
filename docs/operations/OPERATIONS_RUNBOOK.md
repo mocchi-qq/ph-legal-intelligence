@@ -18,12 +18,12 @@
 
 ### Source Connector Status
 
-| Source | Last Fetch | Status | Notes |
-|---|---|---|---|
-| Supreme Court E-Library | _(date)_ | ✅/❌ | Check PDF integrity |
-| LawPhil Project | _(date)_ | ✅/❌ | Verify case completeness |
-| Official Gazette | _(date)_ | ✅/❌ | Gazette publication lag |
-| Agency APIs | _(date)_ | ✅/❌/⚠️ | Per-agency variation |
+| Source                  | Last Fetch | Status   | Notes                    |
+| ----------------------- | ---------- | -------- | ------------------------ |
+| Supreme Court E-Library | _(date)_   | ✅/❌    | Check PDF integrity      |
+| LawPhil Project         | _(date)_   | ✅/❌    | Verify case completeness |
+| Official Gazette        | _(date)_   | ✅/❌    | Gazette publication lag  |
+| Agency APIs             | _(date)_   | ✅/❌/⚠️ | Per-agency variation     |
 
 ## Ingestion Ops
 
@@ -57,12 +57,12 @@ pnpm ingest:document --id=<doc-id>
 
 ### Severity Classification
 
-| Severity | Description | Response Time | Escalation |
-|---|---|---|---|
-| **P0 — Critical** | Platform completely down; no legal research access; data loss | 15 minutes | CTO → Engineering lead |
-| **P1 — High** | Major feature broken; search producing wrong results; citation engine degraded | 1 hour | Engineering lead → Team |
-| **P2 — Medium** | Minor UI issue; slow ingestion; non-critical error | 24 hours | Team lead |
-| **P3 — Low** | Documentation typo; cosmetic issue; minor config | 1 week | Team lead |
+| Severity          | Description                                                                    | Response Time | Escalation              |
+| ----------------- | ------------------------------------------------------------------------------ | ------------- | ----------------------- |
+| **P0 — Critical** | Platform completely down; no legal research access; data loss                  | 15 minutes    | CTO → Engineering lead  |
+| **P1 — High**     | Major feature broken; search producing wrong results; citation engine degraded | 1 hour        | Engineering lead → Team |
+| **P2 — Medium**   | Minor UI issue; slow ingestion; non-critical error                             | 24 hours      | Team lead               |
+| **P3 — Low**      | Documentation typo; cosmetic issue; minor config                               | 1 week        | Team lead               |
 
 ### P0 Response Checklist
 
@@ -77,12 +77,12 @@ pnpm ingest:document --id=<doc-id>
 
 ### Common Incidents
 
-| Incident | First Response | Resolution |
-|---|---|---|
-| Search returns no results | Verify Vectorize index is populated; run `pnpm db:seed` | Re-index from source registry |
-| Ingestion pipeline stuck | Check queue depth; restart worker; verify source credentials | Clear queue, fix credentials, restart |
-| Citation verification timeout | Check model gateway availability; reduce concurrency | Increase timeout or fallback model |
-| D1 migration failure | Review migration file for schema drift; regenerate if needed | `pnpm db:generate` then `pnpm db:migrate` |
+| Incident                      | First Response                                               | Resolution                                |
+| ----------------------------- | ------------------------------------------------------------ | ----------------------------------------- |
+| Search returns no results     | Verify Vectorize index is populated; run `pnpm db:seed`      | Re-index from source registry             |
+| Ingestion pipeline stuck      | Check queue depth; restart worker; verify source credentials | Clear queue, fix credentials, restart     |
+| Citation verification timeout | Check model gateway availability; reduce concurrency         | Increase timeout or fallback model        |
+| D1 migration failure          | Review migration file for schema drift; regenerate if needed | `pnpm db:generate` then `pnpm db:migrate` |
 
 ### Post-Incident
 
@@ -92,4 +92,4 @@ pnpm ingest:document --id=<doc-id>
 4. Update runbook if procedure changed
 5. Notify team via daily standup
 
-*Runbook version 1.0.0. Last updated: 2026-11-09.*
+_Runbook version 1.0.0. Last updated: 2026-11-09._

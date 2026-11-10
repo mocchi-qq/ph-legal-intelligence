@@ -10,16 +10,16 @@
 
 ## 1. Governing Principles (mapped from A.M. No. 25-11-28-SC)
 
-| Principle | Framework Expectation | Platform Commitment |
-|-----------|----------------------|---------------------|
-| Fairness | AI must not produce discriminatory or biased outcomes | Benchmark across legal domains; bias review; diverse evaluation set |
-| Accountability | Clear human responsibility for AI-assisted outputs | Named owners; audit trails; human sign-off for professional outputs |
-| Transparency | Users understand AI capabilities and limits | Disclosures; source citations; model/version reporting |
-| Privacy | Personal data protected per DPA and NPC guidance | Privacy Specification; minimization; no default training |
-| Security | Systems robust against misuse and attack | Security Architecture; prompt-injection defense; tenant isolation |
-| Robustness | Reliable behavior under edge cases | Abstention policy; red-team testing; fallback providers |
-| Human Oversight | Humans retain meaningful control | Human-in-the-loop gates; no autonomous legal conclusions |
-| Data Governance | Legal data sourced, versioned, and traceable | Canonical document model; provenance; immutable versions |
+| Principle       | Framework Expectation                                 | Platform Commitment                                                 |
+| --------------- | ----------------------------------------------------- | ------------------------------------------------------------------- |
+| Fairness        | AI must not produce discriminatory or biased outcomes | Benchmark across legal domains; bias review; diverse evaluation set |
+| Accountability  | Clear human responsibility for AI-assisted outputs    | Named owners; audit trails; human sign-off for professional outputs |
+| Transparency    | Users understand AI capabilities and limits           | Disclosures; source citations; model/version reporting              |
+| Privacy         | Personal data protected per DPA and NPC guidance      | Privacy Specification; minimization; no default training            |
+| Security        | Systems robust against misuse and attack              | Security Architecture; prompt-injection defense; tenant isolation   |
+| Robustness      | Reliable behavior under edge cases                    | Abstention policy; red-team testing; fallback providers             |
+| Human Oversight | Humans retain meaningful control                      | Human-in-the-loop gates; no autonomous legal conclusions            |
+| Data Governance | Legal data sourced, versioned, and traceable          | Canonical document model; provenance; immutable versions            |
 
 ---
 
@@ -27,16 +27,16 @@
 
 ### 2.1 Mandatory Human Review
 
-| Output | Human Review Required | Rationale |
-|--------|----------------------|-----------|
-| Public legal information | No (AI-generated, labeled) | Low risk; informational |
-| Research answers (educational) | No (labeled, cited) | Educational; citations verifiable |
-| Professional research answers | Recommended | Professional reliance risk |
-| Generated drafts | **Yes — before finalization** | Legal effect; professional responsibility |
-| Case digests / doctrine extraction | **Yes — before publication as authoritative** | Accuracy-critical |
-| Citation verification flags | Human confirms `NEEDS_REVIEW` items | Release-critical |
-| "Good law" status | **Yes — never auto-displayed as authoritative** | Subsequent-treatment complexity |
-| Any output used in a court filing | **Yes — attorney of record** | Professional responsibility |
+| Output                             | Human Review Required                           | Rationale                                 |
+| ---------------------------------- | ----------------------------------------------- | ----------------------------------------- |
+| Public legal information           | No (AI-generated, labeled)                      | Low risk; informational                   |
+| Research answers (educational)     | No (labeled, cited)                             | Educational; citations verifiable         |
+| Professional research answers      | Recommended                                     | Professional reliance risk                |
+| Generated drafts                   | **Yes — before finalization**                   | Legal effect; professional responsibility |
+| Case digests / doctrine extraction | **Yes — before publication as authoritative**   | Accuracy-critical                         |
+| Citation verification flags        | Human confirms `NEEDS_REVIEW` items             | Release-critical                          |
+| "Good law" status                  | **Yes — never auto-displayed as authoritative** | Subsequent-treatment complexity           |
+| Any output used in a court filing  | **Yes — attorney of record**                    | Professional responsibility               |
 
 ### 2.2 Prohibited Autonomous Actions
 
@@ -71,7 +71,11 @@ Every AI-assisted output must make visible:
   "generated_at": "ISO-8601",
   "model": { "provider": "...", "model_id": "...", "version": "..." },
   "prompt_version": "...",
-  "retrieval_config": { "lexical_weight": 0.4, "semantic_weight": 0.6, "rerank_top_k": 50 },
+  "retrieval_config": {
+    "lexical_weight": 0.4,
+    "semantic_weight": 0.6,
+    "rerank_top_k": 50
+  },
   "corpus_cutoff": "YYYY-MM-DD",
   "document_versions_used": ["..."],
   "retrieved_passages": ["..."],
@@ -94,18 +98,18 @@ Every AI-assisted output must make visible:
 
 ### 4.1 Release Gates (aligned with dossier §15.3)
 
-| Gate | Requirement |
-|------|-------------|
-| Canonical identity accuracy | ≥99% on audited records |
-| Citation identity accuracy | ≥99% |
-| Citation passage accuracy | ≥98% |
-| Material claims with traceable support | 100% |
-| Historical law selection | ≥98% on benchmark |
-| Retrieval Recall@10 | ≥95% |
-| Cross-tenant data leakage | 0 |
-| Critical security vulnerabilities | 0 |
-| Unverified source presented as verified | 0 |
-| Unsupported legal certainty | 0 in release benchmark |
+| Gate                                    | Requirement             |
+| --------------------------------------- | ----------------------- |
+| Canonical identity accuracy             | ≥99% on audited records |
+| Citation identity accuracy              | ≥99%                    |
+| Citation passage accuracy               | ≥98%                    |
+| Material claims with traceable support  | 100%                    |
+| Historical law selection                | ≥98% on benchmark       |
+| Retrieval Recall@10                     | ≥95%                    |
+| Cross-tenant data leakage               | 0                       |
+| Critical security vulnerabilities       | 0                       |
+| Unverified source presented as verified | 0                       |
+| Unsupported legal certainty             | 0 in release benchmark  |
 
 ---
 
@@ -131,26 +135,26 @@ Every AI-assisted output must make visible:
 
 ### 6.1 Model Risk Register (initial)
 
-| Risk | Description | Mitigation |
-|------|-------------|------------|
-| Hallucinated citations | Model invents authorities | Four-layer citation verification; abstention |
-| Outdated law | Model uses superseded text | Temporal retrieval; corpus cutoff disclosure |
-| Provider outage | Single point of failure | Multi-provider gateway; fallback |
-| Data leakage to provider | Confidential prompt exposure | DPAs; local/self-hosted option for sensitive |
-| Model drift | Quality regression after update | Benchmark gating; version pinning |
-| Prompt injection | Malicious document instructions | Static system prompts; isolation |
+| Risk                     | Description                     | Mitigation                                   |
+| ------------------------ | ------------------------------- | -------------------------------------------- |
+| Hallucinated citations   | Model invents authorities       | Four-layer citation verification; abstention |
+| Outdated law             | Model uses superseded text      | Temporal retrieval; corpus cutoff disclosure |
+| Provider outage          | Single point of failure         | Multi-provider gateway; fallback             |
+| Data leakage to provider | Confidential prompt exposure    | DPAs; local/self-hosted option for sensitive |
+| Model drift              | Quality regression after update | Benchmark gating; version pinning            |
+| Prompt injection         | Malicious document instructions | Static system prompts; isolation             |
 
 ---
 
 ## 7. Accountability Structure
 
-| Role | Responsibility |
-|------|----------------|
-| Data Protection Officer | Privacy compliance, DPIAs, DSRs, breach notification |
-| AI Governance Lead | Model lifecycle, evaluation, disclosures |
-| Legal Content Reviewer | Source verification, corrections, publication approval |
-| Security Lead | Threat model, incident response, audits |
-| Engineering Lead | Architecture, release gates, reproducibility |
+| Role                    | Responsibility                                         |
+| ----------------------- | ------------------------------------------------------ |
+| Data Protection Officer | Privacy compliance, DPIAs, DSRs, breach notification   |
+| AI Governance Lead      | Model lifecycle, evaluation, disclosures               |
+| Legal Content Reviewer  | Source verification, corrections, publication approval |
+| Security Lead           | Threat model, incident response, audits                |
+| Engineering Lead        | Architecture, release gates, reproducibility           |
 
 ---
 
@@ -166,6 +170,7 @@ Every AI-assisted output must make visible:
 ## 9. Review and Evolution
 
 This governance document is reviewed:
+
 - Annually
 - On new Supreme Court, NPC, or legislative guidance
 - On material architecture or model change

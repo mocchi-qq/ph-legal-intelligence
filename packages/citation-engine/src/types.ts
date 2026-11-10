@@ -3,10 +3,10 @@
 
 /** The four verification layers defined in the citation verification spec. */
 export enum VerificationLayer {
-  IDENTITY = 'IDENTITY',
-  LOCATION = 'LOCATION',
-  SUPPORT = 'SUPPORT',
-  TEMPORAL_VALIDITY = 'TEMPORAL_VALIDITY',
+  IDENTITY = "IDENTITY",
+  LOCATION = "LOCATION",
+  SUPPORT = "SUPPORT",
+  TEMPORAL_VALIDITY = "TEMPORAL_VALIDITY",
 }
 
 /** Result of a single verification layer. */
@@ -24,17 +24,17 @@ export type LayerResults = Record<VerificationLayer, LayerResult>;
 
 /** How the verification was performed. */
 export enum VerificationMethod {
-  AUTOMATED = 'AUTOMATED',
-  MANUAL = 'MANUAL',
-  HYBRID = 'HYBRID',
+  AUTOMATED = "AUTOMATED",
+  MANUAL = "MANUAL",
+  HYBRID = "HYBRID",
 }
 
 /** Aggregated verification status. */
 export enum VerificationStatus {
-  VERIFIED = 'VERIFIED',
-  PARTIALLY_VERIFIED = 'PARTIALLY_VERIFIED',
-  FAILED = 'FAILED',
-  PENDING = 'PENDING',
+  VERIFIED = "VERIFIED",
+  PARTIALLY_VERIFIED = "PARTIALLY_VERIFIED",
+  FAILED = "FAILED",
+  PENDING = "PENDING",
 }
 
 /** Input to the citation verifier. */
