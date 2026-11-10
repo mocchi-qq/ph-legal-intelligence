@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-10
 **Implementation:** `packages/legal-ingestion/src/acquisition.ts`, `guards.ts`
-**Tests:** `tests/legal-data/acquisition-guards.test.ts` (14 passing)
+**Tests:** `tests/legal-data/acquisition-guards.test.ts` (14 passing: 8 manifest, 6 guards)
 
 ## 1. What exists
 

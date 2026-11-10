@@ -107,7 +107,7 @@ describe("Gate 2 — benchmark separation and blockers", () => {
       },
       reranking: { status: "NOT_IMPLEMENTED", metrics: null },
       ocr: {
-        status: tools.pdftotext ? "UNAVAILABLE" : "UNAVAILABLE",
+        status: "UNAVAILABLE",
         reason: "no OCR engine installed on this host (tesseract missing)",
         pages_processed: 0,
       },

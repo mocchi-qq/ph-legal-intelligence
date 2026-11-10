@@ -78,6 +78,18 @@ describe("Gate 2 — acquisition manifest authorization gate", () => {
     expect(result.record.acquisitionOutcome).toBe("ACQUIRED");
   });
 
+  it("refuses an authorized source whose URL is private or local", () => {
+    for (const url of [
+      "http://localhost/doc.pdf",
+      "http://169.254.169.254/doc.pdf",
+      "http://10.0.0.5/doc.pdf",
+    ]) {
+      const result = buildAcquisitionRecord(input({ sourceUrl: url }));
+      expect(result.ok, url).toBe(false);
+      expect(!result.ok && result.reason).toContain("unsafe_url");
+    }
+  });
+
   it("keeps unknown dates null rather than inventing them", () => {
     const result = buildAcquisitionRecord(input());
     expect(result.ok && result.record.publicationDate).toBeNull();

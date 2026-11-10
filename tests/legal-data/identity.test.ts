@@ -42,6 +42,11 @@ describe("Gate 2 — legal identifier parsing", () => {
     );
   });
 
+  it("does not treat an ordinary word followed by a number as a G.R. number", () => {
+    expect(parseLegalIdentifier("Gr 100")).toBeNull();
+    expect(parseLegalIdentifier("G.R. No. 100")).not.toBeNull();
+  });
+
   it("returns null when no legal identifier is present", () => {
     expect(
       parseLegalIdentifier("Synthetic Entity v. Synthetic Authority"),

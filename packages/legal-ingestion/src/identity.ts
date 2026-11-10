@@ -52,7 +52,7 @@ const PATTERNS: Pattern[] = [
     regex:
       /\b(?:Memorandum\s+Circular|M\.?\s*C\.?)\s*(?:No\.?)?\s*(\d{1,5})\b/i,
   },
-  { kind: "GR", regex: /\bG\.?\s*R\.?\s*(?:No\.?)?\s*(\d{1,7})\b/i },
+  { kind: "GR", regex: /\bG\.\s*R\.\s*(?:No\.?)?\s*(\d{1,7})\b/i },
   {
     kind: "AM",
     regex:
