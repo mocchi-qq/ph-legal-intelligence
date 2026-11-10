@@ -6,6 +6,7 @@ export * from "./extract";
 export * from "./guards";
 export * from "./identity";
 export * from "./pipeline";
+export * from "./snapshot";
 export * from "./store";
 export * from "./transport";
 export * from "./types";

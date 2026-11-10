@@ -1,0 +1,304 @@
+{
+  "generated_at": "2026-11-10",
+  "dataset": "owner-authorized pilot (4 official RA pages)",
+  "authorization_basis": "owner_authorization",
+  "counsel_signoff": false,
+  "thresholds": {
+    "exact_identifier_accuracy": 1,
+    "positive_recall_at_5": 0.8,
+    "negative_empty_accuracy": 1,
+    "note": "Small corpus (4 documents). Metrics are descriptive integration checks, not general retrieval accuracy."
+  },
+  "metrics": {
+    "documents": 4,
+    "provisions": 54,
+    "queries": 14,
+    "exact": {
+      "correct": 6,
+      "total": 6,
+      "accuracy": 1
+    },
+    "positive": {
+      "count": 9,
+      "recall_at_1": 0.8888888888888888,
+      "recall_at_5": 1,
+      "recall_at_10": 1,
+      "mrr": 0.9444444444444444,
+      "precision_at_5": 0.6944444444444444
+    },
+    "negative": {
+      "count": 5,
+      "empty_correct": 5,
+      "accuracy": 1
+    },
+    "multilingual_gap": {
+      "query": "Q-FIL-01",
+      "returned_results": 0,
+      "supported": false,
+      "note": "English-only lexical retrieval. Empty result is expected and is not multilingual support."
+    }
+  },
+  "detail": [
+    {
+      "id": "Q-EX-01",
+      "category": "exact",
+      "expected": [
+        "REPUBLIC_ACT:12326"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:12326"
+      ],
+      "top_score": 0.03252247488101534,
+      "lexical_score": 0.8855843306816751,
+      "top1": "REPUBLIC_ACT:12326",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 1,
+      "precision_at_5": 1,
+      "empty_correct": false
+    },
+    {
+      "id": "Q-EX-02",
+      "category": "exact_alias",
+      "expected": [
+        "REPUBLIC_ACT:12325"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:12325"
+      ],
+      "top_score": 0.01639344262295082,
+      "lexical_score": 0,
+      "top1": "REPUBLIC_ACT:12325",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 1,
+      "precision_at_5": 1,
+      "empty_correct": false
+    },
+    {
+      "id": "Q-TI-01",
+      "category": "title",
+      "expected": [
+        "REPUBLIC_ACT:12326"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:12326",
+        "REPUBLIC_ACT:12232"
+      ],
+      "top_score": 0.01639344262295082,
+      "lexical_score": 3.4480102292287533,
+      "top1": "REPUBLIC_ACT:12326",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 1,
+      "precision_at_5": 0.5,
+      "empty_correct": false
+    },
+    {
+      "id": "Q-NL-01",
+      "category": "natural_language",
+      "expected": [
+        "REPUBLIC_ACT:12326"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:12326",
+        "REPUBLIC_ACT:12232"
+      ],
+      "top_score": 0.01639344262295082,
+      "lexical_score": 2.338065908499945,
+      "top1": "REPUBLIC_ACT:12326",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 1,
+      "precision_at_5": 0.5,
+      "empty_correct": false
+    },
+    {
+      "id": "Q-NL-02",
+      "category": "natural_language",
+      "expected": [
+        "REPUBLIC_ACT:10931"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:10931",
+        "REPUBLIC_ACT:12325"
+      ],
+      "top_score": 0.01639344262295082,
+      "lexical_score": 3.0248246365540363,
+      "top1": "REPUBLIC_ACT:10931",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 1,
+      "precision_at_5": 0.5,
+      "empty_correct": false
+    },
+    {
+      "id": "Q-AM-01",
+      "category": "amendment",
+      "expected": [
+        "REPUBLIC_ACT:12326"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:12326",
+        "REPUBLIC_ACT:12325",
+        "REPUBLIC_ACT:10931",
+        "REPUBLIC_ACT:12232"
+      ],
+      "top_score": 0.01639344262295082,
+      "lexical_score": 1.659957133924657,
+      "top1": "REPUBLIC_ACT:12326",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 1,
+      "precision_at_5": 0.25,
+      "empty_correct": false
+    },
+    {
+      "id": "Q-PT-01",
+      "category": "partial_title",
+      "expected": [
+        "REPUBLIC_ACT:12326"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:12232",
+        "REPUBLIC_ACT:12326"
+      ],
+      "top_score": 0.01639344262295082,
+      "lexical_score": 1.8572145386026522,
+      "top1": "REPUBLIC_ACT:12232",
+      "hit_at_1": false,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 0.5,
+      "precision_at_5": 0.5,
+      "empty_correct": false
+    },
+    {
+      "id": "Q-EX-03",
+      "category": "negative_exact",
+      "expected": [],
+      "returned": [],
+      "top_score": 0,
+      "lexical_score": 0,
+      "top1": null,
+      "hit_at_1": false,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 0,
+      "precision_at_5": 0,
+      "empty_correct": true
+    },
+    {
+      "id": "Q-EX-04",
+      "category": "negative_exact",
+      "expected": [],
+      "returned": [],
+      "top_score": 0,
+      "lexical_score": 0,
+      "top1": null,
+      "hit_at_1": false,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 0,
+      "precision_at_5": 0,
+      "empty_correct": true
+    },
+    {
+      "id": "Q-EX-05",
+      "category": "negative_transposed",
+      "expected": [],
+      "returned": [],
+      "top_score": 0,
+      "lexical_score": 0,
+      "top1": null,
+      "hit_at_1": false,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 0,
+      "precision_at_5": 0,
+      "empty_correct": true
+    },
+    {
+      "id": "Q-OUT-01",
+      "category": "out_of_corpus",
+      "expected": [],
+      "returned": [],
+      "top_score": 0,
+      "lexical_score": 0,
+      "top1": null,
+      "hit_at_1": false,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 0,
+      "precision_at_5": 0,
+      "empty_correct": true
+    },
+    {
+      "id": "Q-FIL-01",
+      "category": "filipino_unsupported",
+      "expected": [],
+      "returned": [],
+      "top_score": 0,
+      "lexical_score": 0,
+      "top1": null,
+      "hit_at_1": false,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 0,
+      "precision_at_5": 0,
+      "empty_correct": true,
+      "note": "Expected empty because retrieval is English-token lexical; this is a documented multilingual gap, not a pass for multilingual support."
+    },
+    {
+      "id": "Q-ADV-01",
+      "category": "adversarial_exact_vs_title",
+      "expected": [
+        "REPUBLIC_ACT:12325"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:12325"
+      ],
+      "top_score": 0.01639344262295082,
+      "lexical_score": 0,
+      "top1": "REPUBLIC_ACT:12325",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 1,
+      "precision_at_5": 1,
+      "empty_correct": false,
+      "note": "Exact identifier must dominate a misleading title fragment."
+    },
+    {
+      "id": "Q-EX-06",
+      "category": "exact",
+      "expected": [
+        "REPUBLIC_ACT:12232"
+      ],
+      "returned": [
+        "REPUBLIC_ACT:12232"
+      ],
+      "top_score": 0.031544957774465976,
+      "lexical_score": 0.1849901786965639,
+      "top1": "REPUBLIC_ACT:12232",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "hit_at_10": true,
+      "mrr": 1,
+      "precision_at_5": 1,
+      "empty_correct": false
+    }
+  ],
+  "limitations": [
+    "Four documents only; metrics are integration checks, not general retrieval accuracy.",
+    "No semantic retrieval, no reranking.",
+    "No confidence intervals; sample too small.",
+    "Filipino queries are unsupported and return empty."
+  ]
+}

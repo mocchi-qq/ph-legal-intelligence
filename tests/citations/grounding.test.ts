@@ -195,3 +195,41 @@ describe("Gate 1 — grounded answers", () => {
     }
   });
 });
+
+describe("Gate 3 — lexical-only support is never treated as verified", () => {
+  it("abstains when the only evidence is VERIFIED but LEXICAL_ONLY", () => {
+    const lexicalOnly = {
+      documentTitle: "Republic Act No. 12326",
+      citation: { citationText: "Republic Act No. 12326", proposition: "x" },
+      result: {
+        citationId: "c1",
+        documentId: "d1",
+        passageId: "p1",
+        citationText: "Republic Act No. 12326",
+        identityVerified: true,
+        passageVerified: true,
+        propositionSupported: true,
+        temporalValidity: true,
+        verificationMethod: "AUTOMATED",
+        verificationStatus: "VERIFIED",
+        layerResults: {
+          IDENTITY: { passed: true },
+          LOCATION: { passed: true },
+          SUPPORT: { passed: true },
+          TEMPORAL_VALIDITY: { passed: true },
+        },
+        supportClass: "LEXICAL_ONLY",
+        supportMethod: "lexical_proxy",
+      },
+      passage: "Barangay elections are held every five years.",
+    } as unknown as CitedEvidence;
+
+    const answer = composeGroundedAnswer(
+      "How often are barangay elections held?",
+      [lexicalOnly],
+    );
+    expect(answer.abstained).toBe(true);
+    expect(answer.verifiedCount).toBe(0);
+    expect(answer.limitations.join(" ")).toContain("lexical-only");
+  });
+});

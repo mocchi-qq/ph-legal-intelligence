@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
   assessTextQuality,
+  checkPageLimit,
   extractPdfText,
   inspectPdf,
   isPdf,
   NO_OCR_PROVIDER,
   ocrEligibility,
   pdfToolsAvailable,
+  sandboxCapabilities,
 } from "../../packages/document-parser/src/index";
 import { makeTestPdf } from "../helpers/pdf";
 
@@ -33,6 +35,24 @@ describe("Gate 2 — PDF inspection and extraction", () => {
     const result = extractPdfText(pdf, { maxBytes: 10 });
     expect(result.status).toBe("REJECTED");
     expect(result.reason).toContain("too_large");
+  });
+
+  it("reports sandbox capabilities explicitly", () => {
+    const caps = sandboxCapabilities();
+    expect(typeof caps.prlimit).toBe("boolean");
+    expect(typeof caps.unshareNet).toBe("boolean");
+  });
+
+  it("enforces a page-count limit", () => {
+    expect(checkPageLimit(10, 500)).toBe(true);
+    expect(checkPageLimit(501, 500)).toBe(false);
+    expect(checkPageLimit(null, 500)).toBe(true);
+  });
+
+  it("rejects an inspected document above the page limit", () => {
+    const result = inspectPdf(pdf, { maxPages: 0 });
+    expect(result.status).toBe("REJECTED");
+    expect(result.reason).toContain("too_many_pages");
   });
 
   it("reports tool availability explicitly", () => {

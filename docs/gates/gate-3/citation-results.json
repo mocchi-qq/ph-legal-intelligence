@@ -1,0 +1,112 @@
+{
+  "generated_at": "2026-11-10",
+  "dataset": "owner-authorized pilot, RA 12326",
+  "reviewer": "technical evidence assessment; not a legal opinion",
+  "pairs": 7,
+  "annotation_agreement": {
+    "correct": 7,
+    "total": 7
+  },
+  "lexical_proxy": {
+    "false_positives": 0,
+    "false_positive_ids": [],
+    "contradiction_detected": 0,
+    "direct_quote_detected": 0
+  },
+  "temporal": {
+    "documents_with_effectivity_date": 0,
+    "note": "Pilot documents have no verified effectivity date, so temporal validity is not evidence-based."
+  },
+  "rows": [
+    {
+      "id": "C1",
+      "expected": "FULL_SUPPORT",
+      "lexical_class": "LEXICAL_ONLY",
+      "lexical_status": "VERIFIED",
+      "lexical_proposition_supported": true,
+      "lexical_mapped": "SUPPORTED",
+      "annotated_class": "FULL_SUPPORT",
+      "annotated_mapped": "SUPPORTED",
+      "annotated_method": "technical_annotation",
+      "temporal_known": false
+    },
+    {
+      "id": "C2",
+      "expected": "CONTRADICTED",
+      "lexical_class": "NO_SUPPORT",
+      "lexical_status": "PARTIALLY_VERIFIED",
+      "lexical_proposition_supported": false,
+      "lexical_mapped": "NOT_SUPPORTED",
+      "annotated_class": "CONTRADICTED",
+      "annotated_mapped": "CONTRADICTED",
+      "annotated_method": "technical_annotation",
+      "temporal_known": false
+    },
+    {
+      "id": "C3",
+      "expected": "NO_SUPPORT",
+      "lexical_class": "NO_SUPPORT",
+      "lexical_status": "PARTIALLY_VERIFIED",
+      "lexical_proposition_supported": false,
+      "lexical_mapped": "NOT_SUPPORTED",
+      "annotated_class": "NO_SUPPORT",
+      "annotated_mapped": "NOT_SUPPORTED",
+      "annotated_method": "technical_annotation",
+      "temporal_known": false
+    },
+    {
+      "id": "C4",
+      "expected": "PARTIAL_SUPPORT",
+      "lexical_class": "NO_SUPPORT",
+      "lexical_status": "PARTIALLY_VERIFIED",
+      "lexical_proposition_supported": false,
+      "lexical_mapped": "NOT_SUPPORTED",
+      "annotated_class": "PARTIAL_SUPPORT",
+      "annotated_mapped": "PARTIAL",
+      "annotated_method": "technical_annotation",
+      "temporal_known": false
+    },
+    {
+      "id": "C5",
+      "expected": "NO_SUPPORT",
+      "lexical_class": "NO_SUPPORT",
+      "lexical_status": "PARTIALLY_VERIFIED",
+      "lexical_proposition_supported": false,
+      "lexical_mapped": "NOT_SUPPORTED",
+      "annotated_class": "NO_SUPPORT",
+      "annotated_mapped": "NOT_SUPPORTED",
+      "annotated_method": "technical_annotation",
+      "temporal_known": false
+    },
+    {
+      "id": "C6",
+      "expected": "FULL_SUPPORT",
+      "lexical_class": "NO_SUPPORT",
+      "lexical_status": "PARTIALLY_VERIFIED",
+      "lexical_proposition_supported": false,
+      "lexical_mapped": "NOT_SUPPORTED",
+      "annotated_class": "FULL_SUPPORT",
+      "annotated_mapped": "SUPPORTED",
+      "annotated_method": "technical_annotation",
+      "temporal_known": false
+    },
+    {
+      "id": "C7",
+      "expected": "INSUFFICIENT_CONTEXT",
+      "lexical_class": "INSUFFICIENT_CONTEXT",
+      "lexical_status": "PARTIALLY_VERIFIED",
+      "lexical_proposition_supported": false,
+      "lexical_mapped": "NOT_SUPPORTED",
+      "annotated_class": "INSUFFICIENT_CONTEXT",
+      "annotated_mapped": "INSUFFICIENT",
+      "annotated_method": "lexical_proxy",
+      "temporal_known": false
+    }
+  ],
+  "limitations": [
+    "Seven pairs, one document; not a legal benchmark.",
+    "Labels are technical, not legal opinions.",
+    "Lexical proxy cannot detect contradiction or partial support.",
+    "No semantic entailment model is implemented."
+  ]
+}

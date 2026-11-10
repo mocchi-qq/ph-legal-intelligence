@@ -46,8 +46,13 @@ export interface SearchIndex {
 
 const RRF_K = 60;
 const MIN_LEXICAL = 0.02;
+// At least half of the query's content terms must occur in the passage. This
+// rejects weak shared-token matches (e.g. one common word) without a corpus-
+// specific score threshold.
+const MIN_TERM_COVERAGE = 0.3;
+// An identifier-only query, not a natural-language question that merely cites one.
 const IDENTIFIER_QUERY =
-  /(\bg\.?r\.?\s*no\.?|\ba\.?m\.?\s*no\.?|\bact\s+no\.?|\brepublic\s+act\b|\bexecutive\s+order\b|\be\.?o\.?\s*no\.?)\s*\d/i;
+  /^(?:\S+\s+){0,2}(?:g\.?\s*r\.?|ra|r\.?\s*a\.?|republic\s+act|executive\s+order|e\.?\s*o\.?|presidential\s+decree|p\.?\s*d\.?|a\.?\s*m\.?)\b[^\n]{0,40}\d/i;
 
 const STOPWORDS = new Set([
   "the",
@@ -97,6 +102,17 @@ function tokenize(text: string): string[] {
 
 function normalizeKey(input: string): string {
   return input.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+/** Exact query aliases, e.g. `RA 12325` -> the canonical Republic Act key. */
+function queryKeys(text: string): string[] {
+  const keys = [normalizeKey(text)];
+  const act =
+    /^\s*(?:RA|R\.?\s*A\.?|Republic\s+Act)(?:\s+No\.?)?\s*(\d{1,5})\b/i.exec(
+      text,
+    );
+  if (act) keys.push(normalizeKey(`REPUBLIC_ACT:${act[1]}`));
+  return keys;
 }
 
 function yearOf(date: string | null | undefined): number {
@@ -218,6 +234,26 @@ function lexicalScore(
   return dot / Math.sqrt(entryNorm);
 }
 
+// Generic legal vocabulary is ignored when measuring coverage; matching only
+// "act" or "data" is not evidence that the passage is about the query.
+const COVERAGE_GENERIC = new Set([
+  "act",
+  "law",
+  "code",
+  "section",
+  "republic",
+  "philippines",
+  "data",
+]);
+
+function termCoverage(entry: IndexEntry, queryTerms: string[]): number {
+  const terms = queryTerms.filter((term) => !COVERAGE_GENERIC.has(term));
+  if (terms.length === 0) return 1;
+  let present = 0;
+  for (const term of terms) if (entry.termFreq.has(term)) present += 1;
+  return present / terms.length;
+}
+
 function isLiveAt(entry: IndexEntry, asOf: string | undefined): boolean {
   if (!asOf) return true;
   if (entry.effectiveFrom && entry.effectiveFrom > asOf) return false;
@@ -232,7 +268,7 @@ export function retrieve(
   defaultLimit = 10,
 ): SearchResult[] {
   const limit = query.limit ?? defaultLimit;
-  const queryNormalized = normalizeKey(query.text);
+  const queryNormalized = queryKeys(query.text);
   const queryTerms = tokenize(query.text);
 
   const candidates = index.entries.filter(
@@ -242,7 +278,9 @@ export function retrieve(
 
   // Signal 1: exact identifier match (document-level).
   const exactRanking = candidates
-    .filter((entry) => entry.exactKeys.some((key) => key === queryNormalized))
+    .filter((entry) =>
+      entry.exactKeys.some((key) => queryNormalized.includes(key)),
+    )
     .sort((a, b) => a.chunkId.localeCompare(b.chunkId));
 
   // Signal 2: lexical relevance.
@@ -259,7 +297,11 @@ export function retrieve(
 
   const lexicalRanking = lexicalCandidates
     .map((entry) => ({ entry, score: lexicalScore(index, entry, queryTerms) }))
-    .filter((item) => item.score >= MIN_LEXICAL)
+    .filter(
+      (item) =>
+        item.score >= MIN_LEXICAL &&
+        termCoverage(item.entry, queryTerms) >= MIN_TERM_COVERAGE,
+    )
     .sort(
       (a, b) =>
         b.score - a.score || a.entry.chunkId.localeCompare(b.entry.chunkId),

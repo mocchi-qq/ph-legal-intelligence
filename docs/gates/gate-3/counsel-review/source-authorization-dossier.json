@@ -1,0 +1,2004 @@
+{
+  "generated_at": "2026-11-10",
+  "status": "PREPARED_FOR_COUNSEL_NOT_REVIEWED",
+  "notice": "No determination exists for any source or activity. UNKNOWN is preserved. This dossier is a question set, not an opinion.",
+  "activities": [
+    "viewing",
+    "downloading",
+    "temporary_processing",
+    "persistent_storage",
+    "text_extraction",
+    "ocr",
+    "search_indexing",
+    "embedding_generation",
+    "ai_assisted_analysis",
+    "citation_display",
+    "quotation",
+    "redistribution",
+    "commercial_use"
+  ],
+  "sources": [
+    {
+      "source_id": "sc_elibrary",
+      "organization": "Supreme Court of the Philippines",
+      "source_name": "Supreme Court E-Library",
+      "official_status": "official",
+      "domain": "elibrary.judiciary.gov.ph",
+      "material_types": [
+        "supreme_court_decisions",
+        "national_statutes",
+        "court_issuances",
+        "executive_issuances"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "lawphil",
+      "organization": "Arellano Law Foundation",
+      "source_name": "LawPhil Project",
+      "official_status": "secondary",
+      "domain": "lawphil.net",
+      "material_types": [
+        "jurisprudence",
+        "statutes",
+        "legal_materials"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "official_gazette",
+      "organization": "Office of the President of the Philippines",
+      "source_name": "Official Gazette",
+      "official_status": "official",
+      "domain": "officialgazette.gov.ph",
+      "material_types": [
+        "presidential_issuances",
+        "official_publications"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "congress",
+      "organization": "House of Representatives of the Philippines",
+      "source_name": "Congress",
+      "official_status": "official",
+      "domain": "congress.gov.ph",
+      "material_types": [
+        "bills",
+        "legislative_records",
+        "legislative_history"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "senate",
+      "organization": "Senate of the Philippines",
+      "source_name": "Senate",
+      "official_status": "official",
+      "domain": "senate.gov.ph",
+      "material_types": [
+        "bills",
+        "resolutions",
+        "legislative_materials"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "bir",
+      "organization": "Bureau of Internal Revenue",
+      "source_name": "Bureau of Internal Revenue",
+      "official_status": "official",
+      "domain": "bir.gov.ph",
+      "material_types": [
+        "revenue_regulations",
+        "revenue_memorandum_orders",
+        "revenue_memorandum_circulars"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "dole",
+      "organization": "Department of Labor and Employment",
+      "source_name": "Department of Labor and Employment",
+      "official_status": "official",
+      "domain": "dole.gov.ph",
+      "material_types": [
+        "department_orders",
+        "labor_advisories"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "sec",
+      "organization": "Securities and Exchange Commission",
+      "source_name": "Securities and Exchange Commission",
+      "official_status": "official",
+      "domain": "sec.gov.ph",
+      "material_types": [
+        "memorandum_circulars",
+        "opinions",
+        "regulations"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "dti",
+      "organization": "Department of Trade and Industry",
+      "source_name": "Department of Trade and Industry",
+      "official_status": "official",
+      "domain": "dti.gov.ph",
+      "material_types": [
+        "department_administrative_orders",
+        "consumer_protection_issuances"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "npc",
+      "organization": "National Privacy Commission",
+      "source_name": "National Privacy Commission",
+      "official_status": "official",
+      "domain": "privacy.gov.ph",
+      "material_types": [
+        "circulars",
+        "advisories",
+        "decisions",
+        "guidelines"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "csc",
+      "organization": "Civil Service Commission",
+      "source_name": "Civil Service Commission",
+      "official_status": "official",
+      "domain": "csc.gov.ph",
+      "material_types": [
+        "memorandum_circulars",
+        "resolutions",
+        "rules"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "bsp",
+      "organization": "Bangko Sentral ng Pilipinas",
+      "source_name": "Bangko Sentral ng Pilipinas",
+      "official_status": "official",
+      "domain": "bsp.gov.ph",
+      "material_types": [
+        "circulars",
+        "regulations",
+        "supervisory_issuances"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "gppb",
+      "organization": "Government Procurement Policy Board",
+      "source_name": "Government Procurement Policy Board",
+      "official_status": "official",
+      "domain": "gppb.gov.ph",
+      "material_types": [
+        "procurement_policies",
+        "resolutions"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "dof",
+      "organization": "Department of Finance",
+      "source_name": "Department of Finance",
+      "official_status": "official",
+      "domain": "dof.gov.ph",
+      "material_types": [
+        "department_orders",
+        "regulations"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "doj",
+      "organization": "Department of Justice",
+      "source_name": "Department of Justice",
+      "official_status": "official",
+      "domain": "doj.gov.ph",
+      "material_types": [
+        "department_circulars",
+        "opinions"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "coa",
+      "organization": "Commission on Audit",
+      "source_name": "Commission on Audit",
+      "official_status": "official",
+      "domain": "coa.gov.ph",
+      "material_types": [
+        "government_auditing",
+        "coa_decisions"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "comelec",
+      "organization": "Commission on Elections",
+      "source_name": "Commission on Elections",
+      "official_status": "official",
+      "domain": "comelec.gov.ph",
+      "material_types": [
+        "election_laws",
+        "resolutions"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "dar",
+      "organization": "Department of Agrarian Reform",
+      "source_name": "Department of Agrarian Reform",
+      "official_status": "official",
+      "domain": "dar.gov.ph",
+      "material_types": [
+        "agrarian_reform_laws",
+        "issuances"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "denr",
+      "organization": "Department of Environment and Natural Resources",
+      "source_name": "Department of Environment and Natural Resources",
+      "official_status": "official",
+      "domain": "denr.gov.ph",
+      "material_types": [
+        "environmental_regulations"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "ipophilippines",
+      "organization": "Intellectual Property Office of the Philippines",
+      "source_name": "Intellectual Property Office of the Philippines",
+      "official_status": "official",
+      "domain": "ipophil.gov.ph",
+      "material_types": [
+        "ip_laws",
+        "administrative_decisions"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "nlrc",
+      "organization": "National Labor Relations Commission",
+      "source_name": "National Labor Relations Commission",
+      "official_status": "official",
+      "domain": "nlrc.dole.gov.ph",
+      "material_types": [
+        "labor_decisions",
+        "procedural_rules"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "cta",
+      "organization": "Court of Tax Appeals",
+      "source_name": "Court of Tax Appeals",
+      "official_status": "official",
+      "domain": "cta.judiciary.gov.ph",
+      "material_types": [
+        "tax_jurisprudence"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "pcc",
+      "organization": "Philippine Competition Commission",
+      "source_name": "Philippine Competition Commission",
+      "official_status": "official",
+      "domain": "phcc.gov.ph",
+      "material_types": [
+        "competition_regulations",
+        "decisions"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "insurance_commission",
+      "organization": "Insurance Commission",
+      "source_name": "Insurance Commission",
+      "official_status": "official",
+      "domain": "insurance.gov.ph",
+      "material_types": [
+        "insurance_regulations"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    },
+    {
+      "source_id": "prc",
+      "organization": "Professional Regulation Commission",
+      "source_name": "Professional Regulation Commission",
+      "official_status": "official",
+      "domain": "prc.gov.ph",
+      "material_types": [
+        "professional_regulatory_issuances"
+      ],
+      "access_method": "unknown",
+      "authorization_status": "UNKNOWN",
+      "counsel_required": true,
+      "existing_evidence": "Gate 0 registry entry only; no terms-of-use capture, no written authorization, no counsel review",
+      "permissions": {
+        "viewing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "downloading": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "temporary_processing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "persistent_storage": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "text_extraction": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ocr": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "search_indexing": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "embedding_generation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "ai_assisted_analysis": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "citation_display": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "quotation": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "redistribution": {
+          "status": "UNKNOWN",
+          "evidence": null
+        },
+        "commercial_use": {
+          "status": "UNKNOWN",
+          "evidence": null
+        }
+      },
+      "attribution_required": "UNKNOWN",
+      "retention_requirement": "UNKNOWN",
+      "unresolved_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ]
+    }
+  ]
+}

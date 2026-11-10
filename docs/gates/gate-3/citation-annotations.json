@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-11-10",
+  "dataset": "owner-authorized pilot, RA 12326 (official E-Library snapshot)",
+  "reviewer": "technical evidence assessment by the engineer. Not a legal opinion.",
+  "label_classes": ["FULL_SUPPORT", "PARTIAL_SUPPORT", "NO_SUPPORT", "CONTRADICTED", "INSUFFICIENT_CONTEXT"],
+  "pairs": [
+    { "id": "C1", "document": "REPUBLIC_ACT:12326", "location": "SEC. 2", "proposition": "Barangay and Sangguniang Kabataan elections are held every five years.", "expected": "FULL_SUPPORT", "rationale": "The section states the elections are held every five (5) years." },
+    { "id": "C2", "document": "REPUBLIC_ACT:12326", "location": "SEC. 2", "proposition": "Barangay elections are held every three years.", "expected": "CONTRADICTED", "rationale": "The section fixes a five-year cycle; the proposition conflicts." },
+    { "id": "C3", "document": "REPUBLIC_ACT:12326", "location": "SEC. 2", "proposition": "The Act imposes a new tax on barangay officials.", "expected": "NO_SUPPORT", "rationale": "No tax provision appears in the cited section." },
+    { "id": "C4", "document": "REPUBLIC_ACT:12326", "location": "SEC. 2", "proposition": "Elections are held every five years and all incumbent officials are removed immediately.", "expected": "PARTIAL_SUPPORT", "rationale": "The five-year cycle is supported; immediate removal is not stated in this section." },
+    { "id": "C5", "document": "REPUBLIC_ACT:12326", "location": "SEC. 10", "proposition": "Barangay elections are held every five years.", "expected": "NO_SUPPORT", "rationale": "Section 10 is the effectivity clause and does not address election frequency." },
+    { "id": "C6", "document": "REPUBLIC_ACT:12326", "location": "SEC. 8", "proposition": "If a provision is declared unconstitutional, the remaining provisions stay in effect.", "expected": "FULL_SUPPORT", "rationale": "The separability clause states exactly this." },
+    { "id": "C7", "document": "REPUBLIC_ACT:12326", "location": "SEC. 99", "proposition": "Barangay elections are held every five years.", "expected": "INSUFFICIENT_CONTEXT", "rationale": "The cited section does not exist, so support cannot be assessed." }
+  ]
+}

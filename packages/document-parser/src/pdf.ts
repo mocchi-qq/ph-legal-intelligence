@@ -41,12 +41,82 @@ export interface PdfOptions {
   maxBytes?: number;
   timeoutMs?: number;
   layout?: boolean;
+  /** Default 500. Inspected page counts above this are rejected. */
+  maxPages?: number;
+  /** `preferred` (default) uses available OS limits/network isolation; `off` for tests only. */
+  sandbox?: "preferred" | "off";
 }
 
 const DEFAULT_MAX_BYTES = 25 * 1024 * 1024;
 const DEFAULT_TIMEOUT = 15_000;
 
 let toolsCache: { pdftotext: boolean; pdfinfo: boolean } | undefined;
+let sandboxCache: { prlimit: boolean; unshareNet: boolean } | undefined;
+
+export interface SandboxCapabilities {
+  prlimit: boolean;
+  unshareNet: boolean;
+}
+
+export function sandboxCapabilities(): SandboxCapabilities {
+  if (sandboxCache) return sandboxCache;
+  const probe = (cmd: string): boolean => {
+    try {
+      execFileSync("sh", ["-c", `command -v ${cmd}`], {
+        stdio: "ignore",
+        timeout: 3000,
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  sandboxCache = { prlimit: probe("prlimit"), unshareNet: probe("unshare") };
+  return sandboxCache;
+}
+
+export function checkPageLimit(
+  pageCount: number | null,
+  maxPages = 500,
+): boolean {
+  return pageCount === null || pageCount <= maxPages;
+}
+
+/** Run a parser tool under OS resource limits and, when available, network isolation. */
+function runTool(command: string, args: string[], options: PdfOptions): string {
+  const caps = sandboxCapabilities();
+  const useSandbox = options.sandbox !== "off";
+  let finalCommand = command;
+  let finalArgs = args;
+  let isolated = false;
+
+  if (useSandbox && caps.unshareNet) {
+    finalCommand = "unshare";
+    finalArgs = ["-n", command, ...args];
+    isolated = true;
+  }
+  if (useSandbox && caps.prlimit) {
+    finalCommand = "prlimit";
+    finalArgs = [
+      "--as=536870912",
+      "--cpu=20",
+      "--nproc=64",
+      "--fsize=67108864",
+      "--",
+      finalCommand,
+      ...finalArgs,
+    ];
+  }
+  const output = execFileSync(finalCommand, finalArgs, {
+    timeout: options.timeoutMs ?? DEFAULT_TIMEOUT,
+    maxBuffer: 20 * 1024 * 1024,
+    encoding: "utf8",
+  });
+  if (useSandbox && !isolated && caps.unshareNet === false) {
+    // No network isolation available; resource limits may still apply. Never claim sandboxing.
+  }
+  return output;
+}
 
 export function pdfToolsAvailable(): { pdftotext: boolean; pdfinfo: boolean } {
   if (toolsCache) return toolsCache;
@@ -115,17 +185,23 @@ export function inspectPdf(
 
   try {
     return withTempFile(bytes, (path) => {
-      const out = execFileSync("pdfinfo", [path], {
-        timeout: options.timeoutMs ?? DEFAULT_TIMEOUT,
-        maxBuffer: 4 * 1024 * 1024,
-        encoding: "utf8",
-      });
+      const out = runTool("pdfinfo", [path], options);
       const pageMatch = out.match(/^Pages:\s+(\d+)/m);
       const versionMatch = out.match(/^PDF version:\s+([\d.]+)/m);
       const encrypted = /^Encrypted:\s+yes/m.test(out);
+      const pageCount = pageMatch ? Number.parseInt(pageMatch[1]!, 10) : null;
+      if (!checkPageLimit(pageCount, options.maxPages)) {
+        return {
+          status: "REJECTED" as const,
+          pageCount,
+          pdfVersion: versionMatch?.[1] ?? null,
+          encrypted,
+          reason: `too_many_pages:${pageCount}>${options.maxPages ?? 500}`,
+        };
+      }
       return {
         status: "OK" as const,
-        pageCount: pageMatch ? Number.parseInt(pageMatch[1]!, 10) : null,
+        pageCount,
         pdfVersion: versionMatch?.[1] ?? null,
         encrypted,
       };
@@ -215,11 +291,7 @@ export function extractPdfText(
       const args = ["-enc", "UTF-8"];
       if (options.layout) args.push("-layout");
       args.push(path, "-");
-      const text = execFileSync("pdftotext", args, {
-        timeout: options.timeoutMs ?? DEFAULT_TIMEOUT,
-        maxBuffer: 20 * 1024 * 1024,
-        encoding: "utf8",
-      });
+      const text = runTool("pdftotext", args, options);
       const inspection = tools.pdfinfo
         ? inspectPdf(bytes, options)
         : { pageCount: null };

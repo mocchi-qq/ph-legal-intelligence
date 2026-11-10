@@ -56,18 +56,18 @@ export function composeGroundedAnswer(
   evidence: CitedEvidence[],
   options: { asOfDate?: string } = {},
 ): GroundedAnswer {
-  const verified = evidence.filter(
-    (item) => item.result.verificationStatus === VERIFIED,
-  );
-  const unverified = evidence.filter(
-    (item) => item.result.verificationStatus !== VERIFIED,
-  );
+  // Lexical-only support is never treated as fully verified for answering.
+  const fullySupported = (item: CitedEvidence) =>
+    item.result.verificationStatus === VERIFIED &&
+    item.result.supportClass !== "LEXICAL_ONLY";
+  const verified = evidence.filter(fullySupported);
+  const unverified = evidence.filter((item) => !fullySupported(item));
   const limitations: string[] = [];
   const missingInformation: string[] = [];
 
   if (unverified.length > 0) {
     limitations.push(
-      `${unverified.length} citation(s) were not fully verified and are excluded from the answer: ` +
+      `${unverified.length} citation(s) were not fully verified (or were lexical-only) and are excluded from the answer: ` +
         unverified.map((item) => item.citation.citationText).join("; "),
     );
   }

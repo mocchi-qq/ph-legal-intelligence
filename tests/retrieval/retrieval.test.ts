@@ -36,6 +36,11 @@ describe("Gate 1 — retrieval", () => {
     expect(results[0]?.key).toBe("COURT_DECISION:G.R. No. 999001");
   });
 
+  it("retrieves by the RA alias form", () => {
+    const results = topIdentity("RA 1001");
+    expect(results[0]?.key).toBe("REPUBLIC_ACT:1001");
+  });
+
   it("retrieves by exact statute citation", () => {
     const results = topIdentity("Synthetic Republic Act No. 1001");
     expect(results[0]?.key).toBe("REPUBLIC_ACT:1001");

@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-11-10",
+  "dataset": "owner-authorized pilot, 4 official RA pages",
+  "environment": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "arch": "arm64",
+    "available_memory_mb": 2329,
+    "gpu": false,
+    "ocr_engine": "absent"
+  },
+  "corpus": {
+    "documents": 4,
+    "versions": 4,
+    "provisions": 54,
+    "chunks": 87,
+    "source_bytes": 184424
+  },
+  "timings_ms": {
+    "ingest_4_documents": 248.98,
+    "index_build": 120.24,
+    "query_p50": 0.576,
+    "query_p95": 7.016,
+    "query_p99": 20.762,
+    "queries_measured": 280
+  },
+  "memory_mb": {
+    "rss_before": 45.6,
+    "rss_after": 62.6,
+    "rss_delta": 17,
+    "heap_used_after": 15.8
+  },
+  "not_measured": [
+    "OCR time (no engine)",
+    "PDF extraction at scale (only a synthetic one-page PDF was timed separately)",
+    "Concurrent users and network acquisition throughput",
+    "Embedding generation (not implemented)"
+  ],
+  "limitations": [
+    "Four documents; timings are indicative, not production capacity.",
+    "Single warm process; no cold-start measurement.",
+    "Host is an ARM/PRoot environment with ~2.3 GB available memory."
+  ]
+}

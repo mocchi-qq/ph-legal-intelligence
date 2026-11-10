@@ -517,10 +517,14 @@ async function run() {
     },
   };
 
-  writeFileSync(
-    join(process.cwd(), "docs/gates/gate-1/08_benchmark-results.json"),
-    `${JSON.stringify(report, null, 2)}\n`,
-  );
+  // Historical Gate 1 artifacts are not rewritten by a routine test run.
+  // Regenerate explicitly with PH_WRITE_BENCH=1 when the benchmark itself changes.
+  if (process.env.PH_WRITE_BENCH === "1") {
+    writeFileSync(
+      join(process.cwd(), "docs/gates/gate-1/08_benchmark-results.json"),
+      `${JSON.stringify(report, null, 2)}\n`,
+    );
+  }
   return report;
 }
 

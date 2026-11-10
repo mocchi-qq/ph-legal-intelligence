@@ -102,3 +102,25 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G2-L | Independent review              | VERIFIED (second pass APPROVE)      | `09_INDEPENDENT_REVIEW.md`                                |
 | G2-M | Owner authorization + pilot     | VERIFIED (owner basis, not counsel) | `01A_OWNER_AUTHORIZATION.md`, `PILOT_MANIFEST.json`       |
 | G2-N | Guarded transport               | VERIFIED                            | `transport.ts`; 11 tests                                  |
+
+---
+
+# Gate 3 — Authorization Closure, Expanded Corpus, Real Retrieval
+
+**Corpus expansion BLOCKED:** no counsel determination; 25 sources remain UNKNOWN.
+
+| ID   | Task                                    | Status                          | Evidence                                                        |
+| ---- | --------------------------------------- | ------------------------------- | --------------------------------------------------------------- |
+| G3-A | Baseline + Gate 1/2 regression          | VERIFIED                        | `00_BASELINE.md`; 256 tests at baseline                         |
+| G3-B | Counsel dossier + worksheet + questions | VERIFIED (packet only)          | `01_COUNSEL_AUTHORIZATION.md`, `counsel-review/`                |
+| G3-C | Source authorization                    | BLOCKED (0 of 25)               | no counsel determination                                        |
+| G3-D | Corpus expansion to 20–50               | BLOCKED                         | `REAL_CORPUS_MANIFEST.json` (4 owner-authorized only)           |
+| G3-E | Immutable snapshot model                | VERIFIED                        | `02_SOURCE_SNAPSHOTS.md`; 7 tests                               |
+| G3-F | Parser isolation (prlimit + unshare -n) | VERIFIED (bounded)              | `03_DOCUMENT_SECURITY.md`; 14 PDF tests                         |
+| G3-G | OCR                                     | BLOCKED / NOT REQUIRED          | `04_OCR_AND_EXTRACTION_QUALITY.md`                              |
+| G3-H | Identity + version reconciliation       | PARTIAL (dates UNKNOWN)         | `05_LEGAL_VERSION_RECONCILIATION.md`                            |
+| G3-I | Real-corpus retrieval benchmark         | VERIFIED (4 docs)               | `06_RETRIEVAL_EVALUATION.md`; exact 6/6, R@5 9/9, negatives 5/5 |
+| G3-J | Semantic citation evaluation            | PARTIAL (technical labels only) | `07_SEMANTIC_CITATION_EVALUATION.md`; 7/7 annotation mechanism  |
+| G3-K | Grounded answering hardening            | VERIFIED                        | lexical-only excluded; `08_GROUNDED_ANSWERING.md`               |
+| G3-L | Performance/resource measurement        | VERIFIED (pilot)                | `09_PERFORMANCE_AND_RESOURCE_REPORT.md`                         |
+| G3-M | Independent review                      | IN REVIEW                       | `10_INDEPENDENT_REVIEW.md`                                      |
