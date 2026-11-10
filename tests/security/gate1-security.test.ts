@@ -85,7 +85,11 @@ describe("Gate 1 — security and privacy controls", () => {
     const store = CorpusStore.memory();
     const result = ingestArtifact(
       store,
-      artifact({ synthetic: true, sourceUrl: "synthetic://fixture/pdf", mimeType: "application/pdf" }),
+      artifact({
+        synthetic: true,
+        sourceUrl: "synthetic://fixture/pdf",
+        mimeType: "application/pdf",
+      }),
       OPTS,
     );
     expect(result.status).toBe("FAILED");
