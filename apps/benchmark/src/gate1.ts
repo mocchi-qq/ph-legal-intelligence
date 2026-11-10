@@ -16,4 +16,9 @@ export const GATE1_THRESHOLDS = {
   recoveryAccuracy: 1,
 } as const;
 
-export const GATE1_UNIMPLEMENTED = ["semantic_retrieval", "cross_encoder_reranking", "ocr", "pdf_parsing"] as const;
+export const GATE1_UNIMPLEMENTED = [
+  "semantic_retrieval",
+  "cross_encoder_reranking",
+  "ocr",
+  "pdf_parsing",
+] as const;

@@ -5,4 +5,6 @@
 // docs/gates/gate-1/08_BENCHMARK_REPORT.md for measured results.
 export * from "./gate1";
 
-console.log("PHLI Benchmark — Gate 1 runs via tests/benchmark/gate1-benchmark.test.ts");
+console.log(
+  "PHLI Benchmark — Gate 1 runs via tests/benchmark/gate1-benchmark.test.ts",
+);
