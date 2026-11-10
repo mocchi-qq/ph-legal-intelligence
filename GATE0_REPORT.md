@@ -58,7 +58,7 @@ Checked 99 files. 0 errors, 0 warnings, 0 info. EXIT=0
 
 ### 2.5 Git History
 
-16 commits, conventional messages, one logical concern per commit, working tree clean at each accepted milestone.
+Conventional, scoped commit messages with one logical concern per commit; working tree clean at each accepted milestone. 16 commits at the time of the cross-lane review; 18 including the review records themselves.
 
 ## 3. Requirement Traceability (Dossier §9 — Gate 0 Acceptance)
 
@@ -77,7 +77,7 @@ Checked 99 files. 0 errors, 0 warnings, 0 info. EXIT=0
 | 11  | Repository initialized                       | Met     | pnpm workspace, 5 apps, 16 packages                                                   |
 | 12  | Development environment verified             | Met     | scripts/verify-env.sh output                                                          |
 | 13  | Tests run successfully                       | Met     | `npx vitest run` all passing                                                          |
-| 14  | Git history clean and reviewable             | Met     | 16 conventional commits                                                               |
+| 14  | Git history clean and reviewable             | Met     | Conventional commits; 16 at review, 18 including review records                       |
 | 15  | Remaining blockers explicitly documented     | Met     | docs/architecture/KNOWN_LIMITATIONS.md                                                |
 
 ---
