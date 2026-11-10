@@ -42,3 +42,13 @@ All cards verified by executable tests plus a clean build. Evidence: `npx vitest
 - Author lanes alternate between NVIDIA (lane A) and OpenCode free tier (lane B) where subagents were available.
 - All legal sources remain `acquisition_status: "Pending"` by design — no reuse approval asserted.
 - Independent cross-lane review recorded in GATE0_REPORT.md / review section below.
+
+## Review outcome — Gate 0
+
+Independent cross-lane review (lane B, OpenCode) initially returned REQUEST CHANGES on three blocking findings:
+
+1. working-tree/format mismatch against the report;
+2. fabricated acquisition-status claims in KNOWN_LIMITATIONS.md;
+3. unsupported hallucination statistic and pricing in the competitor research.
+
+All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with the gate recorded as ACCEPTED WITH LIMITATIONS (source reuse unverified, benchmark content placeholder, ADRs stubbed, no product implementation).
