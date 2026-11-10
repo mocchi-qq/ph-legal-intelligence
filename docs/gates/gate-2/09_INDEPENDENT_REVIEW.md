@@ -51,7 +51,7 @@ After the owner authorized a bounded pilot, the reviewer re-ran everything at a 
 
 | Check                | Observed                                                                                                                                                 |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Suite                | 27 files / 253 tests at review (28 / 255 after the fixes below)                                                                                          |
+| Suite                | 27 files / 253 tests at review (28 / 256 after the fixes below)                                                                                          |
 | Pilot provenance     | **SHA-256 of all four local files matches `PILOT_MANIFEST.json`**; byte counts match                                                                     |
 | Pilot originals      | `legal-data/pilot/` untracked and git-ignored                                                                                                            |
 | Amendment evidence   | Both quotes occur verbatim (whitespace-normalised) in the corresponding source HTML                                                                      |

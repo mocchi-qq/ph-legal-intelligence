@@ -37,7 +37,7 @@ This is **not** legal authorization and not a general corpus. No source status c
 
 ## C. Evidence
 
-- Suite: `npx vitest run` → 28 files passing, 255 tests; 1 live pilot test skipped unless `PH_LIVE_PILOT=1`.
+- Suite: `npx vitest run` → 28 files passing, 256 tests; 1 live pilot test skipped unless `PH_LIVE_PILOT=1`.
 - Build: `pnpm build` → exit 0. Lint: `npx @biomejs/biome check .` → 0 errors.
 - Migrations 0001–0003 applied to `node:sqlite`; `authorization_basis` CHECK enforced.
 - Gate 1 benchmark JSON SHA-256 `7fca3b67…b0a5`, unchanged and pinned by test.
