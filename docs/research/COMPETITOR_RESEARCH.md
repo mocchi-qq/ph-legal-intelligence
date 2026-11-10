@@ -157,7 +157,7 @@ Harvey.ai website, press coverage, legal tech reviews (accessed 2026-11-09)
 ## ChatGPT (OpenAI)
 
 **Website:** https://chat.openai.com
-**Pricing (public):** Plus $23/month, Pro $103/month (approx. PHP conversion)
+**Pricing (public):** Plus $20/month, Pro $200/month (openai.com pricing, retrieved 2026-11-09)
 **Retrieval date:** 2026-11-09
 
 ### Publicly Documented Features
@@ -170,7 +170,7 @@ Harvey.ai website, press coverage, legal tech reviews (accessed 2026-11-09)
 
 ### Known Limitations
 
-- **17–34% citation hallucination rate** in legal contexts (per multiple independent studies)
+- **High citation hallucination rate on specific legal questions** — published evaluation reports 58% (GPT-4) to 88% (Llama 2) hallucination on specific, verifiable questions about US federal cases (Dahl, Magesh, Suzgun & Ho, _Large Legal Fictions_, 16 J. Legal Analysis 64 (2024))
 - No legal-specific training or grounding
 - No citator or authority verification
 - No Philippines-specific legal knowledge beyond training cutoff
@@ -178,7 +178,7 @@ Harvey.ai website, press coverage, legal tech reviews (accessed 2026-11-09)
 
 ### Source
 
-OpenAI pricing page, independent legal AI hallucination studies (Dahl et al., 2024; Mateo et al., 2024) (accessed 2026-11-09)
+OpenAI pricing page; Dahl, Magesh, Suzgun & Ho, _Large Legal Fictions: Profiling Legal Hallucinations in Large Language Models_, 16 Journal of Legal Analysis 64 (2024) (accessed 2026-11-09)
 
 ---
 

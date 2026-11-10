@@ -139,7 +139,7 @@ describe("Gate 0 acceptance — 15 required criteria", () => {
   it("15. remaining blockers documented", () => {
     const c = read("docs/architecture/KNOWN_LIMITATIONS.md");
     expect(c).toMatch(/E-Library|LawLibrary|LawPhil/i);
-    expect(c).toMatch(/good law|subsequent treatment/i);
+    expect(c).toMatch(/good[- ]law|subsequent treatment/i);
   });
 });
 

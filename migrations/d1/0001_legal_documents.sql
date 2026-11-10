@@ -1,6 +1,13 @@
 -- Migration: 0001_legal_documents
 -- Target: Cloudflare D1 (SQLite)
--- Purpose: Core four-object legal data model — source, canonical, extracted, chunks.
+-- Purpose: Core canonical legal data model — source manifestations, canonical
+-- documents, immutable versions, provisions, citations and relationships.
+--
+-- Scope note: this migration intentionally does NOT create searchable chunk or
+-- extracted-text tables. Those belong to Gate 1/2 extraction and retrieval work
+-- and will live in dedicated migrations (extracted text in R2, metadata and
+-- chunk pointers in D1). Their TypeScript shapes already exist in
+-- packages/legal-schema/src/types.ts; physical storage is deferred.
 --
 -- The TEXT CHECK IN (...) constraints below are the database-level mirror of the
 -- enumerations in packages/legal-schema/src/taxonomy.ts. Keep them in lockstep.

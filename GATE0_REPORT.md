@@ -58,9 +58,7 @@ Checked 99 files. 0 errors (2 warnings, 1 info). EXIT=0
 
 ### 2.5 Git History
 
-14 commits, conventional messages, one logical concern per commit, working tree clean at each accepted milestone.
-
----
+## 14 commits, conventional messages, one logical concern per commit, working tree clean at each accepted milestone.
 
 ## 3. Requirement Traceability (Dossier §9 — Gate 0 Acceptance)
 
@@ -106,7 +104,7 @@ ph-legal-intelligence/
 └── tests/              unit, integration, contract, security, regression, end-to-end
 ```
 
-Tracked files: 149.
+Tracked files: 155.
 
 ---
 
@@ -160,7 +158,17 @@ Tracked files: 149.
 
 ---
 
-## 9. Independent Verdict
+## 9. Cross-Lane Independent Review
+
+An independent reviewer on lane B (OpenCode free tier), separate from the authoring lane (NVIDIA), reproduced the evidence and reviewed content, not just file existence. It returned **REQUEST CHANGES** with three blocking findings, all of which were fixed before this acceptance:
+
+1. **Repo state vs. report mismatch.** The working tree had an unformatted `KANBAN.md`, so `biome check .` exited 1 while the report claimed 0. Fixed by formatting and committing the board; `biome check .` now exits 0 and the working tree is clean.
+2. **Fabricated status claims in `KNOWN_LIMITATIONS.md`.** The draft claimed licensing negotiations with CHED, a scraping prototype, and operational PDF retrieval — none of which exist. The file was rewritten to state only what the repository actually contains, with all sources `Pending`.
+3. **Misattributed hallucination statistic and pricing in `COMPETITOR_RESEARCH.md`.** The "17–34%" figure and "Mateo et al." reference were unsupported, and ChatGPT pricing was wrong. Corrected to the attributable Dahl et al. (2024) range of 58%–88% and to OpenAI's $20/$200 pricing.
+
+The reviewer also raised two major/minor spec points, both fixed: citation enforcement now covers `PARTIALLY_VERIFIED`, and the D1 migration header now states that chunk/extracted-text tables are deliberately deferred. The reviewer verified independently that the D1 migration applies to SQLite and enforces its enum `CHECK` constraints, that no secrets are committed, and that no product implementation exists at Gate 0.
+
+## 10. Independent Verdict
 
 **ACCEPTED WITH LIMITATIONS.**
 
@@ -168,6 +176,6 @@ Gate 0's engineering foundation is real and reproducible: the repo builds, lints
 
 ---
 
-## 10. Next Recommended Phase
+## 11. Next Recommended Phase
 
 **Gate 1 — Legal Data Foundation**, starting with a small, independently verified corpus across several legal domains: prove the system retrieves the correct authority, recognizes amendments, and cites the right passage before scaling the collection. First action: close source reuse review for the Tier 1 sources.

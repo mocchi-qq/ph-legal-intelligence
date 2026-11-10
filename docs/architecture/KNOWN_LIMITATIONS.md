@@ -1,23 +1,32 @@
 # Known Limitations — Philippine Legal Intelligence Platform
 
-Research gaps documented from dossier Section 22. Each gap has a status field indicating current state of resolution.
+Research gaps carried forward from dossier Section 22. This file records the state as of Gate 0. It states only what actually exists in this repository. No negotiation, connector, prototype, or acquisition is claimed beyond the artefacts listed.
 
-| Research Gap                   | Status      | Notes                                                                                                                                                                                                                                                |
-| ------------------------------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **E-Library bulk acquisition** | In Progress | Bulk dataset licensing negotiations ongoing with Commission on Higher Education. No public API available; screen-scraping prototype in development. Coverage: 2020-present statutes and court decisions. Priority: High (foundational legal corpus). |
-| **LawPhil bulk acquisition**   | In Progress | LawPhil Project (lawphil.net) content available via permissioned access. Bulk download API not public; individual case PDF retrieval operational. Coverage: 1901-present. Priority: High.                                                            |
-| **Official Gazette coverage**  | Partial     | Official Gazette (gov.ph) coverage limited to published presidential issuances. Not all agency issuances are gazetted. Coverage: ~60% of expected administrative law materials. Priority: Medium (supplemented by agency source connectors).         |
-| **Agency source connectors**   | Planned     | No connectors built yet for key agencies (DepEd, DOH, DPWH, DOJ). Requires API access or file imports. Prioritized by practice-area demand. Priority: Medium-term.                                                                                   |
-| **Local ordinance coverage**   | Limited     | Selected city/municipal ordinances available via local government websites. No standardized schema across PH localities. Coverage: <15% of jurisdictions. Priority: Medium (data normalization required).                                            |
-| **Historical law versions**    | Not Started | No infrastructure for tracking law version history, amendments, or repeal chains. Requires schema extension to `LegalStatus` and temporal model. Priority: Medium (supports good law analysis).                                                      |
-| **Case treatment data**        | Not Started | No data on whether cases are "good law", "overruled", "distinguished", or "followed". Requires integration with treatment metadata from citators (Shepardization equivalent). Priority: High (critical for legal research accuracy).                 |
-| **Multilingual retrieval**     | Not Started | Filipino (Tagalog) and English retrieval not balanced. Existing search optimized for English query patterns. Priority: Medium (supports broader access).                                                                                             |
-| **AI model selection**         | In Progress | Model gateway interfaces defined (packages/model-gateway). Provider-specific routing not yet implemented for all desired models (OpenAI, Anthropic, local PH-optimized models). Priority: Medium.                                                    |
-| **OCR quality**                | Not Started | No OCR pipeline for scanned Philippine legal documents. Would require integration with Tesseract or commercial OCR, with validation against born-digital texts. Priority: Low (depends on scanned document acquisition).                             |
-| **Cloudflare cost**            | Watching    | Vectorize, Queues, and R2 usage monitoring in progress. Cost model not yet finalized for production scale. Priority: Medium (affects deployment feasibility).                                                                                        |
-| **Legal service boundaries**   | Not Started | No explicit model for delineating legal advice vs. legal information. Requires policy documentation and UI/UX guardrails. Priority: High (compliance & ethics).                                                                                      |
-| **Privacy implementation**     | Not Started | No data minimization, consent, or retention policy implemented for user data. Requires privacy-by-design review across all data flows. Priority: High (legal requirement).                                                                           |
-| **Copyright/licensing**        | Not Started | Bulk acquisition copyright status unclear for many sources. License terms vary by source. Requires legal review of acquisition agreements. Priority: High.                                                                                           |
-| **Professional verification**  | Not Started | No mechanism for attorney or judge verification of platform-generated citations or analysis. Would require professional onboarding flow and attestation. Priority: Medium (enhances credibility).                                                    |
+Status values used here:
 
-_Adapted from dossier Section 22. Status values: In Progress, Partial, Planned, Not Started. See individual gate acceptance evidence for mitigation progress._
+- **Not started** — no work exists in this repository.
+- **Specified** — a design or schema exists, but no operational capability.
+- **Pending review** — a technical or legal review is outstanding.
+- **Blocked** — cannot proceed until an external dependency resolves.
+
+| Research gap               | Status         | What actually exists (Gate 0)                                                                                                                                                                    |
+| -------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| E-Library bulk acquisition | Pending review | Source registered as `sc_elibrary` with `acquisition_status: "Pending"`. No connector, no bulk-access agreement, no scraping prototype. Technical access and reuse permission remain unverified. |
+| LawPhil bulk acquisition   | Pending review | Source registered as `lawphil` with `acquisition_status: "Pending"`. No connector exists. Terms and reuse assessment outstanding.                                                                |
+| Official Gazette coverage  | Pending review | Source registered as `official_gazette`, `Pending`. Completeness of coverage is unmeasured.                                                                                                      |
+| Agency source connectors   | Not started    | Agency sources are registered as `Pending`. No connector code exists (apps/ingestion is a scaffold only).                                                                                        |
+| Local ordinance coverage   | Not started    | No local-ordinance source is registered. Geographic coverage is unmeasured and must not be claimed until records exist.                                                                          |
+| Historical law versions    | Specified      | Temporal model and `DocumentVersion` / `LegalProvision` schema exist. No versioned corpus or amendment graph has been built.                                                                     |
+| Case treatment data        | Not started    | No treatment/citator data exists. Good-law status must not be displayed as authoritative until evidence and classification are reviewed.                                                         |
+| Multilingual retrieval     | Not started    | No English–Filipino retrieval benchmark exists. Model and embedding choices are unvalidated.                                                                                                     |
+| AI model selection         | Specified      | Provider-neutral interfaces exist (packages/model-gateway, packages/ai-orchestrator). No model has been evaluated against a legal benchmark.                                                     |
+| OCR quality                | Not started    | No OCR pipeline exists. Quality on scanned Philippine legal documents is unmeasured.                                                                                                             |
+| Cloudflare cost            | Not started    | No representative workload has been run. Cost and capacity at 10k/100k/1M documents are unmeasured. Limits are cited from documentation only.                                                    |
+| Legal service boundaries   | Pending review | Requires Philippine counsel review of disclaimers, professional-practice implications, and document-generation workflows.                                                                        |
+| Privacy implementation     | Specified      | Privacy specification, AI governance, and threat model exist. No consent, retention, or data-subject-request mechanism is implemented yet.                                                       |
+| Copyright and licensing    | Pending review | Every source is `Pending`. No source is marked `Approved`. No bulk ingestion may proceed until reuse review and counsel sign-off.                                                                |
+| Professional verification  | Not started    | No lawyer-verification workflow exists. Account category does not grant professional privileges.                                                                                                 |
+
+## Gate 0 honesty note
+
+At Gate 0 the platform has no ingested corpus, no connectors, no trained or selected models, and no product UI. This table must not be read as evidence of operational capability. It records design state and open reviews only.

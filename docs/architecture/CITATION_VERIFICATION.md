@@ -221,9 +221,13 @@ reason and surface the verification gaps.
   citation used in an answer.
 - The answer generation pipeline **must** check all citations before
   finalizing output.
-- If any citation is `FAILED` or `PENDING`, the answer must either:
+- If any citation is anything other than `VERIFIED` — i.e. `FAILED`,
+  `PENDING`, or `PARTIALLY_VERIFIED` (any layer failed) — the answer must
+  either:
   1. Remove the unsupported claim, or
   2. Add the appropriate refusal notice per the table above.
+- A `PARTIALLY_VERIFIED` citation may never be presented as fully verified,
+  and must carry a notice naming the failed layer (e.g. support).
 - Answers with zero verified citations must not present legal conclusions as
   definitive.
 

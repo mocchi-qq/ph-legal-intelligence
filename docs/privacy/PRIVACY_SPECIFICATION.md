@@ -175,7 +175,7 @@ Before production, the following must exist and be reviewed by qualified Philipp
 
 ## 10. Breach Notification
 
-Per NPC Circular 16-03 and DPA §20(f):
+Per NPC Circular No. 16-03 and the Data Privacy Act IRR (Rule VIII, §20(f)):
 
 1. **Detect and contain** (Security Architecture §12)
 2. **Assess:** Nature, scope, affected data subjects, risk
