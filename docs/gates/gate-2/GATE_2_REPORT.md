@@ -33,11 +33,11 @@ This is **not** legal authorization and not a general corpus. No source status c
 | Citation support classes                            | Implemented; one real citation verified | `06_CITATION_AND_SEMANTIC_SUPPORT.md`                      |
 | Security/grounding                                  | Complete (bounded)                      | `07_SECURITY_AND_GROUNDING.md`                             |
 | Benchmark separation                                | Complete                                | `08_BENCHMARK_METHODOLOGY.md`                              |
-| Independent review                                  | Pending second pass for pilot           | `09_INDEPENDENT_REVIEW.md`                                 |
+| Independent review                                  | Approved (second pass)                  | `09_INDEPENDENT_REVIEW.md`                                 |
 
 ## C. Evidence
 
-- Suite: `npx vitest run` → 27 files passing, 253 tests; 1 live pilot test skipped unless `PH_LIVE_PILOT=1`.
+- Suite: `npx vitest run` → 28 files passing, 255 tests; 1 live pilot test skipped unless `PH_LIVE_PILOT=1`.
 - Build: `pnpm build` → exit 0. Lint: `npx @biomejs/biome check .` → 0 errors.
 - Migrations 0001–0003 applied to `node:sqlite`; `authorization_basis` CHECK enforced.
 - Gate 1 benchmark JSON SHA-256 `7fca3b67…b0a5`, unchanged and pinned by test.
@@ -78,7 +78,7 @@ Resolved: G2-S5 DNS-level SSRF gap is now implemented and tested. Remaining: Pop
 
 ## G. Independent review
 
-A first Gate 2 review approved the engineering (26 files / 241 tests) with six minor findings, all fixed. The guarded transport, owner authorization and real pilot were added afterwards and require a second independent pass; `09_INDEPENDENT_REVIEW.md` will carry that verdict once issued. The gate is not final until that pass completes.
+Two independent passes approved the work. The first covered the pre-pilot engineering (26 files / 241 tests) and raised six minor findings, all fixed. The second covered the owner-authorized pilot, guarded transport and owner-authorization basis and raised two major documentation findings plus six minor items; all were corrected or explicitly accepted. `09_INDEPENDENT_REVIEW.md` records the reproduced evidence, findings and dispositions. No unsupported status claim remains.
 
 ## H. Production readiness
 

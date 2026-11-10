@@ -45,8 +45,36 @@ The reviewer independently confirmed:
 - no real Philippine legal document, PDF or case name is committed;
 - Gate 1 results are byte-identical and are never merged with the real-corpus (empty) result.
 
-## 4. Final verdict
+## 4. Second pass — owner-authorized pilot and guarded transport
 
-Gate 2 is **APPROVED as an engineering gate** and **BLOCKED as a real-source gate**. No source is authorized, so no real corpus exists and none was validated. The Gate 1 guarantees are preserved.
+After the owner authorized a bounded pilot, the reviewer re-ran everything at a later HEAD.
 
-The reviewer's remaining items are latent hardening notes, not capability overclaims.
+| Check                | Observed                                                                                                                                                 |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Suite                | 27 files / 253 tests at review (28 / 255 after the fixes below)                                                                                          |
+| Pilot provenance     | **SHA-256 of all four local files matches `PILOT_MANIFEST.json`**; byte counts match                                                                     |
+| Pilot originals      | `legal-data/pilot/` untracked and git-ignored                                                                                                            |
+| Amendment evidence   | Both quotes occur verbatim (whitespace-normalised) in the corresponding source HTML                                                                      |
+| Transport            | Real `fetch` + real `dns.lookup`; DNS checked per hop; redirects re-validated; truncation, MIME, size, timeout enforced; 10 tests (11 after remediation) |
+| Source statuses      | Unchanged — 25 × `UNKNOWN`; `counsel_signoff: false`; `authorization_basis: owner_authorization`                                                         |
+| Benchmark separation | Pilot is `SEPARATE_DATASET`; legally-authorized slot stays `BLOCKED`, `metrics: null`                                                                    |
+| Gate 1 hash          | unchanged                                                                                                                                                |
+
+Findings at second pass and dispositions:
+
+| ID  | Severity       | Finding                                                                        | Disposition                                                                                                                  |
+| --- | -------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| S1  | major          | Hash prefixes in `02_ACQUISITION_AND_PROVENANCE.md` did not match the manifest | **Fixed** to the verified manifest prefixes                                                                                  |
+| S2  | major          | `KANBAN.md` uncommitted and unformatted, breaking `biome check`                | **Fixed** and committed                                                                                                      |
+| S3  | minor          | `G2-S3` still said transport was absent                                        | **Corrected** to remaining unverified behaviour (retry, TLS pinning, proxies)                                                |
+| S4  | minor          | `SEC.` heading support had no offline test                                     | **Added** `segmentation.test.ts`                                                                                             |
+| S5  | minor          | Duplicate section number in doc 04                                             | **Fixed**                                                                                                                    |
+| S6  | minor          | Pilot JSON `documents: 6` did not disclose 2 synthetic carriers                | **Fixed**: `real_documents: 4`, `synthetic_relationship_carriers: 2`                                                         |
+| S7  | minor          | Two short evidence excerpts are committed                                      | **Accepted**: `01A_OWNER_AUTHORIZATION.md` now records the evidence-excerpt carve-out (under ~300 chars, not redistribution) |
+| S8  | minor (latent) | Body buffered before size check                                                | **Fixed**: streaming read with a running cap, plus a test                                                                    |
+
+## 5. Final verdict
+
+Gate 2 is **ACCEPTED WITH LIMITATIONS**. The bounded owner-authorized pilot is real and independently verified; the guarded transport is real and tested; the Gate 1 guarantees are preserved.
+
+**Legal authorization is still absent.** All 25 sources remain `UNKNOWN`/`NOT_REVIEWED`, counsel sign-off is false, originals are not redistributed, and bulk ingestion is not authorized. The pilot is four documents, not a corpus benchmark.

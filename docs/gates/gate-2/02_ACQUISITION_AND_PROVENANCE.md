@@ -74,10 +74,10 @@ Four official E-Library Republic Act pages were acquired, preserved under
 
 | Document | Bytes  | SHA-256 (prefix) | Extracted chars |
 | -------- | ------ | ---------------- | --------------- |
-| RA 12232 | 39,262 | `88cc924c5100`   | 4,010           |
-| RA 10931 | 49,603 | `648acfe1f26d`   | 23,378          |
-| RA 12326 | 37,072 | `b8cda9d15418`   | 6,966           |
-| RA 12325 | 58,487 | `cf3b0dd0eab6`   | 22,192          |
+| RA 12232 | 39,262 | `6b6972c3eed1`   | 4,010           |
+| RA 10931 | 49,603 | `7af9ca2d153e`   | 23,378          |
+| RA 12326 | 37,072 | `858c580239b5`   | 6,966           |
+| RA 12325 | 58,487 | `a6ff48243be6`   | 22,192          |
 
 All four returned HTTP 200, `text/html`, no redirects, and parsed to the expected
 Republic Act identifier. `authorization_basis` = `owner_authorization`.

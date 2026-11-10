@@ -86,17 +86,19 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 **Primary objective BLOCKED:** no source authorization, no counsel sign-off. No real legal document acquired.
 
-| ID   | Task                            | Status                                                    | Evidence                                                  |
-| ---- | ------------------------------- | --------------------------------------------------------- | --------------------------------------------------------- |
-| G2-A | Baseline + Gate 1 regression    | VERIFIED                                                  | `docs/gates/gate-2/00_BASELINE.md`; 198 tests at baseline |
-| G2-B | Source authorization review     | VERIFIED (no approval)                                    | `01_SOURCE_AUTHORIZATION.md`; 25 × UNKNOWN unchanged      |
-| G2-C | Acquisition manifest + guards   | VERIFIED                                                  | `02_ACQUISITION_AND_PROVENANCE.md`; 14 tests              |
-| G2-D | PDF inspection/extraction       | VERIFIED (synthetic PDF)                                  | `03_PDF_PARSING_AND_OCR.md`; 11 tests                     |
-| G2-E | OCR                             | BLOCKED (engine absent)                                   | `NO_OCR_PROVIDER`, `available: false`                     |
-| G2-F | Legal identity + structure      | VERIFIED                                                  | `04_LEGAL_IDENTITY_AND_STRUCTURE.md`; 10 tests            |
-| G2-G | Real-corpus retrieval           | BLOCKED (no corpus)                                       | `05_RETRIEVAL_AND_RERANKING.md`                           |
-| G2-H | Semantic retrieval / reranking  | NOT_IMPLEMENTED                                           | no model evaluated                                        |
-| G2-I | Citation support classification | VERIFIED                                                  | `06_CITATION_AND_SEMANTIC_SUPPORT.md`; 7 tests            |
-| G2-J | Security/grounding              | VERIFIED (bounded)                                        | `07_SECURITY_AND_GROUNDING.md`                            |
-| G2-K | Benchmark separation            | VERIFIED                                                  | `08_BENCHMARK_METHODOLOGY.md`; Gate 1 hash pinned         |
-| G2-L | Independent review              | VERIFIED (APPROVE engineering / BLOCKED real acquisition) | `09_INDEPENDENT_REVIEW.md`                                |
+| ID   | Task                            | Status                              | Evidence                                                  |
+| ---- | ------------------------------- | ----------------------------------- | --------------------------------------------------------- |
+| G2-A | Baseline + Gate 1 regression    | VERIFIED                            | `docs/gates/gate-2/00_BASELINE.md`; 198 tests at baseline |
+| G2-B | Source authorization review     | VERIFIED (no approval)              | `01_SOURCE_AUTHORIZATION.md`; 25 × UNKNOWN unchanged      |
+| G2-C | Acquisition manifest + guards   | VERIFIED                            | `02_ACQUISITION_AND_PROVENANCE.md`; 14 tests              |
+| G2-D | PDF inspection/extraction       | VERIFIED (synthetic PDF)            | `03_PDF_PARSING_AND_OCR.md`; 11 tests                     |
+| G2-E | OCR                             | BLOCKED (engine absent)             | `NO_OCR_PROVIDER`, `available: false`                     |
+| G2-F | Legal identity + structure      | VERIFIED                            | `04_LEGAL_IDENTITY_AND_STRUCTURE.md`; 10 tests            |
+| G2-G | Real-corpus retrieval           | PARTIAL (4-doc owner pilot)         | `05_RETRIEVAL_AND_RERANKING.md`; exact 1/1, NL 5 results  |
+| G2-H | Semantic retrieval / reranking  | NOT_IMPLEMENTED                     | no model evaluated                                        |
+| G2-I | Citation support classification | VERIFIED                            | `06_CITATION_AND_SEMANTIC_SUPPORT.md`; 7 tests            |
+| G2-J | Security/grounding              | VERIFIED (bounded)                  | `07_SECURITY_AND_GROUNDING.md`                            |
+| G2-K | Benchmark separation            | VERIFIED                            | `08_BENCHMARK_METHODOLOGY.md`; Gate 1 hash pinned         |
+| G2-L | Independent review              | VERIFIED (second pass APPROVE)      | `09_INDEPENDENT_REVIEW.md`                                |
+| G2-M | Owner authorization + pilot     | VERIFIED (owner basis, not counsel) | `01A_OWNER_AUTHORIZATION.md`, `PILOT_MANIFEST.json`       |
+| G2-N | Guarded transport               | VERIFIED                            | `transport.ts`; 11 tests                                  |

@@ -262,7 +262,9 @@ describe.skipIf(!LIVE)(
           support_method: citation.supportMethod,
         },
         corpus: {
-          documents: store.state.documents.length,
+          real_documents: 4,
+          synthetic_relationship_carriers: 2,
+          total_records: store.state.documents.length,
           versions: store.state.versions.length,
           provisions: store.state.provisions.length,
           chunks: store.state.chunks.length,

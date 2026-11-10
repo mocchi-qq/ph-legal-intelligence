@@ -46,7 +46,7 @@ Gate 1 already supports evidenced `AMENDS`/`REPEALS`/`PARTIALLY_REPEALS` edges w
 
 Identity parsing and exact resolution are implemented and tested. They deliberately refuse to resolve approximate or conflicting identities.
 
-## 6. Real-document result (owner-authorized pilot)
+## 7. Real-document result (owner-authorized pilot)
 
 The four pilot documents used both `SECTION n.` and `SEC. n.` headings. The parser
 initially recognised only `SECTION`, collapsing each document to one `unsegmented`
