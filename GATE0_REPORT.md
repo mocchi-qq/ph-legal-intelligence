@@ -53,12 +53,12 @@ Environment OK
 
 ```
 $ npx @biomejs/biome check .
-Checked 99 files. 0 errors (2 warnings, 1 info). EXIT=0
+Checked 99 files. 0 errors, 0 warnings, 0 info. EXIT=0
 ```
 
 ### 2.5 Git History
 
-## 14 commits, conventional messages, one logical concern per commit, working tree clean at each accepted milestone.
+16 commits, conventional messages, one logical concern per commit, working tree clean at each accepted milestone.
 
 ## 3. Requirement Traceability (Dossier §9 — Gate 0 Acceptance)
 
@@ -77,7 +77,7 @@ Checked 99 files. 0 errors (2 warnings, 1 info). EXIT=0
 | 11  | Repository initialized                       | Met     | pnpm workspace, 5 apps, 16 packages                                                   |
 | 12  | Development environment verified             | Met     | scripts/verify-env.sh output                                                          |
 | 13  | Tests run successfully                       | Met     | `npx vitest run` all passing                                                          |
-| 14  | Git history clean and reviewable             | Met     | 14 conventional commits                                                               |
+| 14  | Git history clean and reviewable             | Met     | 16 conventional commits                                                               |
 | 15  | Remaining blockers explicitly documented     | Met     | docs/architecture/KNOWN_LIMITATIONS.md                                                |
 
 ---

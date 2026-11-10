@@ -38,9 +38,9 @@
     "ChatGPT": {
       "coverage": "General knowledge up to training cutoff; no authoritative legal corpus",
       "ai_features": "General reasoning, file analysis, code interpreter, web browsing, custom GPTs",
-      "pricing": "Plus $23/month, Pro $103/month",
+      "pricing": "Plus $20/month, Pro $200/month (openai.com, retrieved 2026-11-09)",
       "api_availability": "OpenAI API (pay-per-token)",
-      "philippines_focus": "No Philippines-specific legal grounding; 17–34% citation hallucination rate"
+      "philippines_focus": "No Philippines-specific legal grounding; high citation hallucination rate on specific legal questions — 58% (GPT-4) to 88% (Llama 2) per Dahl et al. (2024)"
     },
     "Philippine legal databases": {
       "coverage": "Official sources: SC decisions (1901+), statutes, presidential issuances, laws",
