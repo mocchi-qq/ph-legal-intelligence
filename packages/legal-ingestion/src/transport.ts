@@ -50,6 +50,39 @@ const ALLOWED_MIME = new Set([
 const DEFAULT_UA =
   "PHLI-research-pilot/0.1 (bounded internal evaluation; project owner authorized)";
 
+/** Stream the body with a running cap so a missing Content-Length cannot balloon memory. */
+async function readBounded(
+  response: Response,
+  maxBytes: number,
+): Promise<{ bytes: Uint8Array; tooLarge: boolean }> {
+  if (!response.body) {
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    return { bytes, tooLarge: bytes.length > maxBytes };
+  }
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    if (value) {
+      total += value.length;
+      if (total > maxBytes) {
+        await reader.cancel();
+        return { bytes: new Uint8Array(), tooLarge: true };
+      }
+      chunks.push(value);
+    }
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return { bytes, tooLarge: false };
+}
+
 async function resolveHost(
   hostname: string,
   resolve?: FetchOptions["resolve"],
@@ -152,16 +185,17 @@ export async function fetchLegalDocument(
         response.headers.get("content-length") ?? "",
         10,
       );
-      const buffer = new Uint8Array(await response.arrayBuffer());
-      if (buffer.length > maxBytes) {
+      const read = await readBounded(response, maxBytes);
+      if (read.tooLarge) {
         return {
           status: "REJECTED",
           redirects,
           httpStatus: response.status,
           contentType,
-          reason: `too_large:${buffer.length}>${maxBytes}`,
+          reason: `too_large:>${maxBytes}`,
         };
       }
+      const buffer = read.bytes;
       if (Number.isFinite(declaredLength) && declaredLength !== buffer.length) {
         return {
           status: "FAILED",

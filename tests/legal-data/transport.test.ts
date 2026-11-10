@@ -105,6 +105,21 @@ describe("Gate 2 — guarded transport", () => {
     expect(result.reason).toContain("too_large");
   });
 
+  it("enforces the size cap by streaming when Content-Length is absent", async () => {
+    const body = "y".repeat(300);
+    const result = await fetchLegalDocument("https://example.gov.ph/stream", {
+      resolve: publicResolve,
+      maxBytes: 100,
+      fetchImpl: async () =>
+        response(body, {
+          status: 200,
+          headers: { "content-type": "text/plain" },
+        }),
+    });
+    expect(result.status).toBe("REJECTED");
+    expect(result.reason).toContain("too_large");
+  });
+
   it("reports HTTP failures without throwing", async () => {
     const result = await fetchLegalDocument("https://example.gov.ph/missing", {
       resolve: publicResolve,

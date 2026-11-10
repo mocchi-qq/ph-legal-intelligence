@@ -7,16 +7,16 @@
 
 ## Scope
 
-| Constraint      | Value                                                                                        |
-| --------------- | -------------------------------------------------------------------------------------------- |
-| Sources         | Supreme Court E-Library (`elibrary.judiciary.gov.ph`) only                                   |
-| Documents       | 4 Republic Act pages (12326, 12325, 12232, 10931)                                            |
-| Purpose         | Internal engineering validation of acquisition, extraction, identity, retrieval and citation |
-| Storage         | `legal-data/pilot/`, git-ignored, local only                                                 |
-| Redistribution  | None. Originals are not committed, republished or served                                     |
-| Bulk access     | None. Four one-off requests, 1.5 s apart, no recursion, no crawl                             |
-| Access controls | None bypassed; no CAPTCHA evasion; no authentication circumvention                           |
-| Rate            | One request per document, bounded timeout and size                                           |
+| Constraint      | Value                                                                                                                                                                                                                  |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sources         | Supreme Court E-Library (`elibrary.judiciary.gov.ph`) only                                                                                                                                                             |
+| Documents       | 4 Republic Act pages (12326, 12325, 12232, 10931)                                                                                                                                                                      |
+| Purpose         | Internal engineering validation of acquisition, extraction, identity, retrieval and citation                                                                                                                           |
+| Storage         | `legal-data/pilot/`, git-ignored, local only                                                                                                                                                                           |
+| Redistribution  | None. Originals are not committed, republished or served. Short verbatim evidence excerpts (under ~300 characters) may be recorded in manifests/results for provenance; that is citation evidence, not redistribution. |
+| Bulk access     | None. Four one-off requests, 1.5 s apart, no recursion, no crawl                                                                                                                                                       |
+| Access controls | None bypassed; no CAPTCHA evasion; no authentication circumvention                                                                                                                                                     |
+| Rate            | One request per document, bounded timeout and size                                                                                                                                                                     |
 
 ## Explicit acknowledgements
 

@@ -69,6 +69,7 @@ Datasets are never merged. The pilot is not a legal-corpus benchmark.
 8. No authentication, tenancy, malware scanning, rate limiting or deployment.
 9. No qualified Philippine legal review of any output.
 10. Pilot originals are not redistributed and must be deleted if counsel restricts the use.
+11. Re-fetching the same E-Library URL produced different bytes of identical length; hashes are per-retrieval, not stable document identifiers.
 
 ## F. Security assessment
 

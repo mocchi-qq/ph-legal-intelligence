@@ -72,12 +72,18 @@ Four official E-Library Republic Act pages were acquired, preserved under
 `legal-data/pilot/` (git-ignored, not redistributed), and recorded in
 `PILOT_MANIFEST.json`:
 
-| Document | Bytes  | SHA-256 (prefix) | Extracted chars |
-| -------- | ------ | ---------------- | --------------- |
-| RA 12232 | 39,262 | `6b6972c3eed1`   | 4,010           |
-| RA 10931 | 49,603 | `7af9ca2d153e`   | 23,378          |
-| RA 12326 | 37,072 | `858c580239b5`   | 6,966           |
-| RA 12325 | 58,487 | `a6ff48243be6`   | 22,192          |
+| Document | Bytes  | Extracted chars |
+| -------- | ------ | --------------- |
+| RA 12232 | 39,262 | 4,010           |
+| RA 10931 | 49,603 | 23,378          |
+| RA 12326 | 37,072 | 6,966           |
+| RA 12325 | 58,487 | 22,192          |
+
+SHA-256 is recorded in `PILOT_MANIFEST.json` and was recomputed from the stored
+bytes; the manifest is authoritative. Re-fetching the same URLs produced
+different bytes with identical lengths, so a content hash identifies one
+retrieval, not a stable document identity. This is why the table does not
+duplicate hashes.
 
 All four returned HTTP 200, `text/html`, no redirects, and parsed to the expected
 Republic Act identifier. `authorization_basis` = `owner_authorization`.
