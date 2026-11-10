@@ -30,10 +30,16 @@ export type IsoDateTimeString = string;
 /** The kind of edge between two canonical documents. */
 export type DocumentRelationshipType =
   | "AMENDS"
+  | "PARTIALLY_AMENDS"
   | "REPEALS"
+  | "PARTIALLY_REPEALS"
   | "SUPERSEDES"
   | "IMPLEMENTS"
   | "INTERPRETS"
+  | "APPLIES"
+  | "DISTINGUISHES"
+  | "REVERSES"
+  | "MODIFIES"
   | "CITES"
   | "CONSOLIDATES"
   | "DERIVES_FROM"
@@ -184,8 +190,35 @@ export interface DocumentRelationship {
   relationshipType: DocumentRelationshipType;
   /** Provision-level scope, if the relationship targets a single provision. */
   scope?: string | null;
+  /** Date the relationship takes legal effect, if established. */
+  effectiveDate?: IsoDateString | null;
+  /** Quoted passage from the source document that evidences the relationship. */
+  evidencePassage?: string | null;
+  /** How the relationship was established — never inferred from similarity alone. */
+  verificationStatus: VerificationStatus;
   notes?: string | null;
   createdAt: IsoDateTimeString;
+}
+
+/**
+ * One execution of the ingestion pipeline over one artifact. Recorded so that
+ * re-runs are auditable and idempotent, and so a failure is never mistaken for
+ * a successful publish.
+ */
+export interface IngestionRun {
+  id: string;
+  inputContentHash: string;
+  sourceId: string;
+  pipelineVersion: string;
+  extractorVersion: string;
+  normalizerVersion: string;
+  status: "SUCCEEDED" | "DUPLICATE" | "FAILED" | "IDENTITY_AMBIGUOUS";
+  documentId?: string | null;
+  versionId?: string | null;
+  manifestId?: string | null;
+  failureReason?: string | null;
+  startedAt: IsoDateTimeString;
+  finishedAt?: IsoDateTimeString | null;
 }
 
 /**

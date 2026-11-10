@@ -1,0 +1,16 @@
+{
+  "description": "Gate 1 benchmark record schema",
+  "fields": [
+    "test_id",
+    "operation",
+    "expected_document",
+    "expected_passage",
+    "expected_version",
+    "expected_result",
+    "evidence_source",
+    "reviewer",
+    "actual_result",
+    "pass",
+    "failure_explanation"
+  ]
+}

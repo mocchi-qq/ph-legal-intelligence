@@ -29,6 +29,17 @@ export enum VerificationMethod {
   HYBRID = "HYBRID",
 }
 
+/** Explicit per-layer states. `VERIFIED` is never used as a blanket status. */
+export type CitationState =
+  | "VERIFIED_IDENTITY"
+  | "VERIFIED_LOCATION"
+  | "VERIFIED_SUPPORT"
+  | "VERIFIED_TEMPORAL_STATUS"
+  | "PARTIALLY_VERIFIED"
+  | "UNVERIFIED"
+  | "CONFLICTING"
+  | "INVALID";
+
 /** Aggregated verification status. */
 export enum VerificationStatus {
   VERIFIED = "VERIFIED",
@@ -45,6 +56,8 @@ export interface CitationInput {
   documentId?: string;
   /** DocumentChunk or LegalProvision ID if already resolved. */
   passageId?: string;
+  /** Pinpoint location within the document, e.g. `Section 2` or `¶ 4`. */
+  location?: string;
   /** The legal proposition this citation is offered to support. */
   proposition: string;
   /** ISO date (YYYY-MM-DD) for temporal validity evaluation. */
@@ -75,4 +88,6 @@ export interface CitationVerificationResult {
   verificationStatus: VerificationStatus;
   /** Per-layer detail with evidence and notes. */
   layerResults: LayerResults;
+  /** Explicit states; never a blanket `VERIFIED`. */
+  states?: CitationState[];
 }

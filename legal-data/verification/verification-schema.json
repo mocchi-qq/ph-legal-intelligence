@@ -1,0 +1,18 @@
+{
+  "description": "Verification record for each corpus artifact. Synthetic fixtures are marked SYNTHETIC and are never publication-eligible.",
+  "fields": {
+    "document_id": "stable internal identity key",
+    "source_id": "source registry id",
+    "source_url": "exact URL or synthetic:// locator",
+    "source_classification": "SYNTHETIC | official_primary | official_secondary | unofficial",
+    "retrieval_date": "ISO-8601 timestamp",
+    "artifact_id": "fixture or artifact identifier",
+    "sha256": "SHA-256 of original bytes",
+    "extraction_result": "text_extracted | empty | unsupported",
+    "verification_result": "independently verified | not_independently_verified",
+    "reviewer": "person who verified, or none",
+    "exceptions": "known anomalies",
+    "legal_status_confidence": "high | low | not_applicable_synthetic",
+    "publication_eligibility": "ELIGIBLE | NOT_ELIGIBLE_SYNTHETIC | BLOCKED"
+  }
+}

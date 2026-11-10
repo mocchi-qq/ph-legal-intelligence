@@ -1,0 +1,14 @@
+{
+  "source": "packages/legal-schema/src/taxonomy.ts",
+  "values": [
+    "UNKNOWN",
+    "IN_FORCE",
+    "PARTIALLY_AMENDED",
+    "AMENDED",
+    "REPEALED",
+    "SUPERSEDED",
+    "EXPIRED",
+    "NOT_YET_EFFECTIVE",
+    "UNDER_REVIEW"
+  ]
+}

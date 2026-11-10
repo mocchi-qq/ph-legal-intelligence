@@ -1,0 +1,22 @@
+{
+  "source": "packages/legal-schema/src/taxonomy.ts",
+  "values": [
+    "CONSTITUTION",
+    "STATUTE",
+    "REPUBLIC_ACT",
+    "COMMONWEALTH_ACT",
+    "PRESIDENTIAL_DECREE",
+    "BATAS_PAMBANSA",
+    "EXECUTIVE_ORDER",
+    "ADMINISTRATIVE_ORDER",
+    "COURT_DECISION",
+    "SIGNED_RESOLUTION",
+    "COURT_RULE",
+    "COURT_CIRCULAR",
+    "AGENCY_REGULATION",
+    "ADMINISTRATIVE_DECISION",
+    "TREATY",
+    "LOCAL_ORDINANCE",
+    "LEGAL_REFERENCE"
+  ]
+}

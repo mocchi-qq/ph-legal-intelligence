@@ -1,8 +1,5 @@
 // @phli/ai-orchestrator — Package entry point
-//
-// The orchestration contract for grounded legal AI: a provider-neutral model
-// gateway and the structured research answer schemas. See
-// docs/architecture/AI_RESEARCH_SPECIFICATION.md for the architecture these
-// types encode.
+// Responsibility: docs/gates/gate-1/07_CITATION_VERIFICATION_REPORT.md
 
+export * from "./grounding";
 export * from "./types";

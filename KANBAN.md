@@ -52,3 +52,30 @@ Independent cross-lane review (lane B, OpenCode) initially returned REQUEST CHAN
 3. unsupported hallucination statistic and pricing in the competitor research.
 
 All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with the gate recorded as ACCEPTED WITH LIMITATIONS (source reuse unverified, benchmark content placeholder, ADRs stubbed, no product implementation).
+
+---
+
+# Gate 1 — Legal Data Foundation
+
+**Hard stop honoured:** no real legal material ingested. Corpus is `SYNTHETIC` only. Bulk ingestion `BLOCKED — COUNSEL SIGN-OFF NOT OBTAINED`.
+
+| ID   | Task                                         | Owner           | Status           | Evidence                                                                      |
+| ---- | -------------------------------------------- | --------------- | ---------------- | ----------------------------------------------------------------------------- |
+| G1-A | Baseline report                              | lead            | VERIFIED         | `docs/gates/gate-1/00_BASELINE_REPORT.md`                                     |
+| G1-B | Source authorization matrix + registry       | lead            | VERIFIED         | `SOURCE_AUTHORIZATION_MATRIX.md`, `sources.authorization.json` (25 × UNKNOWN) |
+| G1-C | Counsel reuse packet                         | lead            | READY (not sent) | `01_SOURCE_REUSE_REVIEW.md`; no sign-off                                      |
+| G1-D | Migration 0002 (relationships, chunks, runs) | lead            | VERIFIED         | applied to SQLite; enums enforced                                             |
+| G1-E | Bounded ingestion                            | lead            | VERIFIED         | 13 tests; 10 runs / 8 docs / 9 versions                                       |
+| G1-F | Legal versioning                             | lead            | VERIFIED         | 4/4 amendment, 4/4 repeal, 4/4 historical                                     |
+| G1-G | Retrieval                                    | lead            | VERIFIED         | exact 4/4, Recall@5 8/8, Recall@10 8/8                                        |
+| G1-H | Citation verification                        | lead            | VERIFIED         | 10/10 each layer                                                              |
+| G1-I | Grounding                                    | lead            | VERIFIED         | 6 tests; abstains without verified authority                                  |
+| G1-J | Benchmark                                    | lead            | VERIFIED         | `08_benchmark-results.json`                                                   |
+| G1-K | Security/privacy review                      | lead            | VERIFIED         | `03_SECURITY_AND_PRIVACY_REVIEW.md`                                           |
+| G1-L | Independent review                           | lane B reviewer | IN REVIEW        | `09_INDEPENDENT_REVIEW.md`                                                    |
+
+### Explicit blockers
+
+- **BLOCKED — COUNSEL SIGN-OFF NOT OBTAINED.** No source may be used for real test or bulk ingestion.
+- Semantic retrieval, reranking, OCR and PDF parsing: not implemented.
+- Authentication, tenancy and deployment: not implemented.

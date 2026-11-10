@@ -1,0 +1,480 @@
+{
+  "generated_at": "2026-11-10",
+  "corpus": {
+    "synthetic": true,
+    "documents": 8,
+    "versions": 9,
+    "provisions": 31,
+    "chunks": 31,
+    "ingestion_runs": 10,
+    "duplicate_runs": 1
+  },
+  "retrieval": {
+    "cases": 11,
+    "exact": {
+      "correct": 4,
+      "total": 4
+    },
+    "recall_at_5": {
+      "passed": 8,
+      "total": 8,
+      "value": 1
+    },
+    "recall_at_10": {
+      "passed": 8,
+      "total": 8,
+      "value": 1
+    },
+    "passage_accuracy": {
+      "passed": 3,
+      "total": 3
+    },
+    "negative_cases": {
+      "correct": 3,
+      "total": 3
+    },
+    "semantic_retrieval": "NOT IMPLEMENTED",
+    "reranking": "NOT IMPLEMENTED",
+    "detail": [
+      {
+        "id": "R1",
+        "query": "G.R. No. 999001",
+        "expect": [
+          "COURT_DECISION:G.R. No. 999001"
+        ],
+        "exact": true,
+        "returned": [
+          "COURT_DECISION:G.R. No. 999001"
+        ],
+        "hit5": true,
+        "hit10": true
+      },
+      {
+        "id": "R2",
+        "query": "Synthetic Republic Act No. 1001",
+        "expect": [
+          "REPUBLIC_ACT:1001"
+        ],
+        "exact": true,
+        "returned": [
+          "REPUBLIC_ACT:1001"
+        ],
+        "hit5": true,
+        "hit10": true
+      },
+      {
+        "id": "R3",
+        "query": "Synthetic Executive Order No. 101",
+        "expect": [
+          "EXECUTIVE_ORDER:101"
+        ],
+        "exact": true,
+        "returned": [
+          "EXECUTIVE_ORDER:101",
+          "AGENCY_REGULATION:IRR-101",
+          "REPUBLIC_ACT:1003",
+          "REPUBLIC_ACT:1002",
+          "COURT_DECISION:G.R. No. 999001",
+          "COURT_DECISION:G.R. No. 999002",
+          "COURT_DECISION:G.R. No. 999003",
+          "REPUBLIC_ACT:1001"
+        ],
+        "hit5": true,
+        "hit10": true
+      },
+      {
+        "id": "R4",
+        "query": "Synthetic Implementing Rules and Regulations of EO 101",
+        "expect": [
+          "AGENCY_REGULATION:IRR-101"
+        ],
+        "exact": true,
+        "returned": [
+          "AGENCY_REGULATION:IRR-101",
+          "REPUBLIC_ACT:1001",
+          "COURT_DECISION:G.R. No. 999001",
+          "COURT_DECISION:G.R. No. 999002",
+          "COURT_DECISION:G.R. No. 999003",
+          "EXECUTIVE_ORDER:101"
+        ],
+        "hit5": true,
+        "hit10": true
+      },
+      {
+        "id": "R5",
+        "query": "annual renewal of registration",
+        "expect": [
+          "REPUBLIC_ACT:1001"
+        ],
+        "expectPassage": "renew its registration every year",
+        "returned": [
+          "REPUBLIC_ACT:1002",
+          "COURT_DECISION:G.R. No. 999003",
+          "AGENCY_REGULATION:IRR-101",
+          "REPUBLIC_ACT:1001",
+          "COURT_DECISION:G.R. No. 999002",
+          "COURT_DECISION:G.R. No. 999001"
+        ],
+        "hit5": true,
+        "hit10": true,
+        "passageHit": true
+      },
+      {
+        "id": "R6",
+        "query": "administrative penalty for a violation",
+        "expect": [
+          "REPUBLIC_ACT:1001"
+        ],
+        "expectPassage": "administrative penalty",
+        "returned": [
+          "REPUBLIC_ACT:1001"
+        ],
+        "hit5": true,
+        "hit10": true,
+        "passageHit": true
+      },
+      {
+        "id": "R7",
+        "query": "renew its registration every year",
+        "asOf": "2019-06-01",
+        "expect": [],
+        "returned": [],
+        "hit5": true,
+        "hit10": true
+      },
+      {
+        "id": "R8",
+        "query": "renew its registration every year",
+        "asOf": "2021-01-01",
+        "expect": [
+          "REPUBLIC_ACT:1001"
+        ],
+        "expectPassage": "renew its registration every year",
+        "returned": [
+          "REPUBLIC_ACT:1001",
+          "AGENCY_REGULATION:IRR-101",
+          "COURT_DECISION:G.R. No. 999001"
+        ],
+        "hit5": true,
+        "hit10": true,
+        "passageHit": true
+      },
+      {
+        "id": "R9",
+        "query": "G.R. No. 000000",
+        "expect": [],
+        "returned": [],
+        "hit5": true,
+        "hit10": true
+      },
+      {
+        "id": "R10",
+        "query": "Synthetic Republic Act No. 9999",
+        "expect": [],
+        "returned": [],
+        "hit5": true,
+        "hit10": true
+      },
+      {
+        "id": "R11",
+        "query": "registration before it begins operations",
+        "expect": [
+          "COURT_DECISION:G.R. No. 999001",
+          "COURT_DECISION:G.R. No. 999002"
+        ],
+        "returned": [
+          "COURT_DECISION:G.R. No. 999002",
+          "COURT_DECISION:G.R. No. 999001",
+          "REPUBLIC_ACT:1001",
+          "COURT_DECISION:G.R. No. 999003",
+          "AGENCY_REGULATION:IRR-101"
+        ],
+        "hit5": true,
+        "hit10": true
+      }
+    ]
+  },
+  "citations": {
+    "cases": 10,
+    "identity": {
+      "correct": 10,
+      "total": 10,
+      "value": 1
+    },
+    "location": {
+      "correct": 10,
+      "total": 10,
+      "value": 1
+    },
+    "support": {
+      "correct": 10,
+      "total": 10,
+      "value": 1
+    },
+    "temporal": {
+      "correct": 10,
+      "total": 10,
+      "value": 1
+    },
+    "support_method": "deterministic lexical proxy (threshold 0.8); not semantic entailment",
+    "detail": [
+      {
+        "id": "C1",
+        "status": "VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        },
+        "expected": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C2",
+        "status": "FAILED",
+        "actual": {
+          "identity": false,
+          "location": false,
+          "support": false,
+          "temporal": false
+        },
+        "expected": {
+          "identity": false,
+          "location": false,
+          "support": false,
+          "temporal": false
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C3",
+        "status": "PARTIALLY_VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": false,
+          "support": false,
+          "temporal": true
+        },
+        "expected": {
+          "identity": true,
+          "location": false,
+          "support": false,
+          "temporal": true
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C4",
+        "status": "PARTIALLY_VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": true,
+          "support": false,
+          "temporal": true
+        },
+        "expected": {
+          "identity": true,
+          "location": true,
+          "support": false,
+          "temporal": true
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C5",
+        "status": "PARTIALLY_VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": true,
+          "support": false,
+          "temporal": true
+        },
+        "expected": {
+          "identity": true,
+          "location": true,
+          "support": false,
+          "temporal": true
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C6",
+        "status": "PARTIALLY_VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": false
+        },
+        "expected": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": false
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C7",
+        "status": "VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        },
+        "expected": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C8",
+        "status": "PARTIALLY_VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": false
+        },
+        "expected": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": false
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C9",
+        "status": "VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        },
+        "expected": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      },
+      {
+        "id": "C10",
+        "status": "PARTIALLY_VERIFIED",
+        "actual": {
+          "identity": true,
+          "location": true,
+          "support": false,
+          "temporal": true
+        },
+        "expected": {
+          "identity": true,
+          "location": true,
+          "support": false,
+          "temporal": true
+        },
+        "layerAgreement": {
+          "identity": true,
+          "location": true,
+          "support": true,
+          "temporal": true
+        }
+      }
+    ]
+  },
+  "versioning": {
+    "amendment": {
+      "passed": 4,
+      "total": 4
+    },
+    "repeal": {
+      "passed": 4,
+      "total": 4
+    },
+    "historical": {
+      "passed": 4,
+      "total": 4
+    }
+  },
+  "abstention": {
+    "passed": 3,
+    "total": 3
+  },
+  "duplicate_ingestion": {
+    "passed": 3,
+    "total": 3
+  },
+  "recovery": {
+    "passed": 3,
+    "total": 3
+  },
+  "thresholds": {
+    "exact_identifier": "100%",
+    "recall_at_10": ">=90%",
+    "recall_at_5": ">=80%",
+    "passage_accuracy": ">=85%",
+    "citation_layer_accuracy": "100%",
+    "amendment_repeal_historical": "100%",
+    "abstention": "100%",
+    "duplicate": "0 extra documents",
+    "recovery": "100%"
+  }
+}

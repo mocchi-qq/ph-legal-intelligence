@@ -1,0 +1,21 @@
+{
+  "source": "packages/legal-schema/src/types.ts",
+  "values": [
+    "AMENDS",
+    "PARTIALLY_AMENDS",
+    "REPEALS",
+    "PARTIALLY_REPEALS",
+    "SUPERSEDES",
+    "IMPLEMENTS",
+    "INTERPRETS",
+    "APPLIES",
+    "DISTINGUISHES",
+    "REVERSES",
+    "MODIFIES",
+    "CITES",
+    "CONSOLIDATES",
+    "DERIVES_FROM",
+    "RELATED"
+  ],
+  "note": "Every relationship must carry evidence; none is inferred from textual similarity."
+}
