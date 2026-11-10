@@ -147,3 +147,51 @@ describe("Gate 1 — citation verification", () => {
     );
   });
 });
+
+describe("Gate 1 — fail-closed temporal edge", () => {
+  it("fails temporal validity when a provision is repealed but the end date is unknown", async () => {
+    const isolated = createCitationVerifier({
+      documents: [
+        {
+          id: "doc-x",
+          title: "Synthetic Repealed Instrument",
+          citationText: "Synthetic Instrument No. 9",
+          legalStatus: "PARTIALLY_AMENDED",
+          effectivityDate: "2019-01-01",
+        },
+      ],
+      versions: [
+        {
+          id: "v1",
+          documentId: "doc-x",
+          effectiveFrom: "2019-01-01",
+          effectiveTo: null,
+          isCurrent: true,
+        },
+      ],
+      provisions: [
+        {
+          id: "prov-x",
+          documentId: "doc-x",
+          versionId: "v1",
+          label: "Section 1",
+          text: "A synthetic duty applies to covered entities.",
+          legalStatus: "REPEALED",
+          effectiveFrom: "2019-01-01",
+          effectiveTo: null,
+        },
+      ],
+      chunks: [],
+    });
+    const result = await isolated.verify({
+      citationText: "Synthetic Instrument No. 9",
+      location: "Section 1",
+      proposition: "A synthetic duty applies to covered entities.",
+      relevantDate: "2024-01-01",
+    });
+    expect(result.layerResults.TEMPORAL_VALIDITY.passed).toBe(false);
+    expect(result.layerResults.TEMPORAL_VALIDITY.evidence).toContain(
+      "repeal date is unknown",
+    );
+  });
+});

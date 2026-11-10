@@ -218,13 +218,15 @@ export function segmentChunks(provisions: ProvisionSeed[]): ChunkSeed[] {
         buffer.length > 0 &&
         buffer.length + sentence.length + 1 > MAX_CHUNK
       ) {
+        const content = buffer.trim();
+        const lead = buffer.length - buffer.trimStart().length;
         chunks.push({
           provisionOrdinal: provision.ordinal,
           chunkKind: "provision",
           chunkIndex: chunks.length,
-          content: buffer.trim(),
-          charStart: cursor,
-          charEnd: cursor + buffer.length,
+          content,
+          charStart: cursor + lead,
+          charEnd: cursor + lead + content.length,
         });
         cursor += buffer.length;
         buffer = "";

@@ -34,15 +34,19 @@ The reviewer independently confirmed:
 - benchmark thresholds are pre-declared and semantic retrieval is scored as `NOT IMPLEMENTED`;
 - no source is approved and no legal-compliance claim is made.
 
-Minor issues raised and fixed after the review:
+Minor issues raised and their disposition:
 
-1. The synthetic flag alone could bypass the authorization guard → added a synthetic-locator cross-check and a test.
-2. A provision marked `REPEALED` with an unknown repeal date passed temporal validity → now fails closed.
-3. "Private/public separation by construction" overstated index isolation → relabelled as conditional; no enforced tenant boundary exists.
-4. Dead `LAW_LIKE` set in `pipeline.ts` → removed.
-5. Ingestion doc comment imprecise about transactional scope → corrected.
-6. Chunk offsets could drift after trimming; fallback label invented "Section 1" → offsets corrected; fallback now `unsegmented`.
-7. PLAN's support-case denominator drifted from 4 to 10 → recorded.
+| #   | Issue                                                                     | Disposition                                                                                          |
+| --- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 1   | The synthetic flag alone could bypass the authorization guard             | **Applied** in `e0e86b0`: synthetic-locator cross-check + test                                       |
+| 2   | `REPEALED` provision with unknown repeal date passed temporal validity    | **Applied after re-review**: fails closed with "repeal date is unknown"                              |
+| 3   | "Private/public separation by construction" overstated index isolation    | **Applied after re-review**: relabelled conditional; no enforced tenant boundary                     |
+| 4   | Dead `LAW_LIKE` set in `pipeline.ts`                                      | **Applied after re-review**: removed                                                                 |
+| 5   | Ingestion doc comment imprecise about transactional scope                 | **Applied** in `e0e86b0`                                                                             |
+| 6   | Chunk offsets drifted after trimming; fallback label invented "Section 1" | **Applied** in `e0e86b0` for the final chunk and label; mid-loop offsets **applied after re-review** |
+| 7   | PLAN's support-case denominator drifted from 4 to 10                      | **Applied after re-review**: drift note added                                                        |
+
+The first re-verification pass correctly caught that items 2, 3, 4 and 7 had been claimed but not applied, and that item 6 was only partly applied. Those claims were inaccurate; this table records the timeline rather than hiding it.
 
 ## 3. Blocking finding and disposition
 

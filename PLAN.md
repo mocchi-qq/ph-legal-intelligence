@@ -21,22 +21,24 @@
 
 ## Thresholds fixed before results
 
-| Metric                                | Threshold | Denominator                |
-| ------------------------------------- | --------- | -------------------------- |
-| Exact identifier accuracy             | 100%      | 4/4                        |
-| Recall@10                             | >= 90%    | all retrieval cases        |
-| Recall@5                              | >= 80%    | all retrieval cases        |
-| Passage retrieval accuracy            | >= 85%    | all passage cases          |
-| Citation identity accuracy            | 100%      | all citation cases         |
-| Citation location accuracy            | 100%      | all citation cases         |
-| Proposition-support accuracy          | 100%      | 4 (2 positive, 2 negative) |
-| Amendment recognition                 | 100%      | 2                          |
-| Historical version accuracy           | 100%      | 2                          |
-| Abstention correctness                | 100%      | 3                          |
-| Duplicate canonical documents created | 0         | duplicate ingest test      |
-| Recovery after interrupted ingest     | 100%      | 1                          |
+| Metric                                | Threshold | Denominator                       |
+| ------------------------------------- | --------- | --------------------------------- |
+| Exact identifier accuracy             | 100%      | 4/4                               |
+| Recall@10                             | >= 90%    | all retrieval cases               |
+| Recall@5                              | >= 80%    | all retrieval cases               |
+| Passage retrieval accuracy            | >= 85%    | all passage cases                 |
+| Citation identity accuracy            | 100%      | all citation cases                |
+| Citation location accuracy            | 100%      | all citation cases                |
+| Proposition-support accuracy          | 100%      | 4 planned; 10 executed (see note) |
+| Amendment recognition                 | 100%      | 2                                 |
+| Historical version accuracy           | 100%      | 2                                 |
+| Abstention correctness                | 100%      | 3                                 |
+| Duplicate canonical documents created | 0         | duplicate ingest test             |
+| Recovery after interrupted ingest     | 100%      | 1                                 |
 
 A synthetic corpus cannot establish nationwide coverage or universal legal accuracy. Every report must say so.
+
+**Drift note:** the support metric was planned with 4 cases; the executed benchmark uses 10 (positive, negative and adversarial). The executed denominator is recorded in `docs/gates/gate-1/08_benchmark-results.json`. Thresholds were not changed after seeing results.
 
 ## Stop conditions honoured
 

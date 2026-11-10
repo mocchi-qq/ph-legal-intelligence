@@ -6,16 +6,16 @@
 
 ## 1. Tested controls
 
-| Control                                   | Result  | Evidence                                                                                                                        |
-| ----------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Unauthorized source refusal               | Pass    | Non-synthetic artifact with `sourceId: sc_elibrary` → `FAILED / source_not_authorized`, zero documents/manifestations persisted |
-| Audit of every attempt                    | Pass    | Each ingest, including refusals, writes an `ingestion_run` with status and pipeline version                                     |
-| File type validation                      | Pass    | `application/pdf` → `FAILED / unsupported_mime`                                                                                 |
-| Empty extraction                          | Pass    | Artifact with no legal text → `FAILED / empty_extraction`, corpus unchanged                                                     |
-| Private/public separation by construction | Pass    | Index built from the legal corpus contains no `private_upload` source; a corpus of only private docs yields an empty index      |
-| Synthetic material labelling              | Pass    | All fixtures `synthetic: true`, `synthetic://` URLs, manifest notice                                                            |
-| No secrets in example env                 | Pass    | `.env.example` contains empty placeholders only                                                                                 |
-| Prompt-injection handling                 | Partial | Instruction-like sentences are stripped before support checking and answer assembly; treated as data. Heuristic only            |
+| Control                       | Result      | Evidence                                                                                                                                              |
+| ----------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unauthorized source refusal   | Pass        | Non-synthetic artifact with `sourceId: sc_elibrary` → `FAILED / source_not_authorized`, zero documents/manifestations persisted                       |
+| Audit of every attempt        | Pass        | Each ingest, including refusals, writes an `ingestion_run` with status and pipeline version                                                           |
+| File type validation          | Pass        | `application/pdf` → `FAILED / unsupported_mime`                                                                                                       |
+| Empty extraction              | Pass        | Artifact with no legal text → `FAILED / empty_extraction`, corpus unchanged                                                                           |
+| Index isolation (conditional) | Conditional | Index mirrors the corpus passed in; no enforced tenant boundary exists. A private source is absent only because it is not placed in the public corpus |
+| Synthetic material labelling  | Pass        | All fixtures `synthetic: true`, `synthetic://` URLs, manifest notice                                                                                  |
+| No secrets in example env     | Pass        | `.env.example` contains empty placeholders only                                                                                                       |
+| Prompt-injection handling     | Partial     | Instruction-like sentences are stripped before support checking and answer assembly; treated as data. Heuristic only                                  |
 
 ## 2. Untested controls (not implemented at Gate 1)
 

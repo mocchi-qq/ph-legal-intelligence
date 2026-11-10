@@ -323,6 +323,12 @@ function checkTemporal(
         evidence: `provision not in force on ${relevantDate}`,
       };
     }
+    if (provision.legalStatus === "REPEALED" && !provision.effectiveTo) {
+      return {
+        passed: false,
+        evidence: `provision ${provision.label} is repealed but the repeal date is unknown`,
+      };
+    }
     if (
       provision.legalStatus === "REPEALED" &&
       provision.effectiveTo &&

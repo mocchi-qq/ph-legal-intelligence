@@ -30,22 +30,6 @@ const ALLOWED_MIME = new Set([
   "text/html",
   "application/xhtml+xml",
 ]);
-const LAW_LIKE = new Set([
-  "CONSTITUTION",
-  "STATUTE",
-  "REPUBLIC_ACT",
-  "COMMONWEALTH_ACT",
-  "PRESIDENTIAL_DECREE",
-  "BATAS_PAMBANSA",
-  "EXECUTIVE_ORDER",
-  "ADMINISTRATIVE_ORDER",
-  "AGENCY_REGULATION",
-  "COURT_RULE",
-  "COURT_CIRCULAR",
-  "TREATY",
-  "LOCAL_ORDINANCE",
-]);
-
 function id(prefix: string, value: string): string {
   return `${prefix}_${sha256(value).slice(0, 16)}`;
 }
