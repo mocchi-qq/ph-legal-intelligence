@@ -59,20 +59,20 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 **Hard stop honoured:** no real legal material ingested. Corpus is `SYNTHETIC` only. Bulk ingestion `BLOCKED — COUNSEL SIGN-OFF NOT OBTAINED`.
 
-| ID   | Task                                         | Owner           | Status           | Evidence                                                                      |
-| ---- | -------------------------------------------- | --------------- | ---------------- | ----------------------------------------------------------------------------- |
-| G1-A | Baseline report                              | lead            | VERIFIED         | `docs/gates/gate-1/00_BASELINE_REPORT.md`                                     |
-| G1-B | Source authorization matrix + registry       | lead            | VERIFIED         | `SOURCE_AUTHORIZATION_MATRIX.md`, `sources.authorization.json` (25 × UNKNOWN) |
-| G1-C | Counsel reuse packet                         | lead            | READY (not sent) | `01_SOURCE_REUSE_REVIEW.md`; no sign-off                                      |
-| G1-D | Migration 0002 (relationships, chunks, runs) | lead            | VERIFIED         | applied to SQLite; enums enforced                                             |
-| G1-E | Bounded ingestion                            | lead            | VERIFIED         | 13 tests; 10 runs / 8 docs / 9 versions                                       |
-| G1-F | Legal versioning                             | lead            | VERIFIED         | 4/4 amendment, 4/4 repeal, 4/4 historical                                     |
-| G1-G | Retrieval                                    | lead            | VERIFIED         | exact 4/4, Recall@5 8/8, Recall@10 8/8                                        |
-| G1-H | Citation verification                        | lead            | VERIFIED         | 10/10 each layer                                                              |
-| G1-I | Grounding                                    | lead            | VERIFIED         | 6 tests; abstains without verified authority                                  |
-| G1-J | Benchmark                                    | lead            | VERIFIED         | `08_benchmark-results.json`                                                   |
-| G1-K | Security/privacy review                      | lead            | VERIFIED         | `03_SECURITY_AND_PRIVACY_REVIEW.md`                                           |
-| G1-L | Independent review                           | lane B reviewer | IN REVIEW        | `09_INDEPENDENT_REVIEW.md`                                                    |
+| ID   | Task                                         | Owner           | Status             | Evidence                                                                      |
+| ---- | -------------------------------------------- | --------------- | ------------------ | ----------------------------------------------------------------------------- |
+| G1-A | Baseline report                              | lead            | VERIFIED           | `docs/gates/gate-1/00_BASELINE_REPORT.md`                                     |
+| G1-B | Source authorization matrix + registry       | lead            | VERIFIED           | `SOURCE_AUTHORIZATION_MATRIX.md`, `sources.authorization.json` (25 × UNKNOWN) |
+| G1-C | Counsel reuse packet                         | lead            | READY (not sent)   | `01_SOURCE_REUSE_REVIEW.md`; no sign-off                                      |
+| G1-D | Migration 0002 (relationships, chunks, runs) | lead            | VERIFIED           | applied to SQLite; enums enforced                                             |
+| G1-E | Bounded ingestion                            | lead            | VERIFIED           | 13 tests; 10 runs / 8 docs / 9 versions                                       |
+| G1-F | Legal versioning                             | lead            | VERIFIED           | 4/4 amendment, 4/4 repeal, 4/4 historical                                     |
+| G1-G | Retrieval                                    | lead            | VERIFIED           | exact 4/4, Recall@5 8/8, Recall@10 8/8                                        |
+| G1-H | Citation verification                        | lead            | VERIFIED           | 10/10 each layer                                                              |
+| G1-I | Grounding                                    | lead            | VERIFIED           | 6 tests; abstains without verified authority                                  |
+| G1-J | Benchmark                                    | lead            | VERIFIED           | `08_benchmark-results.json`                                                   |
+| G1-K | Security/privacy review                      | lead            | VERIFIED           | `03_SECURITY_AND_PRIVACY_REVIEW.md`                                           |
+| G1-L | Independent review                           | lane B reviewer | VERIFIED (APPROVE) | `09_INDEPENDENT_REVIEW.md` — three passes, final approve at b0d0866           |
 
 ### Explicit blockers
 

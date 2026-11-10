@@ -56,4 +56,22 @@ The first re-verification pass correctly caught that items 2, 3, 4 and 7 had bee
 
 ## 4. Re-verification
 
-_Pending._ This section will record the reviewer's second-pass command output and final verdict. It will not be filled speculatively.
+**Third pass at commit `b0d0866` — verdict: APPROVE.**
+
+The reviewer reproduced every check independently:
+
+| Check                                   | Observed                                                                       |
+| --------------------------------------- | ------------------------------------------------------------------------------ |
+| `git status --short`                    | clean before and after the full suite                                          |
+| `npx vitest run`                        | 21 files, 198 tests passing                                                    |
+| `pnpm build`                            | exit 0                                                                         |
+| `npx @biomejs/biome check .`            | 126 files, exit 0                                                              |
+| Migrations 0001 + 0002 on `node:sqlite` | 10 tables; new relationship types accepted; bogus type and run status rejected |
+| Benchmark JSON freshness                | committed JSON byte-identical to a fresh run                                   |
+| Fix probes 1–7                          | all present in the tree; no unsupported status claim found                     |
+
+The reviewer also confirmed that the §2 disposition table now matches the tree, and that the first re-verification pass correctly caught items 2, 3, 4 and 7 as claimed-but-not-applied.
+
+**Final verdict:** Gate 1 is **ACCEPTED WITH LIMITATIONS**. **Bulk ingestion remains BLOCKED for lack of Philippine counsel sign-off.** No source is approved for test or bulk use, and no technical result in this gate changes that.
+
+The reviewer's remaining items were informational: 35 non-blocking Biome warnings repo-wide, and this section being filled from the real pass.

@@ -16,18 +16,18 @@ The bounded pipeline, version model, retrieval and four-layer citation verifier 
 
 ## B. Scope actually completed
 
-| Workstream                              | State                                   | Evidence                                                                                                  |
-| --------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Source inventory + authorization matrix | Done (research only)                    | `SOURCE_AUTHORIZATION_MATRIX.md`, `sources.authorization.json` (25 sources, all `UNKNOWN`/`NOT_REVIEWED`) |
-| Counsel reuse packet                    | Prepared, not reviewed                  | `01_SOURCE_REUSE_REVIEW.md`; no sign-off exists                                                           |
-| Bounded ingestion                       | Built, tested                           | 13 tests; 10 runs, 8 docs, 9 versions, 31 provisions/chunks                                               |
-| Legal versioning                        | Built, tested                           | 4/4 amendment, 4/4 repeal, 4/4 historical checks                                                          |
-| Retrieval                               | Built, tested                           | exact 4/4, Recall@5 8/8, Recall@10 8/8, passage 3/3, negatives 3/3                                        |
-| Citation verification                   | Built, tested                           | identity/location/support/temporal 10/10 each                                                             |
-| Grounding                               | Built, tested                           | 6 tests; abstains without verified citations                                                              |
-| Benchmark                               | Executed                                | `08_benchmark-results.json`                                                                               |
-| Security/privacy review                 | Done                                    | `03_SECURITY_AND_PRIVACY_REVIEW.md`                                                                       |
-| Independent review                      | In review (first pass: REQUEST CHANGES) | `09_INDEPENDENT_REVIEW.md`                                                                                |
+| Workstream                              | State                  | Evidence                                                                                                  |
+| --------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------- |
+| Source inventory + authorization matrix | Done (research only)   | `SOURCE_AUTHORIZATION_MATRIX.md`, `sources.authorization.json` (25 sources, all `UNKNOWN`/`NOT_REVIEWED`) |
+| Counsel reuse packet                    | Prepared, not reviewed | `01_SOURCE_REUSE_REVIEW.md`; no sign-off exists                                                           |
+| Bounded ingestion                       | Built, tested          | 13 tests; 10 runs, 8 docs, 9 versions, 31 provisions/chunks                                               |
+| Legal versioning                        | Built, tested          | 4/4 amendment, 4/4 repeal, 4/4 historical checks                                                          |
+| Retrieval                               | Built, tested          | exact 4/4, Recall@5 8/8, Recall@10 8/8, passage 3/3, negatives 3/3                                        |
+| Citation verification                   | Built, tested          | identity/location/support/temporal 10/10 each                                                             |
+| Grounding                               | Built, tested          | 6 tests; abstains without verified citations                                                              |
+| Benchmark                               | Executed               | `08_benchmark-results.json`                                                                               |
+| Security/privacy review                 | Done                   | `03_SECURITY_AND_PRIVACY_REVIEW.md`                                                                       |
+| Independent review                      | Approved (third pass)  | `09_INDEPENDENT_REVIEW.md`                                                                                |
 
 ## C. Source authorization findings
 
@@ -74,7 +74,7 @@ Untested: authentication, tenancy, rate limiting, malware scanning, encryption c
 
 ## I. Independent review
 
-Independent cross-lane review has completed a first pass (`09_INDEPENDENT_REVIEW.md`) with reproduced command output. It approved the engineering substance and raised one blocking status defect (this report claimed the review was complete before the record existed) plus seven minor or record-accuracy issues. This fix round applies the substantive fixes and corrects the records; see `09_INDEPENDENT_REVIEW.md` §2–§3 for the disposition of each item. The gate remains **IN REVIEW** until the reviewer re-verifies and issues a final verdict.
+Independent cross-lane review completed three passes and **approved** at commit `b0d0866` (`09_INDEPENDENT_REVIEW.md`). The first pass approved the engineering substance but raised one blocking status defect (this report claimed the review was complete before the record existed) plus seven minor or record-accuracy issues. The second pass caught four fixes that had been claimed but not applied; that inaccuracy is recorded rather than hidden. The third pass confirmed every fix in the tree and reproduced all results independently. Gate 1 is therefore recorded as **ACCEPTED WITH LIMITATIONS**, with bulk ingestion **BLOCKED** for lack of counsel sign-off.
 
 ## J. Limitations
 
