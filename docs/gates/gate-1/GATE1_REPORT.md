@@ -74,7 +74,7 @@ Untested: authentication, tenancy, rate limiting, malware scanning, encryption c
 
 ## I. Independent review
 
-Recorded in `09_INDEPENDENT_REVIEW.md`. Reviewer is on the other lane and reproduced the test, build and benchmark independently.
+Independent cross-lane review has completed a first pass (`09_INDEPENDENT_REVIEW.md`) with reproduced command output. It approved the engineering substance and raised one blocking status defect (this report claimed the review was complete before the record existed) plus six minor issues. All were addressed. The gate remains **IN REVIEW** until the reviewer re-verifies and issues a final verdict.
 
 ## J. Limitations
 

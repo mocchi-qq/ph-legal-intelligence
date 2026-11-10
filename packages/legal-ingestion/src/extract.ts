@@ -124,7 +124,8 @@ export function segmentProvisions(
       return [
         {
           provisionType: "SECTION",
-          label: "Section 1",
+          // Non-committal: no heading was found, so no section number is invented.
+          label: "unsegmented",
           text: normalizedText,
           ordinal: 1,
           startOffset: 0,
@@ -231,13 +232,15 @@ export function segmentChunks(provisions: ProvisionSeed[]): ChunkSeed[] {
       buffer += `${buffer ? " " : ""}${sentence}`;
     }
     if (buffer.trim().length > 0) {
+      const content = buffer.trim();
+      const lead = buffer.length - buffer.trimStart().length;
       chunks.push({
         provisionOrdinal: provision.ordinal,
         chunkKind: "provision",
         chunkIndex: chunks.length,
-        content: buffer.trim(),
-        charStart: cursor,
-        charEnd: cursor + buffer.length,
+        content,
+        charStart: cursor + lead,
+        charEnd: cursor + lead + content.length,
       });
     }
   }

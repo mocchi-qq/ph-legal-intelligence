@@ -103,7 +103,10 @@ function outcome(
   };
 }
 
-/** Ingest one artifact. Returns the outcome; the store is only mutated on success. */
+/**
+ * Ingest one artifact. Derived records are written only on success; every
+ * attempt (including failure, duplicate and ambiguity) records an audit run.
+ */
 export function ingestArtifact(
   store: CorpusStore,
   artifact: ArtifactInput,
@@ -130,6 +133,10 @@ export function ingestArtifact(
   // 1. Authorization guard — the absolute Gate 1 stop condition, in code.
   if (!artifact.synthetic && !authorized.has(artifact.sourceId)) {
     return fail("source_not_authorized");
+  }
+  // Defence in depth: a synthetic flag alone must not bypass the guard.
+  if (artifact.synthetic && !artifact.sourceUrl.startsWith("synthetic://")) {
+    return fail("synthetic_flag_without_synthetic_locator");
   }
   if (ALLOWED_MIME.has(artifact.mimeType) === false)
     return fail(`unsupported_mime:${artifact.mimeType}`);

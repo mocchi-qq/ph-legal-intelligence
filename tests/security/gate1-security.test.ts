@@ -73,11 +73,19 @@ describe("Gate 1 — security and privacy controls", () => {
     expect(results).toHaveLength(0);
   });
 
+  it("rejects a synthetic flag without a synthetic locator", () => {
+    const store = CorpusStore.memory();
+    const result = ingestArtifact(store, artifact({ synthetic: true }), OPTS);
+    expect(result.status).toBe("FAILED");
+    expect(result.reason).toBe("synthetic_flag_without_synthetic_locator");
+    expect(store.state.documents).toHaveLength(0);
+  });
+
   it("does not accept unsupported file types", () => {
     const store = CorpusStore.memory();
     const result = ingestArtifact(
       store,
-      artifact({ synthetic: true, mimeType: "application/pdf" }),
+      artifact({ synthetic: true, sourceUrl: "synthetic://fixture/pdf", mimeType: "application/pdf" }),
       OPTS,
     );
     expect(result.status).toBe("FAILED");
