@@ -1,3 +1,4 @@
 // @phli/permissions — Package entry point
-// Responsibility: see package README / docs/architecture
-export {};
+// Responsibility: see docs/security/SECURITY_ARCHITECTURE.md §4
+
+export * from './types';
