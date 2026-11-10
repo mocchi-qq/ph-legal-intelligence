@@ -51,3 +51,21 @@ Identity, location (version-aware), support, temporal. Temporal fails closed whe
 ## 6. Result
 
 The reporting limitation is fixed: support is now classified rather than reduced to one score, and reviewed labels are clearly separated from the lexical proxy. Semantic entailment is still absent and is not claimed.
+
+## 7. Real-passage result (owner-authorized pilot)
+
+A citation to RA 12326 at a section containing "term of office" was verified:
+
+| Layer         | Result                                        |
+| ------------- | --------------------------------------------- |
+| Identity      | true                                          |
+| Location      | true (section-level after `SEC.` parsing fix) |
+| Support       | true                                          |
+| Temporal      | true                                          |
+| Aggregate     | `VERIFIED`                                    |
+| Support class | `LEXICAL_ONLY`                                |
+| Method        | `lexical_proxy`                               |
+
+The class is `LEXICAL_ONLY`, not `DIRECT_QUOTE`, because the proposition was a
+truncated first sentence. It is **not** presented as semantic entailment. This is
+one citation on one document, not a citation benchmark.

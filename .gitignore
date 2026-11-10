@@ -8,3 +8,5 @@ build
 .coverage
 .wrangler
 *.tsbuildinfo
+# Owner-authorized pilot originals: local only, never redistributed
+legal-data/pilot/

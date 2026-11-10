@@ -49,3 +49,40 @@ These are not claimed. They require an authorized source and a connector that do
 ## 6. Result
 
 Real acquisition: **BLOCKED — no authorized source.** The gate and guards are implemented and tested; the transport is deliberately not built.
+
+## 7. Guarded transport (added after owner authorization)
+
+`packages/legal-ingestion/src/transport.ts` is the only network code:
+
+- `http`/`https` only, public hosts, standard ports, no credentials;
+- **DNS is resolved and every address checked** (`isPrivateAddress`: loopback,
+  RFC1918, link-local, `::1`, `fc00::/7`, `fe80::/10`, IPv4-mapped IPv6);
+- redirects are manual, max 3, and each hop is re-validated and re-resolved;
+- `Content-Length` mismatch is treated as truncation;
+- 25 MB cap, 20 s timeout, MIME allowlist, empty-body rejection;
+- no shell; returns `OK` / `REJECTED` / `FAILED` with a reason, never throws.
+
+Tests (`tests/legal-data/transport.test.ts`, 10) cover success, DNS-private,
+redirect-to-private, redirect loop, truncation, MIME, size, HTTP 404, empty body
+and private-address classification.
+
+## 8. Owner-authorized pilot result
+
+Four official E-Library Republic Act pages were acquired, preserved under
+`legal-data/pilot/` (git-ignored, not redistributed), and recorded in
+`PILOT_MANIFEST.json`:
+
+| Document | Bytes  | SHA-256 (prefix) | Extracted chars |
+| -------- | ------ | ---------------- | --------------- |
+| RA 12232 | 39,262 | `88cc924c5100`   | 4,010           |
+| RA 10931 | 49,603 | `648acfe1f26d`   | 23,378          |
+| RA 12326 | 37,072 | `b8cda9d15418`   | 6,966           |
+| RA 12325 | 58,487 | `cf3b0dd0eab6`   | 22,192          |
+
+All four returned HTTP 200, `text/html`, no redirects, and parsed to the expected
+Republic Act identifier. `authorization_basis` = `owner_authorization`.
+
+Two evidenced amendment edges were applied from the documents' own text
+(RA 12326 → RA 12232; RA 12325 → RA 10931), each with a quoted evidence passage.
+
+**This is not legal authorization and not a corpus benchmark.**

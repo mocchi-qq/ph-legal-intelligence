@@ -53,3 +53,18 @@ A future approval must name which of these it covers.
 ## 6. What would unblock
 
 A signed counsel determination per source, naming the permitted activities and attribution/redistribution conditions. Until then only synthetic fixtures may be processed.
+
+## 7. Owner authorization for a bounded pilot (not a source approval)
+
+On 2026-11-10 the project owner instructed: "I authorize". This is recorded in
+`01A_OWNER_AUTHORIZATION.md` as an **owner risk acceptance** for four official
+Republic Act pages from the Supreme Court E-Library, for internal evaluation only.
+
+It does **not**:
+
+- change any `authorization_status` (all 25 remain `UNKNOWN`/`NOT_REVIEWED`);
+- constitute Philippine counsel sign-off;
+- permit redistribution, bulk ingestion or public corpus use.
+
+The ingestion run records `authorization_basis: "owner_authorization"` so this is
+never confused with `source_authorization`.

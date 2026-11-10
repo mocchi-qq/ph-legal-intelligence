@@ -41,3 +41,15 @@ No real-corpus query set was created, because expected answers require real docu
 ## 8. Result
 
 Retrieval remains the Gate 1 lexical system, re-verified. Semantic retrieval, hybrid semantic fusion and reranking are absent and are not credited.
+
+## 9. Owner-authorized pilot retrieval (4 documents)
+
+| Check                                                              | Result                 |
+| ------------------------------------------------------------------ | ---------------------- |
+| Exact `Republic Act No. 12326`                                     | correct document (1/1) |
+| Nonexistent `Republic Act No. 99999`                               | 0 results              |
+| Natural language "term of office of barangay officials five years" | 5 results returned     |
+
+This is three checks on four documents, not a retrieval benchmark. Recall, MRR,
+precision and latency against a real corpus remain **unmeasured** because the
+corpus is too small and not legally authorized for general use.

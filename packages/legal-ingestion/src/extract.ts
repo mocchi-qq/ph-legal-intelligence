@@ -109,7 +109,7 @@ const LAW_LIKE = new Set([
 ]);
 
 const HEADING =
-  /(?:^|\n)[ \t]*(Section[ \t]+[0-9]+[A-Za-z0-9-]*|SECTION[ \t]+[0-9]+[A-Za-z0-9-]*|Article[ \t]+[IVXLC]+|ARTICLE[ \t]+[IVXLC]+|Rule[ \t]+[0-9.]+)[.):]?[ \t]*/g;
+  /(?:^|\n)[ \t]*(Section[ \t]+[0-9]+[A-Za-z0-9-]*|SECTION[ \t]+[0-9]+[A-Za-z0-9-]*|SEC\.[ \t]+[0-9]+[A-Za-z0-9-]*|Article[ \t]+[IVXLC]+|ARTICLE[ \t]+[IVXLC]+|Rule[ \t]+[0-9.]+)[.):]?[ \t]*/g;
 
 /** Split a legal instrument into provisions, preserving offsets into normalized text. */
 export function segmentProvisions(

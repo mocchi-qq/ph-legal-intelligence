@@ -45,3 +45,22 @@ Gate 1 already supports evidenced `AMENDS`/`REPEALS`/`PARTIALLY_REPEALS` edges w
 ## 6. Result
 
 Identity parsing and exact resolution are implemented and tested. They deliberately refuse to resolve approximate or conflicting identities.
+
+## 6. Real-document result (owner-authorized pilot)
+
+The four pilot documents used both `SECTION n.` and `SEC. n.` headings. The parser
+initially recognised only `SECTION`, collapsing each document to one `unsegmented`
+unit. After extending the heading pattern to `SEC.`, the pilot produced **56
+provisions across the 6 corpus records** (4 real documents plus 2 synthetic
+relationship carriers) and 89 chunks.
+
+Identifiers parsed correctly for all four: `REPUBLIC_ACT:12232`, `10931`, `12326`,
+`12325`. No title similarity was used.
+
+Limitations confirmed on real HTML:
+
+- `SEC.` support was required and is now tested; other source-specific heading
+  styles may still collapse.
+- Annexes, schedules and tables are not parsed.
+- A referenced "Section 1 of RA 12232" inside another Act is body text, not a
+  heading, because the heading pattern requires a line start.

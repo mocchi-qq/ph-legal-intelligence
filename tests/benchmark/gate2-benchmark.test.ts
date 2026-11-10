@@ -100,6 +100,14 @@ describe("Gate 2 — benchmark separation and blockers", () => {
       },
       pdf_extraction: record,
       real_corpus: realCorpus,
+      owner_authorized_pilot: {
+        status: "SEPARATE_DATASET",
+        reference: "docs/gates/gate-2/PILOT_RESULTS.json",
+        authorization_basis: "owner_authorization",
+        counsel_signoff: false,
+        documents: 4,
+        note: "Four official RA pages acquired under owner risk acceptance. Not merged with the authorized-corpus slot; not a legal reuse determination.",
+      },
       semantic_retrieval: {
         status: "NOT_IMPLEMENTED",
         note: "No embedding model has been selected, downloaded or evaluated.",

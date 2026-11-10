@@ -39,3 +39,17 @@ No new real-corpus thresholds are declared, because there is no defensible evalu
 ## 6. Interpretation
 
 The executed measurements validate regression integrity and parser mechanics. They say nothing about Philippine legal retrieval accuracy.
+
+## 7. Owner-authorized pilot dataset (separate)
+
+| Item                                | Status                                             |
+| ----------------------------------- | -------------------------------------------------- |
+| Documents                           | 4 official RA pages (owner risk acceptance)        |
+| Authorization                       | `owner_authorization`; **counsel sign-off: false** |
+| Source status                       | `UNKNOWN` (unchanged)                              |
+| Results                             | `PILOT_RESULTS.json`                               |
+| Merged into authorized-corpus slot? | **No**                                             |
+
+The automated Gate 2 benchmark keeps `real_corpus: BLOCKED` because no source is
+legally authorized. The owner-authorized pilot is reported as a separate dataset
+and must never be cited as a legal-corpus benchmark.

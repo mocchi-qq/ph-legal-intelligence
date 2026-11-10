@@ -213,6 +213,11 @@ export interface IngestionRun {
   extractorVersion: string;
   normalizerVersion: string;
   status: "SUCCEEDED" | "DUPLICATE" | "FAILED" | "IDENTITY_AMBIGUOUS";
+  /** What permitted this ingest: a written source approval, an owner risk acceptance, or a synthetic fixture. */
+  authorizationBasis?:
+    | "source_authorization"
+    | "owner_authorization"
+    | "synthetic_fixture";
   documentId?: string | null;
   versionId?: string | null;
   manifestId?: string | null;

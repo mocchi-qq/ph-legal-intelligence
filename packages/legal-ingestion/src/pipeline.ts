@@ -66,6 +66,13 @@ function addRun(
     failureReason: extra.reason ?? null,
     startedAt: now,
     finishedAt: now,
+    authorizationBasis: artifact.synthetic
+      ? "synthetic_fixture"
+      : (options.authorizedSourceIds ?? []).includes(artifact.sourceId)
+        ? "source_authorization"
+        : options.ownerAuthorization
+          ? "owner_authorization"
+          : undefined,
   });
   return runId;
 }
@@ -116,7 +123,8 @@ export function ingestArtifact(
 
   // 1. Authorization guard — the absolute Gate 1 stop condition, in code.
   if (!artifact.synthetic && !authorized.has(artifact.sourceId)) {
-    return fail("source_not_authorized");
+    if (!options.ownerAuthorization?.reference)
+      return fail("source_not_authorized");
   }
   // Defence in depth: a synthetic flag alone must not bypass the guard.
   if (artifact.synthetic && !artifact.sourceUrl.startsWith("synthetic://")) {

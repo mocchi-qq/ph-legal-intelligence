@@ -13,6 +13,38 @@ export interface UrlCheck {
 const PRIVATE_V4 =
   /^(127\.|10\.|192\.168\.|169\.254\.|0\.|172\.(1[6-9]|2\d|3[01])\.)/;
 
+/** True for any loopback, link-local, private or invalid IP literal. */
+export function isPrivateAddress(address: string): boolean {
+  const value = address.toLowerCase();
+  if (value.includes(":")) {
+    if (value === "::1") return true;
+    if (
+      value.startsWith("fc") ||
+      value.startsWith("fd") ||
+      value.startsWith("fe80")
+    )
+      return true;
+    const mapped = value.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
+    if (mapped) return isPrivateAddress(mapped[1]!);
+    return false;
+  }
+  const parts = value.split(".").map(Number);
+  if (
+    parts.length !== 4 ||
+    parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)
+  )
+    return true;
+  const [a, b] = parts as [number, number, number, number];
+  return (
+    a === 0 ||
+    a === 10 ||
+    a === 127 ||
+    (a === 169 && b === 254) ||
+    (a === 192 && b === 168) ||
+    (a === 172 && b >= 16 && b <= 31)
+  );
+}
+
 function isPrivateHost(hostname: string): boolean {
   const host = hostname.toLowerCase().replace(/^\[|\]$/g, "");
   if (
@@ -29,6 +61,7 @@ function isPrivateHost(hostname: string): boolean {
   )
     return true;
   if (PRIVATE_V4.test(host)) return true;
+  if (/^[0-9.]+$/.test(host) && isPrivateAddress(host)) return true;
   return false;
 }
 

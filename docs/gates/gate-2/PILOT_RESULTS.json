@@ -1,0 +1,127 @@
+{
+  "generated_at": "2026-11-10",
+  "authorization": {
+    "basis": "owner_authorization",
+    "reference": "docs/gates/gate-2/01A_OWNER_AUTHORIZATION.md",
+    "counsel_signoff": false,
+    "source_status": "UNKNOWN"
+  },
+  "documents": [
+    {
+      "internal_document_id": "ra12232",
+      "identity_key": "REPUBLIC_ACT:12232",
+      "source_id": "sc_elibrary",
+      "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+      "http_status": 200,
+      "content_type": "text/html",
+      "bytes": 39262,
+      "sha256": "6b6972c3eed12e5866b63295ad00ebb7faddf923c12d66004bfb222d5c9feddc",
+      "redirects": 0,
+      "extracted_characters": 4010,
+      "extraction_flags": [],
+      "parsed_identifier": "REPUBLIC_ACT:12232",
+      "authorization_basis": "owner_authorization",
+      "authorization_reference": "docs/gates/gate-2/01A_OWNER_AUTHORIZATION.md",
+      "source_status": "UNKNOWN",
+      "note": "Original stored under git-ignored legal-data/pilot/. Not redistributed."
+    },
+    {
+      "internal_document_id": "ra10931",
+      "identity_key": "REPUBLIC_ACT:10931",
+      "source_id": "sc_elibrary",
+      "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+      "http_status": 200,
+      "content_type": "text/html",
+      "bytes": 49603,
+      "sha256": "7af9ca2d153ea0801f5e82b0afbe5e7b1f5d82fab736535d43614c0aa563ad88",
+      "redirects": 0,
+      "extracted_characters": 23378,
+      "extraction_flags": [],
+      "parsed_identifier": "REPUBLIC_ACT:10931",
+      "authorization_basis": "owner_authorization",
+      "authorization_reference": "docs/gates/gate-2/01A_OWNER_AUTHORIZATION.md",
+      "source_status": "UNKNOWN",
+      "note": "Original stored under git-ignored legal-data/pilot/. Not redistributed."
+    },
+    {
+      "internal_document_id": "ra12326",
+      "identity_key": "REPUBLIC_ACT:12326",
+      "source_id": "sc_elibrary",
+      "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+      "http_status": 200,
+      "content_type": "text/html",
+      "bytes": 37072,
+      "sha256": "858c580239b5ad3c206fd280e1a86822681c953fe72d17cd0255f161144edad2",
+      "redirects": 0,
+      "extracted_characters": 6966,
+      "extraction_flags": [],
+      "parsed_identifier": "REPUBLIC_ACT:12326",
+      "authorization_basis": "owner_authorization",
+      "authorization_reference": "docs/gates/gate-2/01A_OWNER_AUTHORIZATION.md",
+      "source_status": "UNKNOWN",
+      "note": "Original stored under git-ignored legal-data/pilot/. Not redistributed."
+    },
+    {
+      "internal_document_id": "ra12325",
+      "identity_key": "REPUBLIC_ACT:12325",
+      "source_id": "sc_elibrary",
+      "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+      "http_status": 200,
+      "content_type": "text/html",
+      "bytes": 58487,
+      "sha256": "a6ff48243be616fb60d05ad530f80e8b39c8a5281e3bbb390ecdd1176c7fd86f",
+      "redirects": 0,
+      "extracted_characters": 22192,
+      "extraction_flags": [],
+      "parsed_identifier": "REPUBLIC_ACT:12325",
+      "authorization_basis": "owner_authorization",
+      "authorization_reference": "docs/gates/gate-2/01A_OWNER_AUTHORIZATION.md",
+      "source_status": "UNKNOWN",
+      "note": "Original stored under git-ignored legal-data/pilot/. Not redistributed."
+    }
+  ],
+  "relationships": [
+    {
+      "from": "REPUBLIC_ACT:12326",
+      "to": "REPUBLIC_ACT:12232",
+      "evidence": "SECTION 1. Section 1 of Republic Act No. 12232 or \"AN Act Setting the Term of Office of Barangay Officials and Members of Sangguniang Kabataan, and for Other Purposes\" is hereby amended",
+      "applied": true
+    },
+    {
+      "from": "REPUBLIC_ACT:12325",
+      "to": "REPUBLIC_ACT:10931",
+      "evidence": "SECTION 1. Section 3 of Republic Act No. 10931 or the \"Universal Access to Quality Tertiary Education Act\" is hereby amended",
+      "applied": true
+    }
+  ],
+  "retrieval": {
+    "exact_identifier": {
+      "passed": 1,
+      "total": 1
+    },
+    "nonexistent_identifier_empty": true,
+    "natural_language_returned": 5
+  },
+  "citation": {
+    "status": "VERIFIED",
+    "identity": true,
+    "location": true,
+    "support": true,
+    "temporal": true,
+    "support_class": "LEXICAL_ONLY",
+    "support_method": "lexical_proxy"
+  },
+  "corpus": {
+    "documents": 6,
+    "versions": 6,
+    "provisions": 56,
+    "chunks": 89,
+    "ingestion_runs": 6
+  },
+  "limitations": [
+    "Four documents only; not a corpus benchmark.",
+    "Source reuse status remains UNKNOWN; owner risk acceptance only.",
+    "No OCR; HTML pages, not scanned PDFs.",
+    "No semantic retrieval or reranking."
+  ]
+}

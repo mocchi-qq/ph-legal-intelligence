@@ -69,12 +69,22 @@ export interface CorpusState {
   }>;
 }
 
+export interface OwnerAuthorization {
+  /** Reference to the owner decision record. Not a legal reuse determination. */
+  reference: string;
+  scope: string;
+  authorizedBy: string;
+  date: string;
+}
+
 export interface IngestOptions {
   pipelineVersion: string;
   extractorVersion: string;
   normalizerVersion: string;
   /** Source IDs explicitly authorized for non-synthetic ingestion. Empty at Gate 1. */
   authorizedSourceIds?: readonly string[];
+  /** Owner-level risk acceptance for a bounded internal pilot; never legal authorization. */
+  ownerAuthorization?: OwnerAuthorization;
   now?: () => string;
 }
 
