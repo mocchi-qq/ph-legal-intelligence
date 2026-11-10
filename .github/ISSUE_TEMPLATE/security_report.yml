@@ -1,0 +1,21 @@
+name: Security report
+description: Report a security vulnerability (see SECURITY.md for private channel)
+labels: [security]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include secrets, personal data, or exploit details in a public issue.
+        Please coordinate privately per SECURITY.md.
+  - type: input
+    id: area
+    attributes:
+      label: Affected area
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: High-level summary (no exploit details)
+    validations:
+      required: true
