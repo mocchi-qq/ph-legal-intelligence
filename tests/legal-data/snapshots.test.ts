@@ -45,6 +45,16 @@ describe("Gate 3 — immutable acquisition snapshots", () => {
     );
   });
 
+  it("isolates stored bytes from caller mutation", () => {
+    const store = new SnapshotStore();
+    const original = encoder.encode("original");
+    const event = store.record({ ...base, bytes: original });
+    original[0] = 88;
+    const returned = store.get(event.sha256)!;
+    returned[0] = 89;
+    expect(Buffer.from(store.get(event.sha256)!).toString()).toBe("original");
+  });
+
   it("classifies identical bytes without requiring legal review", () => {
     const store = new SnapshotStore();
     const bytes = encoder.encode("same");

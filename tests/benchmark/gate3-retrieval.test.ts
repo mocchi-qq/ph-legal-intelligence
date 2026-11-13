@@ -148,10 +148,13 @@ describe.skipIf(!pilotAvailable())(
           "Filipino queries are unsupported and return empty.",
         ],
       };
-      writeFileSync(
-        join(process.cwd(), "docs/gates/gate-3/retrieval-results.json"),
-        `${JSON.stringify(results, null, 2)}\n`,
-      );
+      // Committed evidence is stable; regenerate explicitly when the evaluation changes.
+      if (process.env.PH_WRITE_GATE3_EVIDENCE === "1") {
+        writeFileSync(
+          join(process.cwd(), "docs/gates/gate-3/retrieval-results.json"),
+          `${JSON.stringify(results, null, 2)}\n`,
+        );
+      }
 
       expect(metrics.exact.accuracy).toBe(1);
       expect(metrics.positive.recall_at_5).toBeGreaterThanOrEqual(0.8);

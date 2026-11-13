@@ -52,7 +52,7 @@ const MIN_LEXICAL = 0.02;
 const MIN_TERM_COVERAGE = 0.3;
 // An identifier-only query, not a natural-language question that merely cites one.
 const IDENTIFIER_QUERY =
-  /^(?:\S+\s+){0,2}(?:g\.?\s*r\.?|ra|r\.?\s*a\.?|republic\s+act|executive\s+order|e\.?\s*o\.?|presidential\s+decree|p\.?\s*d\.?|a\.?\s*m\.?)\b[^\n]{0,40}\d/i;
+  /^(?:\S+\s+){0,2}(?:g\.?\s*r\.?|gr|r\.?\s*a\.?|ra|republic\s+act|e\.?\s*o\.?|eo|executive\s+order|p\.?\s*d\.?|pd|presidential\s+decree|b\.?\s*p\.?|bp|batas\s+pambansa|c\.?\s*a\.?|ca|commonwealth\s+act|a\.?\s*m\.?|am|act\s+no\.?)(?!\w)[^\n]{0,40}\d/i;
 
 const STOPWORDS = new Set([
   "the",
@@ -106,13 +106,35 @@ function normalizeKey(input: string): string {
 
 /** Exact query aliases, e.g. `RA 12325` -> the canonical Republic Act key. */
 function queryKeys(text: string): string[] {
-  const keys = [normalizeKey(text)];
-  const act =
-    /^\s*(?:RA|R\.?\s*A\.?|Republic\s+Act)(?:\s+No\.?)?\s*(\d{1,5})\b/i.exec(
-      text,
-    );
-  if (act) keys.push(normalizeKey(`REPUBLIC_ACT:${act[1]}`));
-  return keys;
+  const keys = new Set<string>([normalizeKey(text)]);
+  const forms: Array<[RegExp, string]> = [
+    [
+      /^\s*(?:r\.?\s*a\.?|ra|republic\s+act)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
+      "republicact",
+    ],
+    [
+      /^\s*(?:e\.?\s*o\.?|eo|executive\s+order)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
+      "executiveorder",
+    ],
+    [
+      /^\s*(?:p\.?\s*d\.?|pd|presidential\s+decree)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
+      "presidentialdecree",
+    ],
+    [
+      /^\s*(?:b\.?\s*p\.?|bp|batas\s+pambansa)(?:\s+(?:blg\.?|no\.?))?\s*(\d{1,5})\b/i,
+      "bataspambansa",
+    ],
+    [
+      /^\s*(?:c\.?\s*a\.?|ca|commonwealth\s+act)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
+      "commonwealthact",
+    ],
+    [/^\s*(?:g\.?\s*r\.?|gr)(?:\s+no\.?)?\s*(\d{1,6})\b/i, "grno"],
+  ];
+  for (const [re, prefix] of forms) {
+    const match = re.exec(text);
+    if (match) keys.add(`${prefix}${match[1]}`);
+  }
+  return [...keys];
 }
 
 function yearOf(date: string | null | undefined): number {
@@ -277,10 +299,9 @@ export function retrieve(
   );
 
   // Signal 1: exact identifier match (document-level).
+  const queryKeySet = new Set(queryNormalized);
   const exactRanking = candidates
-    .filter((entry) =>
-      entry.exactKeys.some((key) => queryNormalized.includes(key)),
-    )
+    .filter((entry) => entry.exactKeys.some((key) => queryKeySet.has(key)))
     .sort((a, b) => a.chunkId.localeCompare(b.chunkId));
 
   // Signal 2: lexical relevance.

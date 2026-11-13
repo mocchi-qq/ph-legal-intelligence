@@ -30,7 +30,7 @@ No date was inferred from a URL, title or retrieval time.
 
 ## 3. Relationships
 
-Two evidenced relationships were applied from the documents' own text:
+Gate 2 recorded two evidenced amendment relationships. The evidence passages are quoted from the amending Acts, but the relationship assertions were inserted through synthetic carrier records; they were not auto-derived from the four documents. The Gate 3 four-document retrieval build therefore contains **0 relationship records** (54 provisions, 87 chunks). The edges remain a Gate 2 provenance record.
 
 | From     | To       | Type               | Evidence                                                             |
 | -------- | -------- | ------------------ | -------------------------------------------------------------------- |

@@ -127,10 +127,13 @@ describe.skipIf(!pilotAvailable())(
           "No semantic entailment model is implemented.",
         ],
       };
-      writeFileSync(
-        join(process.cwd(), "docs/gates/gate-3/citation-results.json"),
-        `${JSON.stringify(results, null, 2)}\n`,
-      );
+      // Committed evidence is stable; regenerate explicitly when the evaluation changes.
+      if (process.env.PH_WRITE_GATE3_EVIDENCE === "1") {
+        writeFileSync(
+          join(process.cwd(), "docs/gates/gate-3/citation-results.json"),
+          `${JSON.stringify(results, null, 2)}\n`,
+        );
+      }
 
       expect(annotationAgreement).toBe(rows.length);
       expect(results.temporal.documents_with_effectivity_date).toBe(0);

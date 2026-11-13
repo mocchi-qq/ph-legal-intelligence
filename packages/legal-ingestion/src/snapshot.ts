@@ -56,7 +56,8 @@ export class SnapshotStore {
   ): AcquisitionEvent {
     const hash = sha256(event.bytes);
     const eventId = `acq_${hash.slice(0, 12)}_${this.events.length + 1}`;
-    if (!this.bytes.has(hash)) this.bytes.set(hash, event.bytes);
+    if (!this.bytes.has(hash))
+      this.bytes.set(hash, new Uint8Array(event.bytes));
     if (event.text !== undefined) this.textByHash.set(hash, event.text);
     const recorded: AcquisitionEvent = {
       eventId,
@@ -83,7 +84,8 @@ export class SnapshotStore {
 
   /** Snapshot bytes are immutable and never replaced. */
   get(hash: string): Uint8Array | undefined {
-    return this.bytes.get(hash);
+    const stored = this.bytes.get(hash);
+    return stored ? new Uint8Array(stored) : undefined;
   }
 
   /** Compare a new retrieval against the latest event for the same source+URL. */

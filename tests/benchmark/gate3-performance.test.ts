@@ -104,10 +104,13 @@ describe.skipIf(!pilotAvailable())(
           "Host is an ARM/PRoot environment with ~2.3 GB available memory.",
         ],
       };
-      writeFileSync(
-        join(process.cwd(), "docs/gates/gate-3/performance-results.json"),
-        `${JSON.stringify(results, null, 2)}\n`,
-      );
+      // Timings are machine- and load-dependent; keep the recorded run stable.
+      if (process.env.PH_WRITE_GATE3_EVIDENCE === "1") {
+        writeFileSync(
+          join(process.cwd(), "docs/gates/gate-3/performance-results.json"),
+          `${JSON.stringify(results, null, 2)}\n`,
+        );
+      }
 
       expect(store.state.documents.length).toBe(4);
       expect(indexMs).toBeLessThan(5000);

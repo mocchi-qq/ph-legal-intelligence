@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-10
 **Implementation:** `packages/legal-ingestion/src/snapshot.ts`
-**Tests:** `tests/legal-data/snapshots.test.ts` (7 passing)
+**Tests:** `tests/legal-data/snapshots.test.ts` (8 passing)
 
 ## 1. The problem Gate 2 exposed
 

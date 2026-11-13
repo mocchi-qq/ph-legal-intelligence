@@ -23,7 +23,7 @@ This verdict is about authorization, not engineering. No additional legal docume
 | Baseline + regression                        | Complete                        | `00_BASELINE.md`; 256 tests at baseline          |
 | Counsel dossier (25 sources × 13 activities) | Prepared, not reviewed          | `01_COUNSEL_AUTHORIZATION.md`, `counsel-review/` |
 | Corpus expansion                             | **BLOCKED**                     | `REAL_CORPUS_MANIFEST.json`                      |
-| Immutable snapshots + change classification  | Implemented, tested             | `02_SOURCE_SNAPSHOTS.md`; 7 tests                |
+| Immutable snapshots + change classification  | Implemented, tested             | `02_SOURCE_SNAPSHOTS.md`; 8 tests                |
 | Parser isolation (`prlimit` + `unshare -n`)  | Implemented, tested             | `03_DOCUMENT_SECURITY.md`; 14 PDF tests          |
 | Malware scanning                             | **Unavailable**                 | no scanner installed                             |
 | OCR                                          | **Blocked / not required**      | `04_OCR_AND_EXTRACTION_QUALITY.md`               |
@@ -32,7 +32,9 @@ This verdict is about authorization, not engineering. No additional legal docume
 | Semantic citation evaluation                 | Partial; technical labels only  | `07_SEMANTIC_CITATION_EVALUATION.md`; 7 pairs    |
 | Grounded answering                           | Hardened; lexical-only excluded | `08_GROUNDED_ANSWERING.md`                       |
 | Performance                                  | Measured on 4 docs              | `09_PERFORMANCE_AND_RESOURCE_REPORT.md`          |
-| Independent review                           | Pending at report time          | `10_INDEPENDENT_REVIEW.md`                       |
+| Independent review                           | Complete; corrections applied   | `10_INDEPENDENT_REVIEW.md`                       |
+
+Independent review on 2026-11-13 re-ran the regression suite, recomputed the pilot hashes, probed exact-identifier routing and compared every reported metric with its stored JSON. It found two routing defects and four reporting inconsistencies. All were corrected before this report was finalised; the verdict is unchanged.
 
 ## C. Counsel authorization status
 
@@ -58,7 +60,7 @@ The Gate 2 finding is preserved: identical URL and length do not imply identical
 ## E. Extraction, identity, versioning
 
 - 4 documents → 54 provisions, 87 chunks; all identifiers parsed.
-- Two evidenced amendment edges (RA 12326 → RA 12232; RA 12325 → RA 10931).
+- Two evidenced amendment edges (RA 12326 → RA 12232; RA 12325 → RA 10931), recorded in Gate 2 via disclosed synthetic carriers. The Gate 3 four-document build contains 0 relationship records.
 - **All publication, promulgation, approval and effectivity dates are UNKNOWN.**
 - Temporal validity is therefore not evidence-based for the pilot.
 - No historical versions were created; no implied repeal was operationalized.
@@ -94,7 +96,7 @@ Thresholds were declared before the run (exact 100%, Recall@5 ≥80%, negatives 
 - Parser runs under 512 MiB address space, 20 s CPU, 64 processes, 64 MiB file, 500-page cap, private temp file, and network namespace isolation (`unshare -n`, verified working).
 - No filesystem sandbox, no malware scanner, no TLS pinning. Documented as residual risk.
 - Transport re-validates every redirect and resolves DNS per hop.
-- 4-document performance: ingest 389.6 ms, index 160.8 ms, query p95 14.2 ms, RSS delta 16.5 MB.
+- 4-document performance (recorded run): ingest 248.98 ms, index 120.24 ms, query p95 7.016 ms, RSS delta 17 MB. Timings vary with host load.
 
 ## I. Limitations
 
@@ -108,6 +110,8 @@ Thresholds were declared before the run (exact 100%, Recall@5 ≥80%, negatives 
 8. Parser is not filesystem-sandboxed; no malware scan.
 9. No authentication, tenancy, deployment or public service.
 10. Performance measured on four documents only.
+11. The retrieval gold set is a development/integration set, not held out; its metrics are optimistic.
+12. The Gate 3 retrieval corpus re-creates no amendment relationships; Gate 2 edges are provenance-only.
 
 ## J. Recommended next gate
 

@@ -115,7 +115,7 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G3-B | Counsel dossier + worksheet + questions | VERIFIED (packet only)          | `01_COUNSEL_AUTHORIZATION.md`, `counsel-review/`                |
 | G3-C | Source authorization                    | BLOCKED (0 of 25)               | no counsel determination                                        |
 | G3-D | Corpus expansion to 20–50               | BLOCKED                         | `REAL_CORPUS_MANIFEST.json` (4 owner-authorized only)           |
-| G3-E | Immutable snapshot model                | VERIFIED                        | `02_SOURCE_SNAPSHOTS.md`; 7 tests                               |
+| G3-E | Immutable snapshot model                | VERIFIED                        | `02_SOURCE_SNAPSHOTS.md`; 8 tests                               |
 | G3-F | Parser isolation (prlimit + unshare -n) | VERIFIED (bounded)              | `03_DOCUMENT_SECURITY.md`; 14 PDF tests                         |
 | G3-G | OCR                                     | BLOCKED / NOT REQUIRED          | `04_OCR_AND_EXTRACTION_QUALITY.md`                              |
 | G3-H | Identity + version reconciliation       | PARTIAL (dates UNKNOWN)         | `05_LEGAL_VERSION_RECONCILIATION.md`                            |
@@ -123,4 +123,6 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G3-J | Semantic citation evaluation            | PARTIAL (technical labels only) | `07_SEMANTIC_CITATION_EVALUATION.md`; 7/7 annotation mechanism  |
 | G3-K | Grounded answering hardening            | VERIFIED                        | lexical-only excluded; `08_GROUNDED_ANSWERING.md`               |
 | G3-L | Performance/resource measurement        | VERIFIED (pilot)                | `09_PERFORMANCE_AND_RESOURCE_REPORT.md`                         |
-| G3-M | Independent review                      | IN REVIEW                       | `10_INDEPENDENT_REVIEW.md`                                      |
+| G3-M | Independent review                      | VERIFIED (corrections applied)  | `10_INDEPENDENT_REVIEW.md`                                      |
+| G3-N | Exact-identifier alias/equality guards  | VERIFIED                        | `tests/retrieval/exact-identifier-safeguards.test.ts`           |
+| G3-O | Evidence-artifact regeneration guard    | VERIFIED                        | `PH_WRITE_GATE3_EVIDENCE=1`; no dirty tree on test run          |
