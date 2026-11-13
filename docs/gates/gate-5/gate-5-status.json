@@ -4,10 +4,12 @@
   "repository": {
     "path": "/root/ph-legal-intelligence",
     "branch": "main",
-    "head": "7a5c9d1e1f666aecfdb7d6df48ff289958609d12",
-    "commits": 34,
-    "working_tree": "clean_at_start",
-    "pushed": false
+    "working_tree": "clean",
+    "pushed": false,
+    "head_at_start": "7a5c9d1e1f666aecfdb7d6df48ff289958609d12",
+    "commits_at_start": 34,
+    "head_at_completion": "090259c",
+    "commits_at_completion": 35
   },
   "verdict": "ACCEPTED_WITH_LIMITATIONS",
   "classification": {

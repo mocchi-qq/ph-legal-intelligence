@@ -3,7 +3,8 @@
 **Date:** 2026-11-13
 **Repository:** `/root/ph-legal-intelligence`
 **Branch:** `main`
-**HEAD:** `7a5c9d1` (34 commits)
+**HEAD at completion:** `090259c` (35 commits)  
+**Gate 5 baseline HEAD:** `7a5c9d1` (34 commits)
 **Working tree:** clean at start; Gate 5 changes are committed separately.
 **Verdict:** **ACCEPTED WITH LIMITATIONS**
 **COUNSEL DETERMINATIONS: 0**
