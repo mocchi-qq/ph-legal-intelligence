@@ -146,3 +146,24 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G4-I | Independent review                    | VERIFIED (two passes)        | `07_INDEPENDENT_REVIEW.md`                                         |
 | G4-J | Counsel determination                 | BLOCKED (0 of 25)            | no signed or verifiable response                                   |
 | G4-K | Controlled ingestion                  | BLOCKED                      | no authorized corpus; no production service                        |
+
+---
+
+# Gate 5 — Counsel Determination Intake and Registry Readiness
+
+**Counsel determinations: 0. All 350 enforcement cells remain UNKNOWN.**
+
+| ID   | Task                                      | Status                          | Evidence                                                        |
+| ---- | ----------------------------------------- | ------------------------------- | --------------------------------------------------------------- |
+| G5-A | Gate 4 baseline verification              | VERIFIED                        | `00_BASELINE.md`; 315 passing at start                          |
+| G5-B | Canonical inventory + first-review field  | VERIFIED                        | `01_CANONICAL_SOURCE_INVENTORY.md`, `source-inventory.json`     |
+| G5-C | Counsel packet (16 activities)            | VERIFIED (packet only)          | `02_…`, `03_…`, `counsel-review/`                               |
+| G5-D | Decision provenance model                 | VERIFIED                        | `04_…`, `counsel-determinations.ts`                             |
+| G5-E | Durable registry schema + repository      | PARTIAL (no D1 adapter)         | `05_…`, migration 0005                                          |
+| G5-F | Lifecycle and revocation audit            | VERIFIED (gaps disclosed)       | `06_…`                                                          |
+| G5-G | Authenticity/date governance              | VERIFIED (no promotion)         | `07_…`                                                          |
+| G5-H | Counsel response intake workflow          | VERIFIED                        | `08_…`                                                          |
+| G5-I | Synthetic tests + regression              | VERIFIED                        | 348 passed, 1 skipped; 33 new tests                             |
+| G5-J | Two independent reviews + remediation     | VERIFIED                        | `10_INDEPENDENT_REVIEW.md`                                      |
+| G5-K | Final status and decision                 | VERIFIED                        | `11_FINAL_REPORT.md`, `gate-5-status.json`, `DECISION.md`       |
+| G5-L | Actual counsel determination              | BLOCKED (external)              | 0 received                                                      |

@@ -1,0 +1,718 @@
+{
+  "generated_at": "2026-11-13",
+  "schema_version": "gate5.source-inventory.v1",
+  "notice": "Selection for counsel review is not authorization. Every source remains UNKNOWN. No source has a counsel determination.",
+  "tier1_sources": [
+    {
+      "source_id": "sc_elibrary",
+      "display_name": "Supreme Court E-Library",
+      "tier1_designated": true
+    },
+    {
+      "source_id": "lawphil",
+      "display_name": "LawPhil Project",
+      "tier1_designated": true
+    },
+    {
+      "source_id": "official_gazette",
+      "display_name": "Official Gazette",
+      "tier1_designated": true
+    },
+    {
+      "source_id": "congress",
+      "display_name": "Congress",
+      "tier1_designated": true
+    },
+    {
+      "source_id": "senate",
+      "display_name": "Senate",
+      "tier1_designated": true
+    }
+  ],
+  "selected_for_initial_counsel_review": "sc_elibrary",
+  "selection_meaning": "selected_for_initial_counsel_review only; not authorized, verified, approved, or approved for ingestion/commercial use.",
+  "sources": [
+    {
+      "source_id": "sc_elibrary",
+      "display_name": "Supreme Court E-Library",
+      "category": "official_primary",
+      "official_url": "https://elibrary.judiciary.gov.ph/",
+      "owner_publisher": "Supreme Court of the Philippines",
+      "source_type": [
+        "supreme_court_decisions",
+        "national_statutes",
+        "court_issuances",
+        "executive_issuances"
+      ],
+      "tier1_designated": true,
+      "selected_for_initial_counsel_review": true,
+      "review_selection_rationale": "Source of all four owner-authorized pilot documents; designated first for counsel review. Selection does not imply authorization.",
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "lawphil",
+      "display_name": "LawPhil Project",
+      "category": "official_secondary",
+      "official_url": "https://lawphil.net/",
+      "owner_publisher": "Arellano Law Foundation",
+      "source_type": [
+        "jurisprudence",
+        "statutes",
+        "legal_materials"
+      ],
+      "tier1_designated": true,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "official_gazette",
+      "display_name": "Official Gazette",
+      "category": "official_primary",
+      "official_url": "https://officialgazette.gov.ph/",
+      "owner_publisher": "Office of the President of the Philippines",
+      "source_type": [
+        "presidential_issuances",
+        "official_publications"
+      ],
+      "tier1_designated": true,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "congress",
+      "display_name": "Congress",
+      "category": "official_primary",
+      "official_url": "https://congress.gov.ph/",
+      "owner_publisher": "House of Representatives of the Philippines",
+      "source_type": [
+        "bills",
+        "legislative_records",
+        "legislative_history"
+      ],
+      "tier1_designated": true,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "senate",
+      "display_name": "Senate",
+      "category": "official_primary",
+      "official_url": "https://senate.gov.ph/",
+      "owner_publisher": "Senate of the Philippines",
+      "source_type": [
+        "bills",
+        "resolutions",
+        "legislative_materials"
+      ],
+      "tier1_designated": true,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "bir",
+      "display_name": "Bureau of Internal Revenue",
+      "category": "official_primary",
+      "official_url": "https://bir.gov.ph/",
+      "owner_publisher": "Bureau of Internal Revenue",
+      "source_type": [
+        "revenue_regulations",
+        "revenue_memorandum_orders",
+        "revenue_memorandum_circulars"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "dole",
+      "display_name": "Department of Labor and Employment",
+      "category": "official_primary",
+      "official_url": "https://dole.gov.ph/",
+      "owner_publisher": "Department of Labor and Employment",
+      "source_type": [
+        "department_orders",
+        "labor_advisories"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "sec",
+      "display_name": "Securities and Exchange Commission",
+      "category": "official_primary",
+      "official_url": "https://sec.gov.ph/",
+      "owner_publisher": "Securities and Exchange Commission",
+      "source_type": [
+        "memorandum_circulars",
+        "opinions",
+        "regulations"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "dti",
+      "display_name": "Department of Trade and Industry",
+      "category": "official_primary",
+      "official_url": "https://dti.gov.ph/",
+      "owner_publisher": "Department of Trade and Industry",
+      "source_type": [
+        "department_administrative_orders",
+        "consumer_protection_issuances"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "npc",
+      "display_name": "National Privacy Commission",
+      "category": "official_primary",
+      "official_url": "https://privacy.gov.ph/",
+      "owner_publisher": "National Privacy Commission",
+      "source_type": [
+        "circulars",
+        "advisories",
+        "decisions",
+        "guidelines"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "csc",
+      "display_name": "Civil Service Commission",
+      "category": "official_primary",
+      "official_url": "https://csc.gov.ph/",
+      "owner_publisher": "Civil Service Commission",
+      "source_type": [
+        "memorandum_circulars",
+        "resolutions",
+        "rules"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "bsp",
+      "display_name": "Bangko Sentral ng Pilipinas",
+      "category": "official_primary",
+      "official_url": "https://bsp.gov.ph/",
+      "owner_publisher": "Bangko Sentral ng Pilipinas",
+      "source_type": [
+        "circulars",
+        "regulations",
+        "supervisory_issuances"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "gppb",
+      "display_name": "Government Procurement Policy Board",
+      "category": "official_primary",
+      "official_url": "https://gppb.gov.ph/",
+      "owner_publisher": "Government Procurement Policy Board",
+      "source_type": [
+        "procurement_policies",
+        "resolutions"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "dof",
+      "display_name": "Department of Finance",
+      "category": "official_primary",
+      "official_url": "https://dof.gov.ph/",
+      "owner_publisher": "Department of Finance",
+      "source_type": [
+        "department_orders",
+        "regulations"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "doj",
+      "display_name": "Department of Justice",
+      "category": "official_primary",
+      "official_url": "https://doj.gov.ph/",
+      "owner_publisher": "Department of Justice",
+      "source_type": [
+        "department_circulars",
+        "opinions"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "coa",
+      "display_name": "Commission on Audit",
+      "category": "official_primary",
+      "official_url": "https://coa.gov.ph/",
+      "owner_publisher": "Commission on Audit",
+      "source_type": [
+        "government_auditing",
+        "coa_decisions"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "comelec",
+      "display_name": "Commission on Elections",
+      "category": "official_primary",
+      "official_url": "https://comelec.gov.ph/",
+      "owner_publisher": "Commission on Elections",
+      "source_type": [
+        "election_laws",
+        "resolutions"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "dar",
+      "display_name": "Department of Agrarian Reform",
+      "category": "official_primary",
+      "official_url": "https://dar.gov.ph/",
+      "owner_publisher": "Department of Agrarian Reform",
+      "source_type": [
+        "agrarian_reform_laws",
+        "issuances"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "denr",
+      "display_name": "Department of Environment and Natural Resources",
+      "category": "official_primary",
+      "official_url": "https://denr.gov.ph/",
+      "owner_publisher": "Department of Environment and Natural Resources",
+      "source_type": [
+        "environmental_regulations"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "ipophilippines",
+      "display_name": "Intellectual Property Office of the Philippines",
+      "category": "official_primary",
+      "official_url": "https://ipophil.gov.ph/",
+      "owner_publisher": "Intellectual Property Office of the Philippines",
+      "source_type": [
+        "ip_laws",
+        "administrative_decisions"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "nlrc",
+      "display_name": "National Labor Relations Commission",
+      "category": "official_primary",
+      "official_url": "https://nlrc.dole.gov.ph/",
+      "owner_publisher": "National Labor Relations Commission",
+      "source_type": [
+        "labor_decisions",
+        "procedural_rules"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "cta",
+      "display_name": "Court of Tax Appeals",
+      "category": "official_primary",
+      "official_url": "https://cta.judiciary.gov.ph/",
+      "owner_publisher": "Court of Tax Appeals",
+      "source_type": [
+        "tax_jurisprudence"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "pcc",
+      "display_name": "Philippine Competition Commission",
+      "category": "official_primary",
+      "official_url": "https://phcc.gov.ph/",
+      "owner_publisher": "Philippine Competition Commission",
+      "source_type": [
+        "competition_regulations",
+        "decisions"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "insurance_commission",
+      "display_name": "Insurance Commission",
+      "category": "official_primary",
+      "official_url": "https://insurance.gov.ph/",
+      "owner_publisher": "Insurance Commission",
+      "source_type": [
+        "insurance_regulations"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    },
+    {
+      "source_id": "prc",
+      "display_name": "Professional Regulation Commission",
+      "category": "official_primary",
+      "official_url": "https://prc.gov.ph/",
+      "owner_publisher": "Professional Regulation Commission",
+      "source_type": [
+        "professional_regulatory_issuances"
+      ],
+      "tier1_designated": false,
+      "selected_for_initial_counsel_review": false,
+      "review_selection_rationale": null,
+      "authorization_state": "UNKNOWN",
+      "authenticity_state": "NOT_ASSESSED",
+      "legal_date_state": "NOT_ASSESSED",
+      "counsel_determination_refs": [],
+      "outstanding_questions": [
+        "Does the site's terms of use permit automated retrieval for this purpose?",
+        "Is the material a government work, and what does that imply for reproduction and indexing?",
+        "Is storing a private archival copy for verification permitted?",
+        "May short quotations and citation metadata be displayed to users?",
+        "Is redistribution prohibited, and does passage display count as redistribution?",
+        "Are there personal-data issues in published decisions that require redaction?"
+      ],
+      "last_review_at": null
+    }
+  ]
+}

@@ -5,12 +5,20 @@
     "institution": "Supreme Court of the Philippines",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["supreme_court_decisions", "national_statutes", "court_issuances", "executive_issuances"],
+    "coverage": [
+      "supreme_court_decisions",
+      "national_statutes",
+      "court_issuances",
+      "executive_issuances"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": true,
+    "selected_for_initial_counsel_review": true,
+    "review_selection_rationale": "Source of all four owner-authorized pilot documents; designated first for counsel review. Selection does not imply authorization."
   },
   {
     "source_id": "lawphil",
@@ -18,12 +26,19 @@
     "institution": "Arellano Law Foundation",
     "authority_level": "official_secondary",
     "jurisdiction": "PH",
-    "coverage": ["jurisprudence", "statutes", "legal_materials"],
+    "coverage": [
+      "jurisprudence",
+      "statutes",
+      "legal_materials"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": true,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "official_gazette",
@@ -31,12 +46,18 @@
     "institution": "Office of the President of the Philippines",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["presidential_issuances", "official_publications"],
+    "coverage": [
+      "presidential_issuances",
+      "official_publications"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": true,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "congress",
@@ -44,12 +65,19 @@
     "institution": "House of Representatives of the Philippines",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["bills", "legislative_records", "legislative_history"],
+    "coverage": [
+      "bills",
+      "legislative_records",
+      "legislative_history"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": true,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "senate",
@@ -57,12 +85,19 @@
     "institution": "Senate of the Philippines",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["bills", "resolutions", "legislative_materials"],
+    "coverage": [
+      "bills",
+      "resolutions",
+      "legislative_materials"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": true,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "bir",
@@ -70,12 +105,19 @@
     "institution": "Bureau of Internal Revenue",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["revenue_regulations", "revenue_memorandum_orders", "revenue_memorandum_circulars"],
+    "coverage": [
+      "revenue_regulations",
+      "revenue_memorandum_orders",
+      "revenue_memorandum_circulars"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "dole",
@@ -83,12 +125,18 @@
     "institution": "Department of Labor and Employment",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["department_orders", "labor_advisories"],
+    "coverage": [
+      "department_orders",
+      "labor_advisories"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "sec",
@@ -96,12 +144,19 @@
     "institution": "Securities and Exchange Commission",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["memorandum_circulars", "opinions", "regulations"],
+    "coverage": [
+      "memorandum_circulars",
+      "opinions",
+      "regulations"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "dti",
@@ -109,12 +164,18 @@
     "institution": "Department of Trade and Industry",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["department_administrative_orders", "consumer_protection_issuances"],
+    "coverage": [
+      "department_administrative_orders",
+      "consumer_protection_issuances"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "npc",
@@ -122,12 +183,20 @@
     "institution": "National Privacy Commission",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["circulars", "advisories", "decisions", "guidelines"],
+    "coverage": [
+      "circulars",
+      "advisories",
+      "decisions",
+      "guidelines"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "csc",
@@ -135,12 +204,19 @@
     "institution": "Civil Service Commission",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["memorandum_circulars", "resolutions", "rules"],
+    "coverage": [
+      "memorandum_circulars",
+      "resolutions",
+      "rules"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "bsp",
@@ -148,12 +224,19 @@
     "institution": "Bangko Sentral ng Pilipinas",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["circulars", "regulations", "supervisory_issuances"],
+    "coverage": [
+      "circulars",
+      "regulations",
+      "supervisory_issuances"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "gppb",
@@ -161,12 +244,18 @@
     "institution": "Government Procurement Policy Board",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["procurement_policies", "resolutions"],
+    "coverage": [
+      "procurement_policies",
+      "resolutions"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "dof",
@@ -174,12 +263,18 @@
     "institution": "Department of Finance",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["department_orders", "regulations"],
+    "coverage": [
+      "department_orders",
+      "regulations"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "doj",
@@ -187,12 +282,18 @@
     "institution": "Department of Justice",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["department_circulars", "opinions"],
+    "coverage": [
+      "department_circulars",
+      "opinions"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "coa",
@@ -200,12 +301,18 @@
     "institution": "Commission on Audit",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["government_auditing", "coa_decisions"],
+    "coverage": [
+      "government_auditing",
+      "coa_decisions"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "comelec",
@@ -213,12 +320,18 @@
     "institution": "Commission on Elections",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["election_laws", "resolutions"],
+    "coverage": [
+      "election_laws",
+      "resolutions"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "dar",
@@ -226,12 +339,18 @@
     "institution": "Department of Agrarian Reform",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["agrarian_reform_laws", "issuances"],
+    "coverage": [
+      "agrarian_reform_laws",
+      "issuances"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "denr",
@@ -239,12 +358,17 @@
     "institution": "Department of Environment and Natural Resources",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["environmental_regulations"],
+    "coverage": [
+      "environmental_regulations"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "ipophilippines",
@@ -252,12 +376,18 @@
     "institution": "Intellectual Property Office of the Philippines",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["ip_laws", "administrative_decisions"],
+    "coverage": [
+      "ip_laws",
+      "administrative_decisions"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "nlrc",
@@ -265,12 +395,18 @@
     "institution": "National Labor Relations Commission",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["labor_decisions", "procedural_rules"],
+    "coverage": [
+      "labor_decisions",
+      "procedural_rules"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "cta",
@@ -278,12 +414,17 @@
     "institution": "Court of Tax Appeals",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["tax_jurisprudence"],
+    "coverage": [
+      "tax_jurisprudence"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "pcc",
@@ -291,12 +432,18 @@
     "institution": "Philippine Competition Commission",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["competition_regulations", "decisions"],
+    "coverage": [
+      "competition_regulations",
+      "decisions"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "insurance_commission",
@@ -304,12 +451,17 @@
     "institution": "Insurance Commission",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["insurance_regulations"],
+    "coverage": [
+      "insurance_regulations"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   },
   {
     "source_id": "prc",
@@ -317,11 +469,16 @@
     "institution": "Professional Regulation Commission",
     "authority_level": "official_primary",
     "jurisdiction": "PH",
-    "coverage": ["professional_regulatory_issuances"],
+    "coverage": [
+      "professional_regulatory_issuances"
+    ],
     "acquisition_status": "Pending",
     "access_method": "reviewed_connector",
     "reuse_review": "required",
     "last_checked_at": null,
-    "last_successful_sync_at": null
+    "last_successful_sync_at": null,
+    "tier1_designated": false,
+    "selected_for_initial_counsel_review": false,
+    "review_selection_rationale": null
   }
 ]

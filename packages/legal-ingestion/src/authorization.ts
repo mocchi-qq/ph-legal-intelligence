@@ -283,6 +283,23 @@ export class ActivityAuthorizationRegistry {
         reason: "no_decision_recorded",
       };
 
+    // A prohibition or restriction denies regardless of the basis recorded on
+    // an enforcement override; it must not be masked by a basis check.
+    if (decision.status === "PROHIBITED")
+      return {
+        ...base,
+        allowed: false,
+        status: decision.status,
+        reason: "prohibited",
+      };
+    if (decision.status === "RESTRICTED")
+      return {
+        ...base,
+        allowed: false,
+        status: decision.status,
+        reason: "restricted",
+      };
+
     const allowedBases = options.allowedBases ?? [
       "COUNSEL_DETERMINATION",
       "OWNER_RISK_ACCEPTANCE",
@@ -336,13 +353,9 @@ export class ActivityAuthorizationRegistry {
       allowed: false,
       status: decision.status,
       reason:
-        decision.status === "PROHIBITED"
-          ? "prohibited"
-          : decision.status === "RESTRICTED"
-            ? "restricted"
-            : decision.status === "REVIEW_REQUIRED"
-              ? "review_required"
-              : "not_authorized",
+        decision.status === "REVIEW_REQUIRED"
+          ? "review_required"
+          : "not_authorized",
     };
   }
 }

@@ -1,0 +1,77 @@
+{
+  "gate": 5,
+  "generated_at": "2026-11-13",
+  "repository": {
+    "path": "/root/ph-legal-intelligence",
+    "branch": "main",
+    "head": "7a5c9d1e1f666aecfdb7d6df48ff289958609d12",
+    "commits": 34,
+    "working_tree": "clean_at_start",
+    "pushed": false
+  },
+  "verdict": "ACCEPTED_WITH_LIMITATIONS",
+  "classification": {
+    "counsel_determinations": {
+      "status": "NOT_RECEIVED",
+      "count": 0
+    },
+    "implementation": {
+      "counsel_packet": "IMPLEMENTED",
+      "canonical_source_inventory": "IMPLEMENTED",
+      "decision_provenance_model": "IMPLEMENTED",
+      "durable_registry_schema": "IMPLEMENTED",
+      "durable_registry_adapter": "NOT_IMPLEMENTED",
+      "authorization_projection": "IMPLEMENTED",
+      "lifecycle_revocation_controls": "PARTIALLY_IMPLEMENTED",
+      "authenticity_and_date_governance": "IMPLEMENTED",
+      "counsel_response_intake_workflow": "IMPLEMENTED"
+    },
+    "tests": {
+      "status": "TESTED_PASS",
+      "files_passed": 39,
+      "files_skipped": 1,
+      "tests_passed": 348,
+      "tests_skipped": 1,
+      "skip_reason": "Gate 2 live pilot requires PH_LIVE_PILOT=1 and network access; not run."
+    },
+    "independent_verification": {
+      "status": "INDEPENDENTLY_VERIFIED",
+      "reviews": 2,
+      "remediation_verification": "PASSED"
+    },
+    "authorization": {
+      "status": "UNKNOWN",
+      "registered_sources": 25,
+      "activities": 14,
+      "cells": 350,
+      "authorized": 0,
+      "authorized_with_conditions": 0,
+      "restricted": 0,
+      "prohibited": 0,
+      "unknown": 350
+    },
+    "corpus_readiness": {
+      "status": "BLOCKED_AUTHORIZATION",
+      "documents": 4,
+      "ready_for_controlled_ingestion": 0,
+      "conditionally_ready": 0,
+      "blocked_authorization": 4,
+      "new_documents_added": 0
+    },
+    "authenticity": {
+      "file_integrity": "VERIFIED",
+      "source_origin": "UNVERIFIED",
+      "independent_corroboration": "SECOND_SOURCE_UNVERIFIED",
+      "legal_dates": "UNKNOWN"
+    }
+  },
+  "limitations": [
+    "No counsel determination has been received; all 350 authorization cells remain UNKNOWN.",
+    "The durable registry schema is implemented but no live D1 adapter exists; the repository model is in-memory.",
+    "Temporary local storage and reindexing of existing content have no activity gate; display, quotation, reproduction, redistribution and retention are not implemented.",
+    "Evidence-file availability is an operational control, not a runtime check.",
+    "Revocation blocks future operations but does not automatically delete stored content; no retention policy exists.",
+    "Four pilot documents remain BLOCKED_AUTHORIZATION; no authenticity or legal-date status was promoted.",
+    "No production ingestion, authentication, tenancy, OCR, semantic retrieval, reranking or deployment exists."
+  ]
+}

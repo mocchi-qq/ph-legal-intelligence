@@ -3,6 +3,7 @@
 
 export * from "./acquisition";
 export * from "./authorization";
+export * from "./counsel-determinations";
 export * from "./extract";
 export * from "./guards";
 export * from "./identity";
