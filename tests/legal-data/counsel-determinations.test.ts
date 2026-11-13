@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   ActivityAuthorizationRegistry,
+  authorizeIndexing,
+  authorizeTemporaryLocalStorage,
   CorpusStore,
   type CounselActivity,
   type CounselActivityDecision,
@@ -10,6 +12,7 @@ import {
   ingestArtifact,
   syncToAuthorizationRegistry,
 } from "../../packages/legal-ingestion/src/index";
+import { buildSearchIndex } from "../../packages/legal-search/src/index";
 
 const SOURCE = "synthetic_counsel_source";
 const OTHER_SOURCE = "synthetic_other_source";
@@ -169,6 +172,14 @@ describe("Gate 5 — counsel determination provenance", () => {
         "missing document",
       ),
     ).toThrow(/decision_document_missing/);
+  });
+
+  it("denies when a required evidence file is unavailable", () => {
+    const r = repo();
+    r.record(determination(), "synthetic-registrar", "recorded");
+    expect(
+      r.project(SOURCE, "viewing", { evidenceAvailable: () => false }).reason,
+    ).toBe("evidence_unavailable");
   });
 
   it("requires conditions for conditional approval and enforces them", () => {
@@ -489,5 +500,194 @@ describe("Gate 5 — projection into Gate 4 enforcement", () => {
       reason: "sync",
     });
     expect(registry.check(SOURCE, "persistent_storage").allowed).toBe(false);
+  });
+});
+
+describe("Gate 6 — reindex authorization", () => {
+  function corpus() {
+    const store = CorpusStore.memory();
+    const result = ingestArtifact(
+      store,
+      {
+        artifactId: "gate6-index-doc",
+        sourceId: SOURCE,
+        sourceUrl: "synthetic://gate6-index-doc",
+        mimeType: "text/html",
+        retrievedAt: "2026-11-13T00:00:00Z",
+        synthetic: true,
+        content:
+          "<html><body>SECTION 1. Synthetic indexed provision for reindex authorization.</body></html>",
+        documentType: "REPUBLIC_ACT",
+        identityKey: "REPUBLIC_ACT:99997",
+        title: "Republic Act No. 99997",
+      },
+      {
+        pipelineVersion: "gate6.0.0",
+        extractorVersion: "extract.3",
+        normalizerVersion: "norm.3",
+      },
+    );
+    expect(result.status, result.reason).toBe("SUCCEEDED");
+    return store;
+  }
+
+  const indexingActivities = [
+    activityDecision("temporary_processing"),
+    activityDecision("text_extraction"),
+    activityDecision("search_indexing"),
+  ];
+
+  it("indexes a synthetic document only with all three required decisions", () => {
+    const r = repo();
+    r.record(
+      determination({ activityDecisions: indexingActivities }),
+      "synthetic-registrar",
+      "index authorization",
+    );
+    const index = buildSearchIndex(corpus().state, {
+      authorize: (request) =>
+        authorizeIndexing(r, {
+          sourceId: request.sourceId,
+          documentId: request.documentId,
+        }),
+    });
+    expect(index.entries.length).toBeGreaterThan(0);
+  });
+
+  it("returns an empty index when no determination exists", () => {
+    const r = repo();
+    const index = buildSearchIndex(corpus().state, {
+      authorize: (request) =>
+        authorizeIndexing(r, {
+          sourceId: request.sourceId,
+          documentId: request.documentId,
+        }),
+    });
+    expect(index.entries).toHaveLength(0);
+  });
+
+  it("stops indexing after revocation", () => {
+    const r = repo();
+    r.record(
+      determination({ activityDecisions: indexingActivities }),
+      "synthetic-registrar",
+      "index authorization",
+    );
+    const store = corpus();
+    const build = () =>
+      buildSearchIndex(store.state, {
+        authorize: (request) =>
+          authorizeIndexing(r, {
+            sourceId: request.sourceId,
+            documentId: request.documentId,
+          }),
+      });
+    expect(build().entries.length).toBeGreaterThan(0);
+    r.revoke(DET_ID, "synthetic-counsel", "withdrawn");
+    expect(build().entries).toHaveLength(0);
+  });
+
+  it("does not delete stored synthetic content when a determination is revoked", () => {
+    const r = repo();
+    r.record(
+      determination({ activityDecisions: [activityDecision("retention")] }),
+      "synthetic-registrar",
+      "retention decision",
+    );
+    const store = corpus();
+    r.revoke(DET_ID, "synthetic-counsel", "withdrawn");
+    expect(r.project(SOURCE, "retention").allowed).toBe(false);
+    expect(store.state.documents).toHaveLength(1);
+  });
+
+  it("denies indexing when one required activity is omitted", () => {
+    const r = repo();
+    r.record(
+      determination({
+        activityDecisions: [
+          activityDecision("text_extraction"),
+          activityDecision("search_indexing"),
+        ],
+      }),
+      "synthetic-registrar",
+      "missing in-memory decision",
+    );
+    const index = buildSearchIndex(corpus().state, {
+      authorize: (request) =>
+        authorizeIndexing(r, {
+          sourceId: request.sourceId,
+          documentId: request.documentId,
+        }),
+    });
+    expect(index.entries).toHaveLength(0);
+  });
+});
+
+describe("Gate 6 — temporary local storage authorization", () => {
+  it("allows the temp-file callback only with an explicit temporary-storage decision", () => {
+    const r = repo();
+    r.record(
+      determination({
+        activityDecisions: [activityDecision("temporary_local_storage")],
+      }),
+      "synthetic-registrar",
+      "temp storage",
+    );
+    const allow = authorizeTemporaryLocalStorage(r, {
+      sourceId: SOURCE,
+      documentId: "doc-1",
+    });
+    expect(allow().allowed).toBe(true);
+  });
+
+  it("denies when only in-memory processing is authorized", () => {
+    const r = repo();
+    r.record(
+      determination({
+        activityDecisions: [activityDecision("temporary_processing")],
+      }),
+      "synthetic-registrar",
+      "in-memory only",
+    );
+    const deny = authorizeTemporaryLocalStorage(r, {
+      sourceId: SOURCE,
+      documentId: "doc-1",
+    });
+    expect(deny().allowed).toBe(false);
+    expect(deny().reason).toBe("activity_not_covered");
+  });
+
+  it("denies the wrong document, expired decision, and revoked decision", () => {
+    const r = repo();
+    r.record(
+      determination({
+        documentIds: ["doc-1"],
+        effectiveDate: "2026-01-01",
+        expiryDate: "2026-12-01",
+        activityDecisions: [activityDecision("temporary_local_storage")],
+      }),
+      "synthetic-registrar",
+      "scoped",
+    );
+    expect(
+      authorizeTemporaryLocalStorage(r, {
+        sourceId: SOURCE,
+        documentId: "doc-2",
+      })().reason,
+    ).toBe("document_scope_mismatch");
+    expect(
+      authorizeTemporaryLocalStorage(
+        r,
+        { sourceId: SOURCE, documentId: "doc-1" },
+        { now: "2027-01-01T00:00:00Z" },
+      )().reason,
+    ).toBe("expired");
+    r.revoke(DET_ID, "synthetic-counsel", "withdrawn");
+    expect(
+      authorizeTemporaryLocalStorage(r, {
+        sourceId: SOURCE,
+        documentId: "doc-1",
+      })().allowed,
+    ).toBe(false);
   });
 });

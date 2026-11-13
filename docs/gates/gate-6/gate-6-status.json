@@ -1,0 +1,89 @@
+{
+  "gate": 6,
+  "generated_at": "2026-11-13",
+  "repository": {
+    "path": "/root/ph-legal-intelligence",
+    "branch": "main",
+    "head_at_start": "405a35015851f8968aee8c7648be4beb2a991716",
+    "commits_at_start": 37,
+    "working_tree_at_start": "clean",
+    "pushed": false,
+    "deployed": false
+  },
+  "verdict": "ACCEPTED_WITH_LIMITATIONS",
+  "classification": {
+    "implementation": {
+      "activity_taxonomy": "IMPLEMENTED",
+      "temporary_local_storage_gate": "IMPLEMENTED",
+      "reindex_gate": "IMPLEMENTED",
+      "index_service": "NOT_IMPLEMENTED",
+      "d1_adapter": "NOT_IMPLEMENTED",
+      "d1_schema": "IMPLEMENTED",
+      "d1_runtime_validation": "NOT_TESTED",
+      "evidence_availability_hook": "IMPLEMENTED",
+      "evidence_store": "NOT_IMPLEMENTED",
+      "retention_governance": "PARTIALLY_IMPLEMENTED",
+      "projection_revocation": "IMPLEMENTED"
+    },
+    "tests": {
+      "status": "TESTED_PASS",
+      "files_passed": 43,
+      "files_skipped": 1,
+      "tests_passed": 381,
+      "tests_skipped": 1,
+      "skip_reason": "Gate 2 live pilot requires PH_LIVE_PILOT=1 and network; not run."
+    },
+    "independent_verification": {
+      "status": "INDEPENDENTLY_VERIFIED",
+      "reviews": 2,
+      "remediation_verification": "PASSED",
+      "material_findings": 0
+    },
+    "counsel_determinations": {
+      "status": "NOT_RECEIVED",
+      "count": 0
+    },
+    "authorization": {
+      "sources": 25,
+      "activities_enforced": 14,
+      "cells": 350,
+      "authorized": 0,
+      "authorized_with_conditions": 0,
+      "restricted": 0,
+      "prohibited": 0,
+      "unknown": 350
+    },
+    "corpus_readiness": {
+      "status": "BLOCKED_AUTHORIZATION",
+      "documents": 4,
+      "ready_for_controlled_ingestion": 0,
+      "blocked_authorization": 4,
+      "new_documents_added": 0
+    },
+    "taxonomy": {
+      "canonical_activities": 16,
+      "gate4_enforced_activities": 14,
+      "extended_activities": [
+        "temporary_local_storage",
+        "substantial_reproduction"
+      ],
+      "reconciled": true
+    },
+    "security": {
+      "temporary_local_storage_before_write": true,
+      "reindex_requires_authorizer": true,
+      "stale_authorization_after_revocation": false,
+      "automatic_deletion_on_revocation": false,
+      "real_counsel_promotion_from_synthetic": false
+    }
+  },
+  "limitations": [
+    "No live D1 adapter; Wrangler local D1 cannot start in this PRoot host (TCMalloc OOM). D1 transaction/batch behavior is unverified.",
+    "Temporary-storage and reindex denials are not centrally audited.",
+    "No production reindex service exists; the function boundary is the gate.",
+    "Display, quotation, substantial reproduction, export, commercial use, retention, deletion, admin and background paths are not implemented.",
+    "No evidence store; evidence availability is an optional hook.",
+    "No authentication, tenancy, OCR, semantic retrieval, reranking or deployment.",
+    "All 350 authorization cells remain UNKNOWN; counsel determinations remain zero."
+  ]
+}

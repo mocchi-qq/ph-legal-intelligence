@@ -12,6 +12,7 @@ import {
 } from "../../packages/document-parser/src/index";
 import { makeTestPdf } from "../helpers/pdf";
 
+const allowTemp = () => ({ allowed: true, reason: "synthetic_fixture" });
 const tools = pdfToolsAvailable();
 const hasPoppler = tools.pdftotext && tools.pdfinfo;
 const pdf = makeTestPdf([
@@ -26,13 +27,18 @@ describe("Gate 2 — PDF inspection and extraction", () => {
   });
 
   it("rejects non-PDF bytes without throwing", () => {
-    const result = inspectPdf(Uint8Array.from(Buffer.from("plain text")));
+    const result = inspectPdf(Uint8Array.from(Buffer.from("plain text")), {
+      authorizeTemporaryStorage: allowTemp,
+    });
     expect(result.status).toBe("REJECTED");
     expect(result.reason).toBe("not_a_pdf");
   });
 
   it("rejects files over the size limit", () => {
-    const result = extractPdfText(pdf, { maxBytes: 10 });
+    const result = extractPdfText(pdf, {
+      maxBytes: 10,
+      authorizeTemporaryStorage: allowTemp,
+    });
     expect(result.status).toBe("REJECTED");
     expect(result.reason).toContain("too_large");
   });
@@ -50,7 +56,10 @@ describe("Gate 2 — PDF inspection and extraction", () => {
   });
 
   it("rejects an inspected document above the page limit", () => {
-    const result = inspectPdf(pdf, { maxPages: 0 });
+    const result = inspectPdf(pdf, {
+      maxPages: 0,
+      authorizeTemporaryStorage: allowTemp,
+    });
     expect(result.status).toBe("REJECTED");
     expect(result.reason).toContain("too_many_pages");
   });
@@ -61,7 +70,9 @@ describe("Gate 2 — PDF inspection and extraction", () => {
   });
 
   it.skipIf(!hasPoppler)("inspects a valid PDF", () => {
-    const inspection = inspectPdf(pdf);
+    const inspection = inspectPdf(pdf, {
+      authorizeTemporaryStorage: allowTemp,
+    });
     expect(inspection.status).toBe("OK");
     expect(inspection.pageCount).toBe(1);
     expect(inspection.encrypted).toBe(false);
@@ -71,7 +82,9 @@ describe("Gate 2 — PDF inspection and extraction", () => {
     "extracts native text and preserves the original bytes",
     () => {
       const before = Buffer.from(pdf).toString("base64");
-      const result = extractPdfText(pdf);
+      const result = extractPdfText(pdf, {
+        authorizeTemporaryStorage: allowTemp,
+      });
       expect(result.status, JSON.stringify(result.flags)).toBe("OK");
       expect(result.method).toBe("native_text");
       expect(result.pageCount).toBe(1);
@@ -86,7 +99,9 @@ describe("Gate 2 — PDF inspection and extraction", () => {
     const corrupt = Uint8Array.from(
       Buffer.from("%PDF-1.4\nthis is not a real pdf body"),
     );
-    const result = extractPdfText(corrupt);
+    const result = extractPdfText(corrupt, {
+      authorizeTemporaryStorage: allowTemp,
+    });
     expect(["FAILED", "REJECTED", "EMPTY"]).toContain(result.status);
     expect(result.text).toBe("");
   });
@@ -131,4 +146,29 @@ describe("Gate 2 — PDF inspection and extraction", () => {
       NO_OCR_PROVIDER.recognise({ bytes: pdf, language: "eng", page: 1 }),
     ).rejects.toThrow(/unavailable/i);
   });
+  it.skipIf(!hasPoppler)(
+    "rejects before writing when temporary storage is not authorized",
+    () => {
+      let calls = 0;
+      const result = extractPdfText(pdf, {
+        authorizeTemporaryStorage: () => {
+          calls += 1;
+          return { allowed: false, reason: "NO_TEMPORARY_STORAGE_DECISION" };
+        },
+      });
+      expect(calls).toBeGreaterThan(0);
+      expect(result.status).toBe("REJECTED");
+      expect(result.reason).toContain("temporary_storage_not_authorized");
+      expect(result.text).toBe("");
+    },
+  );
+
+  it.skipIf(!hasPoppler)(
+    "rejects when no temporary-storage authorizer is supplied",
+    () => {
+      const result = inspectPdf(pdf);
+      expect(result.status).toBe("REJECTED");
+      expect(result.reason).toBe("temporary_storage_authorization_missing");
+    },
+  );
 });

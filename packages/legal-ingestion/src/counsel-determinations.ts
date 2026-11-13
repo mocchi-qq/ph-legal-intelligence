@@ -124,6 +124,8 @@ export interface CounselProjectionOptions {
   now?: string;
   documentId?: string | null;
   satisfiedConditions?: readonly string[];
+  /** Optional evidence availability check; false denies with evidence_unavailable. */
+  evidenceAvailable?: (reference: string) => boolean;
 }
 
 export interface CounselProjection {
@@ -522,6 +524,17 @@ export class CounselDeterminationRepository {
         allowed: false,
         reason: "determination_evidence_missing",
       };
+    if (
+      options.evidenceAvailable &&
+      !determination.evidenceRefs.every((reference) =>
+        options.evidenceAvailable?.(reference),
+      )
+    )
+      return {
+        ...scoped,
+        allowed: false,
+        reason: "evidence_unavailable",
+      };
     if (!APPROVED_STATUSES.includes(decision.status))
       return {
         ...scoped,
@@ -719,4 +732,52 @@ export function syncToAuthorizationRegistry(
       options.changedAt,
     );
   }
+}
+
+export interface IndexingAuthorizationOptions
+  extends CounselProjectionOptions {}
+
+/**
+ * Authorization callback for reindexing. It checks the exact activities the
+ * index build performs: in-memory processing, text extraction and search
+ * indexing. A missing/expired/revoked/conflicting decision denies the document.
+ */
+export function authorizeIndexing(
+  repository: CounselDeterminationRepository,
+  request: { sourceId: string; documentId: string },
+  options: IndexingAuthorizationOptions = {},
+): { allowed: boolean; reason: string } {
+  for (const activity of [
+    "temporary_processing",
+    "text_extraction",
+    "search_indexing",
+  ] as const) {
+    const projection = repository.project(request.sourceId, activity, {
+      ...options,
+      documentId: request.documentId,
+    });
+    if (!projection.allowed)
+      return { allowed: false, reason: `${activity}:${projection.reason}` };
+  }
+  return { allowed: true, reason: "authorized" };
+}
+
+/**
+ * Build the callback required by the document parser before it writes a
+ * temporary local file. This checks only `temporary_local_storage`; permission
+ * for in-memory processing does not imply permission to write a temp file.
+ */
+export function authorizeTemporaryLocalStorage(
+  repository: CounselDeterminationRepository,
+  request: { sourceId: string; documentId: string },
+  options: CounselProjectionOptions = {},
+): () => { allowed: boolean; reason: string } {
+  return () => {
+    const projection = repository.project(
+      request.sourceId,
+      "temporary_local_storage",
+      { ...options, documentId: request.documentId },
+    );
+    return { allowed: projection.allowed, reason: projection.reason };
+  };
 }

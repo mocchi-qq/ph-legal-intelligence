@@ -167,3 +167,24 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G5-J | Two independent reviews + remediation    | VERIFIED                  | `10_INDEPENDENT_REVIEW.md`                                  |
 | G5-K | Final status and decision                | VERIFIED                  | `11_FINAL_REPORT.md`, `gate-5-status.json`, `DECISION.md`   |
 | G5-L | Actual counsel determination             | BLOCKED (external)        | 0 received                                                  |
+
+---
+
+# Gate 6 — Enforcement Closure and Durable Registry
+
+**Counsel determinations: 0. All 350 enforcement cells remain UNKNOWN.**
+
+| ID   | Task                                      | Status                          | Evidence                                                        |
+| ---- | ----------------------------------------- | ------------------------------- | --------------------------------------------------------------- |
+| G6-A | Baseline + task plan                      | VERIFIED                        | `00_BASELINE_AND_PLAN.md`                                       |
+| G6-B | Canonical 16/14 taxonomy                  | VERIFIED                        | `01_ACTIVITY_TAXONOMY.md`, `activity-taxonomy.json`             |
+| G6-C | Temp-storage + reindex gates              | VERIFIED                        | `02_ENFORCEMENT_COVERAGE.md`; parser/search tests                |
+| G6-D | D1 schema validation + adapter assessment | PARTIAL (adapter deferred)      | `03_…`, `04_…`, migration 0006, SQLite tests                    |
+| G6-E | Projection/revocation consistency         | VERIFIED                        | `05_PROJECTION_AND_REVOCATION.md`                               |
+| G6-F | Evidence availability hook                | VERIFIED (no store)             | `06_EVIDENCE_INTEGRITY.md`                                      |
+| G6-G | Revocation/retention governance           | VERIFIED (no deletion)          | `07_REVOCATION_AND_RETENTION_GOVERNANCE.md`                     |
+| G6-H | Synthetic tests + regression              | VERIFIED                        | 381 passed, 1 skipped; 33 new tests                             |
+| G6-I | Two reviews + remediation                 | VERIFIED                        | `09_INDEPENDENT_REVIEW.md`                                      |
+| G6-J | Final status/decision                     | VERIFIED                        | `10_FINAL_REPORT.md`, `gate-6-status.json`, `DECISION.md`       |
+| G6-K | Live D1 adapter                           | NOT_IMPLEMENTED (blocker)       | Wrangler local D1 TCMalloc OOM                                  |
+| G6-L | Counsel determination                     | BLOCKED (external)              | 0 received                                                      |

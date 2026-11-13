@@ -3,10 +3,10 @@ import {
   buildSearchIndex,
   retrieve,
 } from "../../packages/legal-search/src/index";
-import { buildFixtureCorpus } from "../benchmark/helpers";
+import { allowSyntheticIndex, buildFixtureCorpus } from "../benchmark/helpers";
 
 const store = buildFixtureCorpus();
-const index = buildSearchIndex(store.state);
+const index = buildSearchIndex(store.state, { authorize: allowSyntheticIndex });
 
 function topIdentity(query: string, asOfDate?: string) {
   const results = retrieve(index, {

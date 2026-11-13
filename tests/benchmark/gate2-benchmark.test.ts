@@ -12,7 +12,7 @@ import {
   retrieve,
 } from "../../packages/legal-search/src/index";
 import { makeTestPdf } from "../helpers/pdf";
-import { buildFixtureCorpus } from "./helpers";
+import { allowSyntheticIndex, buildFixtureCorpus } from "./helpers";
 
 const root = process.cwd();
 const gate1Path = join(root, "docs/gates/gate-1/08_benchmark-results.json");
@@ -32,7 +32,9 @@ describe("Gate 2 — benchmark separation and blockers", () => {
 
   it("keeps exact identifiers exact-only on the synthetic regression corpus", () => {
     const store = buildFixtureCorpus();
-    const index = buildSearchIndex(store.state);
+    const index = buildSearchIndex(store.state, {
+      authorize: allowSyntheticIndex,
+    });
     const missing = retrieve(index, {
       text: "G.R. No. 000000",
       mode: "standard",
@@ -57,8 +59,12 @@ describe("Gate 2 — benchmark separation and blockers", () => {
       "Section 2. A synthetic remedy is available.",
     ]);
     const tools = pdfToolsAvailable();
-    const inspection = inspectPdf(pdf);
-    const extraction = extractPdfText(pdf);
+    const inspection = inspectPdf(pdf, {
+      authorizeTemporaryStorage: () => ({ allowed: true }),
+    });
+    const extraction = extractPdfText(pdf, {
+      authorizeTemporaryStorage: () => ({ allowed: true }),
+    });
 
     const record = {
       synthetic: true,

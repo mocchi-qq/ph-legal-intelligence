@@ -18,6 +18,7 @@ import {
   retrieve,
 } from "../../packages/legal-search/src/index";
 import {
+  allowSyntheticIndex,
   buildFixtureCorpus,
   currentVersion,
   docByKey,
@@ -25,7 +26,7 @@ import {
 } from "./helpers";
 
 const store = buildFixtureCorpus();
-const index = buildSearchIndex(store.state);
+const index = buildSearchIndex(store.state, { authorize: allowSyntheticIndex });
 const verifier = createCitationVerifier({
   documents: store.state.documents,
   versions: store.state.versions,

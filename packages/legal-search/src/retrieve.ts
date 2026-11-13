@@ -175,13 +175,37 @@ function matchesFilters(
   return true;
 }
 
-export function buildSearchIndex(corpus: CorpusState): SearchIndex {
+export interface IndexAuthorizationRequest {
+  documentId: string;
+  sourceId: string;
+}
+
+export interface IndexAuthorizationDecision {
+  allowed: boolean;
+  reason?: string;
+}
+
+export interface IndexBuildOptions {
+  /** Required. Called before each document's chunks are indexed. */
+  authorize: (request: IndexAuthorizationRequest) => IndexAuthorizationDecision;
+}
+
+export function buildSearchIndex(
+  corpus: CorpusState,
+  options: IndexBuildOptions,
+): SearchIndex {
+  if (!options?.authorize) throw new Error("index_authorization_required");
   const entries: IndexEntry[] = [];
   const docFreq = new Map<string, number>();
 
   for (const chunk of corpus.chunks) {
     const document = corpus.documents.find((d) => d.id === chunk.documentId);
     if (!document) continue;
+    const authorization = options.authorize({
+      documentId: document.id,
+      sourceId: document.sourceId ?? "unknown",
+    });
+    if (!authorization.allowed) continue;
     const version = corpus.versions.find((v) => v.id === chunk.versionId);
     const provision = chunk.provisionId
       ? corpus.provisions.find((p) => p.id === chunk.provisionId)

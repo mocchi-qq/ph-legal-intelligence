@@ -7,7 +7,7 @@ import {
   ingestArtifact,
 } from "../../packages/legal-ingestion/src/index";
 import { buildSearchIndex } from "../../packages/legal-search/src/index";
-import { buildFixtureCorpus } from "../benchmark/helpers";
+import { allowSyntheticIndex, buildFixtureCorpus } from "../benchmark/helpers";
 
 const OPTS = {
   pipelineVersion: "gate1.0.0",
@@ -60,17 +60,22 @@ describe("Gate 1 — security and privacy controls", () => {
 
   it("keeps the public index free of private documents by construction", () => {
     const store = buildFixtureCorpus();
-    const index = buildSearchIndex(store.state);
+    const index = buildSearchIndex(store.state, {
+      authorize: allowSyntheticIndex,
+    });
     expect(index.entries.length).toBeGreaterThan(0);
     expect(
       index.entries.some((entry) => entry.sourceId === "private_upload"),
     ).toBe(false);
-    const results = buildSearchIndex({
-      ...store.state,
-      documents: store.state.documents.filter(
-        (d) => d.sourceId === "private_upload",
-      ),
-    }).entries;
+    const results = buildSearchIndex(
+      {
+        ...store.state,
+        documents: store.state.documents.filter(
+          (d) => d.sourceId === "private_upload",
+        ),
+      },
+      { authorize: allowSyntheticIndex },
+    ).entries;
     expect(results).toHaveLength(0);
   });
 

@@ -18,6 +18,11 @@ export interface FixtureManifest {
   fixtures: ArtifactInput[];
 }
 
+export const allowSyntheticIndex = () => ({
+  allowed: true,
+  reason: "synthetic_test_fixture",
+});
+
 export function loadFixtures(): FixtureManifest {
   const path = join(
     process.cwd(),

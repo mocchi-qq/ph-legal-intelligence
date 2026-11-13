@@ -45,6 +45,12 @@ export interface PdfOptions {
   maxPages?: number;
   /** `preferred` (default) uses available OS limits/network isolation; `off` for tests only. */
   sandbox?: "preferred" | "off";
+  /**
+   * Required before any temporary file is written. It must check the canonical
+   * `temporary_local_storage` decision for this source/document. Missing or
+   * denied authorization rejects the operation before mkdtemp/write.
+   */
+  authorizeTemporaryStorage?: () => { allowed: boolean; reason?: string };
 }
 
 const DEFAULT_MAX_BYTES = 25 * 1024 * 1024;
@@ -135,6 +141,15 @@ export function pdfToolsAvailable(): { pdftotext: boolean; pdfinfo: boolean } {
   return toolsCache;
 }
 
+function temporaryStorageRejection(options: PdfOptions): string | null {
+  if (!options.authorizeTemporaryStorage)
+    return "temporary_storage_authorization_missing";
+  const result = options.authorizeTemporaryStorage();
+  if (!result.allowed)
+    return `temporary_storage_not_authorized:${result.reason ?? "denied"}`;
+  return null;
+}
+
 function withTempFile<T>(bytes: Uint8Array, fn: (path: string) => T): T {
   const dir = mkdtempSync(join(tmpdir(), "phli-pdf-"));
   const path = join(dir, "input.pdf");
@@ -181,6 +196,16 @@ export function inspectPdf(
       pdfVersion: null,
       encrypted: null,
       reason: "pdfinfo_missing",
+    };
+
+  const storageDenied = temporaryStorageRejection(options);
+  if (storageDenied)
+    return {
+      status: "REJECTED",
+      pageCount: null,
+      pdfVersion: null,
+      encrypted: null,
+      reason: storageDenied,
     };
 
   try {
@@ -283,6 +308,18 @@ export function extractPdfText(
       method: "none",
       flags: [],
       reason: "pdftotext_missing",
+    };
+  }
+
+  const storageDenied = temporaryStorageRejection(options);
+  if (storageDenied) {
+    return {
+      status: "REJECTED",
+      text: "",
+      pageCount: null,
+      method: "none",
+      flags: [],
+      reason: storageDenied,
     };
   }
 

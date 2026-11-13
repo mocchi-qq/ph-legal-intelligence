@@ -15,6 +15,11 @@ import {
   retrieve,
 } from "../../packages/legal-search/src/index";
 
+const allowSyntheticIndex = () => ({
+  allowed: true,
+  reason: "synthetic_pilot_fixture",
+});
+
 const LIVE = process.env.PH_LIVE_PILOT === "1";
 const root = process.cwd();
 const OPTS = {
@@ -194,7 +199,9 @@ describe.skipIf(!LIVE)(
         });
       }
 
-      const index = buildSearchIndex(store.state);
+      const index = buildSearchIndex(store.state, {
+        authorize: allowSyntheticIndex,
+      });
       const docKey = (documentId: string) =>
         store.state.documents.find((d) => d.id === documentId)?.identityKey ??
         "unknown";

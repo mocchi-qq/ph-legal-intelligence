@@ -32,24 +32,24 @@ Counsel should identify any assumptions, limitations, uncertainties and matters 
 
 Mark one decision per activity. Do not leave an activity implicitly approved.
 
-| #   | Activity                             | Approved | Approved with conditions | Restricted | Prohibited | Unresolved | Scope / conditions |
-| --- | ------------------------------------ | -------- | ------------------------ | ---------- | ---------- | ---------- | ------------------ |
-| 1   | Viewing through the public interface |          |                          |            |            |            |                    |
-| 2   | Downloading a source document        |          |                          |            |            |            |                    |
-| 3   | Temporary processing in memory       |          |                          |            |            |            |                    |
-| 4   | Temporary local storage              |          |                          |            |            |            |                    |
-| 5   | Persistent document storage          |          |                          |            |            |            |                    |
-| 6   | Text extraction                      |          |                          |            |            |            |                    |
-| 7   | OCR processing                       |          |                          |            |            |            |                    |
-| 8   | Search indexing                      |          |                          |            |            |            |                    |
-| 9   | Embedding generation                 |          |                          |            |            |            |                    |
-| 10  | AI-assisted processing               |          |                          |            |            |            |                    |
-| 11  | Citation display                     |          |                          |            |            |            |                    |
-| 12  | Quotation / excerpt display          |          |                          |            |            |            |                    |
-| 13  | Substantial reproduction             |          |                          |            |            |            |                    |
-| 14  | Redistribution / export              |          |                          |            |            |            |                    |
-| 15  | Commercial use                       |          |                          |            |            |            |                    |
-| 16  | Retention / archival storage         |          |                          |            |            |            |                    |
+| #   | Activity ID                | Activity                             | Approved | Approved with conditions | Restricted | Prohibited | Unresolved | Scope / conditions |
+| --- | -------------------------- | ------------------------------------ | -------- | ------------------------ | ---------- | ---------- | ---------- | ------------------ |
+| 1   | `viewing`                  | Viewing through the public interface |          |                          |            |            |            |                    |
+| 2   | `downloading`              | Downloading a source document        |          |                          |            |            |            |                    |
+| 3   | `temporary_processing`     | Temporary processing in memory       |          |                          |            |            |            |                    |
+| 4   | `temporary_local_storage`  | Temporary local storage              |          |                          |            |            |            |                    |
+| 5   | `persistent_storage`       | Persistent document storage          |          |                          |            |            |            |                    |
+| 6   | `text_extraction`          | Text extraction                      |          |                          |            |            |            |                    |
+| 7   | `ocr`                      | OCR processing                       |          |                          |            |            |            |                    |
+| 8   | `search_indexing`          | Search indexing                      |          |                          |            |            |            |                    |
+| 9   | `embedding_generation`     | Embedding generation                 |          |                          |            |            |            |                    |
+| 10  | `ai_assisted_analysis`     | AI-assisted processing               |          |                          |            |            |            |                    |
+| 11  | `citation_display`         | Citation display                     |          |                          |            |            |            |                    |
+| 12  | `quotation`                | Quotation / excerpt display          |          |                          |            |            |            |                    |
+| 13  | `substantial_reproduction` | Substantial reproduction             |          |                          |            |            |            |                    |
+| 14  | `redistribution`           | Redistribution / export              |          |                          |            |            |            |                    |
+| 15  | `commercial_use`           | Commercial use                       |          |                          |            |            |            |                    |
+| 16  | `retention`                | Retention / archival storage         |          |                          |            |            |            |                    |
 
 ## 4. Conditions, limitations and evidence
 

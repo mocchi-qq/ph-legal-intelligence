@@ -8,6 +8,11 @@ import {
 } from "../../packages/legal-search/src/index";
 import { buildPilotCorpus, pilotAvailable } from "./pilot-corpus";
 
+const allowSyntheticIndex = () => ({
+  allowed: true,
+  reason: "synthetic_pilot_fixture",
+});
+
 const PILOT_FILES = [
   "ra12232.html",
   "ra10931.html",
@@ -34,7 +39,9 @@ describe.skipIf(!pilotAvailable())(
       const ingestMs = performance.now() - t0;
 
       const t1 = performance.now();
-      const index = buildSearchIndex(store.state);
+      const index = buildSearchIndex(store.state, {
+        authorize: allowSyntheticIndex,
+      });
       const indexMs = performance.now() - t1;
 
       const gold = JSON.parse(

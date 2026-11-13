@@ -7,6 +7,11 @@ import {
 } from "../../packages/legal-search/src/index";
 import { buildPilotCorpus, pilotAvailable } from "./pilot-corpus";
 
+const allowSyntheticIndex = () => ({
+  allowed: true,
+  reason: "synthetic_pilot_fixture",
+});
+
 interface GoldQuery {
   id: string;
   category: string;
@@ -20,7 +25,9 @@ describe.skipIf(!pilotAvailable())(
   () => {
     it("evaluates the pre-declared gold set and writes measured results", () => {
       const store = buildPilotCorpus();
-      const index = buildSearchIndex(store.state);
+      const index = buildSearchIndex(store.state, {
+        authorize: allowSyntheticIndex,
+      });
       const gold = JSON.parse(
         readFileSync(
           join(process.cwd(), "docs/gates/gate-3/retrieval-gold-set.json"),
