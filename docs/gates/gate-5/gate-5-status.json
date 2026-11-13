@@ -8,8 +8,11 @@
     "pushed": false,
     "head_at_start": "7a5c9d1e1f666aecfdb7d6df48ff289958609d12",
     "commits_at_start": 34,
-    "head_at_completion": "090259c",
-    "commits_at_completion": 35
+    "feature_commit": "090259c",
+    "documentation_commits": [
+      "67a1fc6"
+    ],
+    "note": "Final HEAD is reported in the terminal report after documentation-only commits; feature/tests are at 090259c."
   },
   "verdict": "ACCEPTED_WITH_LIMITATIONS",
   "classification": {
