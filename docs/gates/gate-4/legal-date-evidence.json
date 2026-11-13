@@ -1,0 +1,410 @@
+{
+  "generated_at": "2026-11-13",
+  "schema_version": "gate4.legal-date-evidence.v1",
+  "notice": "No date was inferred from a URL, retrieval time, list page or title. Unknown remains UNKNOWN.",
+  "date_fields": [
+    "enactment_date",
+    "approval_date",
+    "promulgation_date",
+    "publication_date",
+    "filing_date",
+    "effectivity_date",
+    "amendment_date",
+    "repeal_date",
+    "historical_applicability_date"
+  ],
+  "documents": [
+    {
+      "document_id": "ra12232",
+      "identity_key": "REPUBLIC_ACT:12232",
+      "source_id": "sc_elibrary",
+      "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+      "dates": {
+        "enactment_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "approval_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "promulgation_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "publication_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "filing_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "effectivity_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "amendment_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "repeal_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "historical_applicability_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+          "source_hash": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        }
+      }
+    },
+    {
+      "document_id": "ra10931",
+      "identity_key": "REPUBLIC_ACT:10931",
+      "source_id": "sc_elibrary",
+      "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+      "dates": {
+        "enactment_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "approval_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "promulgation_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "publication_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "filing_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "effectivity_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "amendment_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "repeal_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "historical_applicability_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+          "source_hash": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        }
+      }
+    },
+    {
+      "document_id": "ra12326",
+      "identity_key": "REPUBLIC_ACT:12326",
+      "source_id": "sc_elibrary",
+      "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+      "dates": {
+        "enactment_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "approval_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "promulgation_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "publication_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "filing_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "effectivity_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "amendment_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "repeal_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "historical_applicability_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+          "source_hash": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        }
+      }
+    },
+    {
+      "document_id": "ra12325",
+      "identity_key": "REPUBLIC_ACT:12325",
+      "source_id": "sc_elibrary",
+      "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+      "dates": {
+        "enactment_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "approval_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "promulgation_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "publication_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "filing_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "effectivity_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "amendment_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "repeal_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        },
+        "historical_applicability_date": {
+          "value": null,
+          "status": "UNKNOWN",
+          "evidence": null,
+          "evidence_location": null,
+          "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+          "source_hash": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+          "reviewer": null,
+          "counsel_decision_ref": null
+        }
+      }
+    }
+  ]
+}

@@ -126,3 +126,23 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G3-M | Independent review                      | VERIFIED (corrections applied)  | `10_INDEPENDENT_REVIEW.md`                                      |
 | G3-N | Exact-identifier alias/equality guards  | VERIFIED                        | `tests/retrieval/exact-identifier-safeguards.test.ts`           |
 | G3-O | Evidence-artifact regeneration guard    | VERIFIED                        | `PH_WRITE_GATE3_EVIDENCE=1`; no dirty tree on test run          |
+
+---
+
+# Gate 4 — Authorization Closure and Corpus Readiness
+
+**Corpus expansion BLOCKED:** 0 of 25 sources and 0 of 350 activity cells authorized. No document is ready for controlled ingestion.
+
+| ID   | Task                                  | Status                       | Evidence                                                           |
+| ---- | ------------------------------------- | ---------------------------- | ------------------------------------------------------------------ |
+| G4-A | Baseline + Gate 1–3 regression        | VERIFIED                     | `00_BASELINE.md`; 315 passing, 1 skipped                           |
+| G4-B | Source inventory (25)                 | VERIFIED (no status changed) | `01_SOURCE_INVENTORY.md`                                           |
+| G4-C | Activity matrix (25 × 14)             | VERIFIED (all UNKNOWN)       | `02_ACTIVITY_AUTHORIZATION_MATRIX.md`, `authorization-matrix.json` |
+| G4-D | Counsel packet                        | VERIFIED (packet only)       | `counsel-review/` (35 files)                                       |
+| G4-E | Authenticity + legal date framework   | VERIFIED (no promotion)      | `03_AUTHENTICITY_AND_LEGAL_DATES.md`, JSON artefacts               |
+| G4-F | Activity enforcement (strict default) | VERIFIED                     | `04_AUTHORIZATION_ENFORCEMENT.md`; 38 tests                        |
+| G4-G | Audit trail + migration 0004          | VERIFIED (structural)        | `05_AUTHORIZATION_AUDIT_TRAIL.md`                                  |
+| G4-H | Corpus readiness                      | BLOCKED (4 of 4)             | `06_CORPUS_READINESS.md`, `corpus-readiness.json`                  |
+| G4-I | Independent review                    | VERIFIED (two passes)        | `07_INDEPENDENT_REVIEW.md`                                         |
+| G4-J | Counsel determination                 | BLOCKED (0 of 25)            | no signed or verifiable response                                   |
+| G4-K | Controlled ingestion                  | BLOCKED                      | no authorized corpus; no production service                        |

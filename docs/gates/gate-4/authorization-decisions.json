@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-11-13",
+  "schema_version": "gate4.authorization-decisions.v1",
+  "status": "COUNSEL_DETERMINATION_PENDING",
+  "notice": "No counsel response or signed determination exists in the repository. No decision has been recorded. UNKNOWN is preserved.",
+  "decisions": [],
+  "pending": {
+    "sources": 25,
+    "activities": 14,
+    "cells": 350
+  }
+}

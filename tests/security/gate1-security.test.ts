@@ -13,6 +13,7 @@ const OPTS = {
   pipelineVersion: "gate1.0.0",
   extractorVersion: "extract.1",
   normalizerVersion: "norm.1",
+  allowLegacySourceGate: true,
 };
 
 function artifact(overrides: Partial<ArtifactInput> = {}): ArtifactInput {

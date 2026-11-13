@@ -1,0 +1,127 @@
+{
+  "generated_at": "2026-11-13",
+  "schema_version": "gate4.corpus-readiness.v1",
+  "corpus_target": "20-50 documents (subject to authorization)",
+  "expansion_status": "BLOCKED",
+  "scope": "four owner-authorized pilot documents only",
+  "documents": [
+    {
+      "document_id": "ra12232",
+      "identity_key": "REPUBLIC_ACT:12232",
+      "source_id": "sc_elibrary",
+      "acquisition_event_id": null,
+      "acquisition_note": "Gate 2 retrieval; hash is per retrieval and not a legal-version event.",
+      "hash_verified": true,
+      "authenticity_status": "SECOND_SOURCE_UNVERIFIED",
+      "legal_dates_status": "UNKNOWN",
+      "authorization_status": "UNKNOWN",
+      "permitted_activities": [],
+      "outstanding_conditions": [
+        "COUNSEL_DETERMINATION_PENDING",
+        "SECOND_SOURCE_UNVERIFIED",
+        "LEGAL_DATES_UNKNOWN"
+      ],
+      "readiness": "BLOCKED_AUTHORIZATION",
+      "blockers": [
+        "authorization:UNKNOWN",
+        "authenticity:SECOND_SOURCE_UNVERIFIED",
+        "legal_dates:UNKNOWN",
+        "permitted_activities:none"
+      ],
+      "notes": [
+        "Gate 2 successful processing is not an authorization or authenticity finding.",
+        "Not eligible for controlled ingestion."
+      ]
+    },
+    {
+      "document_id": "ra10931",
+      "identity_key": "REPUBLIC_ACT:10931",
+      "source_id": "sc_elibrary",
+      "acquisition_event_id": null,
+      "acquisition_note": "Gate 2 retrieval; hash is per retrieval and not a legal-version event.",
+      "hash_verified": true,
+      "authenticity_status": "SECOND_SOURCE_UNVERIFIED",
+      "legal_dates_status": "UNKNOWN",
+      "authorization_status": "UNKNOWN",
+      "permitted_activities": [],
+      "outstanding_conditions": [
+        "COUNSEL_DETERMINATION_PENDING",
+        "SECOND_SOURCE_UNVERIFIED",
+        "LEGAL_DATES_UNKNOWN"
+      ],
+      "readiness": "BLOCKED_AUTHORIZATION",
+      "blockers": [
+        "authorization:UNKNOWN",
+        "authenticity:SECOND_SOURCE_UNVERIFIED",
+        "legal_dates:UNKNOWN",
+        "permitted_activities:none"
+      ],
+      "notes": [
+        "Gate 2 successful processing is not an authorization or authenticity finding.",
+        "Not eligible for controlled ingestion."
+      ]
+    },
+    {
+      "document_id": "ra12326",
+      "identity_key": "REPUBLIC_ACT:12326",
+      "source_id": "sc_elibrary",
+      "acquisition_event_id": null,
+      "acquisition_note": "Gate 2 retrieval; hash is per retrieval and not a legal-version event.",
+      "hash_verified": true,
+      "authenticity_status": "SECOND_SOURCE_UNVERIFIED",
+      "legal_dates_status": "UNKNOWN",
+      "authorization_status": "UNKNOWN",
+      "permitted_activities": [],
+      "outstanding_conditions": [
+        "COUNSEL_DETERMINATION_PENDING",
+        "SECOND_SOURCE_UNVERIFIED",
+        "LEGAL_DATES_UNKNOWN"
+      ],
+      "readiness": "BLOCKED_AUTHORIZATION",
+      "blockers": [
+        "authorization:UNKNOWN",
+        "authenticity:SECOND_SOURCE_UNVERIFIED",
+        "legal_dates:UNKNOWN",
+        "permitted_activities:none"
+      ],
+      "notes": [
+        "Gate 2 successful processing is not an authorization or authenticity finding.",
+        "Not eligible for controlled ingestion."
+      ]
+    },
+    {
+      "document_id": "ra12325",
+      "identity_key": "REPUBLIC_ACT:12325",
+      "source_id": "sc_elibrary",
+      "acquisition_event_id": null,
+      "acquisition_note": "Gate 2 retrieval; hash is per retrieval and not a legal-version event.",
+      "hash_verified": true,
+      "authenticity_status": "SECOND_SOURCE_UNVERIFIED",
+      "legal_dates_status": "UNKNOWN",
+      "authorization_status": "UNKNOWN",
+      "permitted_activities": [],
+      "outstanding_conditions": [
+        "COUNSEL_DETERMINATION_PENDING",
+        "SECOND_SOURCE_UNVERIFIED",
+        "LEGAL_DATES_UNKNOWN"
+      ],
+      "readiness": "BLOCKED_AUTHORIZATION",
+      "blockers": [
+        "authorization:UNKNOWN",
+        "authenticity:SECOND_SOURCE_UNVERIFIED",
+        "legal_dates:UNKNOWN",
+        "permitted_activities:none"
+      ],
+      "notes": [
+        "Gate 2 successful processing is not an authorization or authenticity finding.",
+        "Not eligible for controlled ingestion."
+      ]
+    }
+  ],
+  "summary": {
+    "documents": 4,
+    "blocked_authorization": 4,
+    "ready_for_controlled_ingestion": 0,
+    "new_documents_added": 0
+  }
+}

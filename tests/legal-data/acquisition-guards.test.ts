@@ -31,6 +31,7 @@ function input(overrides: Partial<AcquisitionInput> = {}): AcquisitionInput {
     bytes,
     acquisitionMethod: "manual_download",
     authorization: authorized,
+    allowLegacySourceGate: true,
     ...overrides,
   };
 }

@@ -21,6 +21,7 @@ const OPTS = {
   pipelineVersion: "gate2-pilot.1",
   extractorVersion: "extract.2",
   normalizerVersion: "norm.2",
+  allowLegacySourceGate: true,
   ownerAuthorization: {
     reference: "docs/gates/gate-2/01A_OWNER_AUTHORIZATION.md",
     scope: "four Republic Act pages, internal evaluation only",

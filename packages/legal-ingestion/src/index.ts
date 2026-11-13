@@ -2,6 +2,7 @@
 // Responsibility: docs/gates/gate-1/04_INGESTION_REPORT.md, docs/gates/gate-2/
 
 export * from "./acquisition";
+export * from "./authorization";
 export * from "./extract";
 export * from "./guards";
 export * from "./identity";

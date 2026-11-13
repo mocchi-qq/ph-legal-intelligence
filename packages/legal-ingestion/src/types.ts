@@ -14,6 +14,10 @@ import type {
   LegalProvision,
   SourceManifestation,
 } from "@phli/legal-schema";
+import type {
+  ActivityAuthorizationRegistry,
+  AuthorizationBasis,
+} from "./authorization";
 
 /** A single artifact submitted for ingestion. Metadata is explicit, never guessed. */
 export interface ArtifactInput {
@@ -85,6 +89,16 @@ export interface IngestOptions {
   authorizedSourceIds?: readonly string[];
   /** Owner-level risk acceptance for a bounded internal pilot; never legal authorization. */
   ownerAuthorization?: OwnerAuthorization;
+  /** Gate 4 activity-specific decisions. Required when strict enforcement is on. */
+  activityAuthorization?: ActivityAuthorizationRegistry;
+  /** When true, non-synthetic ingestion fails unless every required activity is allowed. */
+  enforceActivityAuthorization?: boolean;
+  /** Explicit opt-in to the legacy coarse source gate. Never set for new sources. */
+  allowLegacySourceGate?: boolean;
+  /** Bases accepted in strict mode. Defaults to counsel determination only. */
+  acceptedAuthorizationBases?: readonly AuthorizationBasis[];
+  satisfiedAuthorizationConditions?: readonly string[];
+  authorizationNow?: string;
   now?: () => string;
 }
 

@@ -66,6 +66,7 @@ export function buildPilotCorpus(): CorpusStore {
         pipelineVersion: "gate3.0.0",
         extractorVersion: "extract.3",
         normalizerVersion: "norm.3",
+        allowLegacySourceGate: true,
         ownerAuthorization: {
           reference: "docs/gates/gate-2/01A_OWNER_AUTHORIZATION.md",
           scope: "four Republic Act pages, internal evaluation only",

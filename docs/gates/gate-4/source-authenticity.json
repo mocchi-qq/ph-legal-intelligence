@@ -1,0 +1,191 @@
+{
+  "generated_at": "2026-11-13",
+  "schema_version": "gate4.source-authenticity.v1",
+  "notice": "File integrity, source origin, identity and legal authenticity are separate dimensions.",
+  "documents": [
+    {
+      "internal_document_id": "ra12232",
+      "identity_key": "REPUBLIC_ACT:12232",
+      "source_id": "sc_elibrary",
+      "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99551",
+      "sha256": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+      "hash_recomputed": "00b4c3671b93243bd6ace797ee2ec8da834b18645da932dbb36b81c0f5c863dd",
+      "hash_match": true,
+      "file_size": 39262,
+      "dimensions": {
+        "official_source_origin": {
+          "status": "UNVERIFIED",
+          "evidence": "Owner-authorized retrieval from the Supreme Court E-Library during Gate 2; no independent provenance confirmation."
+        },
+        "file_integrity": {
+          "status": "VERIFIED",
+          "evidence": "SHA-256 matches PILOT_MANIFEST.json; identifies one retrieval, not legal authenticity."
+        },
+        "document_identity": {
+          "status": "IDENTIFIER_PARSED",
+          "evidence": "REPUBLIC_ACT:12232"
+        },
+        "publication_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "effectivity_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "version_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "independent_corroboration": {
+          "status": "SECOND_SOURCE_UNVERIFIED",
+          "secondary_source": null
+        }
+      },
+      "authenticity_verdict": "NOT_VERIFIED",
+      "notes": [
+        "Hash equality proves file integrity only.",
+        "No second, independent government source was consulted.",
+        "No publication or effectivity evidence is recorded."
+      ]
+    },
+    {
+      "internal_document_id": "ra10931",
+      "identity_key": "REPUBLIC_ACT:10931",
+      "source_id": "sc_elibrary",
+      "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/78458",
+      "sha256": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+      "hash_recomputed": "dc991d2bd2954a4e1d17adf1dd6a77b392353bd5dc7d351b299895f75d3c379a",
+      "hash_match": true,
+      "file_size": 49603,
+      "dimensions": {
+        "official_source_origin": {
+          "status": "UNVERIFIED",
+          "evidence": "Owner-authorized retrieval from the Supreme Court E-Library during Gate 2; no independent provenance confirmation."
+        },
+        "file_integrity": {
+          "status": "VERIFIED",
+          "evidence": "SHA-256 matches PILOT_MANIFEST.json; identifies one retrieval, not legal authenticity."
+        },
+        "document_identity": {
+          "status": "IDENTIFIER_PARSED",
+          "evidence": "REPUBLIC_ACT:10931"
+        },
+        "publication_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "effectivity_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "version_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "independent_corroboration": {
+          "status": "SECOND_SOURCE_UNVERIFIED",
+          "secondary_source": null
+        }
+      },
+      "authenticity_verdict": "NOT_VERIFIED",
+      "notes": [
+        "Hash equality proves file integrity only.",
+        "No second, independent government source was consulted.",
+        "No publication or effectivity evidence is recorded."
+      ]
+    },
+    {
+      "internal_document_id": "ra12326",
+      "identity_key": "REPUBLIC_ACT:12326",
+      "source_id": "sc_elibrary",
+      "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/103013",
+      "sha256": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+      "hash_recomputed": "06cd3edc8da9b29c7e2a2ca54162fb06f2bc4b5df4f586946f4dda72097ee936",
+      "hash_match": true,
+      "file_size": 37072,
+      "dimensions": {
+        "official_source_origin": {
+          "status": "UNVERIFIED",
+          "evidence": "Owner-authorized retrieval from the Supreme Court E-Library during Gate 2; no independent provenance confirmation."
+        },
+        "file_integrity": {
+          "status": "VERIFIED",
+          "evidence": "SHA-256 matches PILOT_MANIFEST.json; identifies one retrieval, not legal authenticity."
+        },
+        "document_identity": {
+          "status": "IDENTIFIER_PARSED",
+          "evidence": "REPUBLIC_ACT:12326"
+        },
+        "publication_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "effectivity_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "version_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "independent_corroboration": {
+          "status": "SECOND_SOURCE_UNVERIFIED",
+          "secondary_source": null
+        }
+      },
+      "authenticity_verdict": "NOT_VERIFIED",
+      "notes": [
+        "Hash equality proves file integrity only.",
+        "No second, independent government source was consulted.",
+        "No publication or effectivity evidence is recorded."
+      ]
+    },
+    {
+      "internal_document_id": "ra12325",
+      "identity_key": "REPUBLIC_ACT:12325",
+      "source_id": "sc_elibrary",
+      "source_url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/102493",
+      "sha256": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+      "hash_recomputed": "ca45d318f9690bb8552d1819faf9ac8a20fc09f392e7cf22e90372a163da383c",
+      "hash_match": true,
+      "file_size": 58487,
+      "dimensions": {
+        "official_source_origin": {
+          "status": "UNVERIFIED",
+          "evidence": "Owner-authorized retrieval from the Supreme Court E-Library during Gate 2; no independent provenance confirmation."
+        },
+        "file_integrity": {
+          "status": "VERIFIED",
+          "evidence": "SHA-256 matches PILOT_MANIFEST.json; identifies one retrieval, not legal authenticity."
+        },
+        "document_identity": {
+          "status": "IDENTIFIER_PARSED",
+          "evidence": "REPUBLIC_ACT:12325"
+        },
+        "publication_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "effectivity_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "version_evidence": {
+          "status": "NONE",
+          "evidence": null
+        },
+        "independent_corroboration": {
+          "status": "SECOND_SOURCE_UNVERIFIED",
+          "secondary_source": null
+        }
+      },
+      "authenticity_verdict": "NOT_VERIFIED",
+      "notes": [
+        "Hash equality proves file integrity only.",
+        "No second, independent government source was consulted.",
+        "No publication or effectivity evidence is recorded."
+      ]
+    }
+  ]
+}

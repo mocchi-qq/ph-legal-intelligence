@@ -30,6 +30,17 @@ const ALLOWED_MIME = new Set([
   "text/html",
   "application/xhtml+xml",
 ]);
+
+/**
+ * Activities that cannot be skipped by this ingestion path. If ALLOWED_MIME is
+ * ever expanded to PDF/images, add `ocr` here before enabling that MIME.
+ */
+const REQUIRED_INGEST_ACTIVITIES = [
+  "temporary_processing",
+  "persistent_storage",
+  "text_extraction",
+  "search_indexing",
+] as const;
 function id(prefix: string, value: string): string {
   return `${prefix}_${sha256(value).slice(0, 16)}`;
 }
@@ -45,6 +56,13 @@ function addRun(
     versionId: string;
     manifestId: string;
     reason: string;
+    authorizationDecisionRef: string | null;
+    authorizationDecisionRefs: string[] | null;
+    authorizationBasisDetail:
+      | "COUNSEL_DETERMINATION"
+      | "OWNER_RISK_ACCEPTANCE"
+      | "SYNTHETIC_FIXTURE"
+      | null;
   }> = {},
 ): string {
   const runId = id(
@@ -52,6 +70,12 @@ function addRun(
     `${contentHash}:${artifact.sourceId}:${state.runs.length + 1}`,
   );
   const now = options.now?.() ?? new Date().toISOString();
+  const strictContext =
+    !artifact.synthetic && options.enforceActivityAuthorization === true;
+  const strictBasis =
+    strictContext && (status === "SUCCEEDED" || status === "DUPLICATE")
+      ? "source_authorization"
+      : undefined;
   state.runs.push({
     id: runId,
     inputContentHash: contentHash,
@@ -66,13 +90,23 @@ function addRun(
     failureReason: extra.reason ?? null,
     startedAt: now,
     finishedAt: now,
-    authorizationBasis: artifact.synthetic
-      ? "synthetic_fixture"
-      : (options.authorizedSourceIds ?? []).includes(artifact.sourceId)
-        ? "source_authorization"
-        : options.ownerAuthorization
-          ? "owner_authorization"
-          : undefined,
+    authorizationBasis: strictContext
+      ? strictBasis
+      : artifact.synthetic
+        ? "synthetic_fixture"
+        : (options.authorizedSourceIds ?? []).includes(artifact.sourceId)
+          ? "source_authorization"
+          : options.ownerAuthorization
+            ? "owner_authorization"
+            : undefined,
+    authorizationDecisionRef:
+      extra.authorizationDecisionRef ??
+      (artifact.synthetic ? "synthetic_fixture" : null),
+    authorizationDecisionRefs:
+      extra.authorizationDecisionRefs ?? (artifact.synthetic ? [] : null),
+    authorizationBasisDetail:
+      extra.authorizationBasisDetail ??
+      (artifact.synthetic ? "SYNTHETIC_FIXTURE" : null),
   });
   return runId;
 }
@@ -122,13 +156,58 @@ export function ingestArtifact(
   };
 
   // 1. Authorization guard — the absolute Gate 1 stop condition, in code.
-  if (!artifact.synthetic && !authorized.has(artifact.sourceId)) {
-    if (!options.ownerAuthorization?.reference)
+  // In Gate 4 strict mode the activity registry is the authority. The legacy
+  // coarse gate is not silently available: it requires an explicit opt-in.
+  const strictActivityMode =
+    !artifact.synthetic && options.enforceActivityAuthorization === true;
+  if (!artifact.synthetic && !strictActivityMode) {
+    if (options.allowLegacySourceGate !== true)
+      return fail("activity_authorization_required");
+    if (
+      !authorized.has(artifact.sourceId) &&
+      !options.ownerAuthorization?.reference
+    )
       return fail("source_not_authorized");
   }
   // Defence in depth: a synthetic flag alone must not bypass the guard.
   if (artifact.synthetic && !artifact.sourceUrl.startsWith("synthetic://")) {
     return fail("synthetic_flag_without_synthetic_locator");
+  }
+
+  // 1b. Gate 4 activity-specific gate. When strict enforcement is requested,
+  // every activity this path performs must be independently authorized. The
+  // default accepts counsel determinations only; owner risk acceptance cannot
+  // be silently substituted.
+  const strictDecisionRefs: string[] = [];
+  let strictBasisDetail:
+    | "COUNSEL_DETERMINATION"
+    | "OWNER_RISK_ACCEPTANCE"
+    | "SYNTHETIC_FIXTURE"
+    | null = null;
+  if (strictActivityMode) {
+    const registry = options.activityAuthorization;
+    if (!registry) return fail("activity_authorization_registry_missing");
+    for (const activity of REQUIRED_INGEST_ACTIVITIES) {
+      const check = registry.check(artifact.sourceId, activity, {
+        now: options.authorizationNow,
+        satisfiedConditions: options.satisfiedAuthorizationConditions,
+        allowedBases: options.acceptedAuthorizationBases ?? [
+          "COUNSEL_DETERMINATION",
+        ],
+      });
+      if (!check.allowed)
+        return fail(`activity_not_authorized:${activity}:${check.reason}`);
+      if (check.decision?.id) strictDecisionRefs.push(check.decision.id);
+      if (!strictBasisDetail) {
+        const basis = check.decision?.basis;
+        strictBasisDetail =
+          basis === "COUNSEL_DETERMINATION" ||
+          basis === "OWNER_RISK_ACCEPTANCE" ||
+          basis === "SYNTHETIC_FIXTURE"
+            ? basis
+            : null;
+      }
+    }
   }
   if (ALLOWED_MIME.has(artifact.mimeType) === false)
     return fail(`unsupported_mime:${artifact.mimeType}`);
@@ -405,6 +484,9 @@ export function ingestArtifact(
     documentId: document.id,
     versionId: version.id,
     manifestId: manifest.id,
+    authorizationDecisionRef: strictDecisionRefs[0] ?? null,
+    authorizationDecisionRefs: strictDecisionRefs,
+    authorizationBasisDetail: strictBasisDetail,
   });
   store.state = draft;
   store.save();

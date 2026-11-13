@@ -218,6 +218,16 @@ export interface IngestionRun {
     | "source_authorization"
     | "owner_authorization"
     | "synthetic_fixture";
+  /** Gate 4 primary activity decision that permitted a strict ingestion, if any. */
+  authorizationDecisionRef?: string | null;
+  /** All Gate 4 activity decisions that permitted a strict ingestion. */
+  authorizationDecisionRefs?: string[] | null;
+  /** Gate 4 basis of that decision, kept distinct from the legacy enum. */
+  authorizationBasisDetail?:
+    | "COUNSEL_DETERMINATION"
+    | "OWNER_RISK_ACCEPTANCE"
+    | "SYNTHETIC_FIXTURE"
+    | null;
   documentId?: string | null;
   versionId?: string | null;
   manifestId?: string | null;
