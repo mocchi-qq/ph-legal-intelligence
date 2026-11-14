@@ -17,6 +17,9 @@ import type {
 export interface IndexEntry {
   chunkId: string;
   documentId: string;
+  /** Zero-based position of the chunk within its document version. */
+  chunkIndex: number;
+  citationText: string | null;
   versionId: string;
   provisionId: string | null;
   provisionLabel: string | null;
@@ -36,6 +39,8 @@ export interface IndexEntry {
   year: number;
   effectiveFrom: string | null;
   effectiveTo: string | null;
+  charStart: number | null;
+  charEnd: number | null;
 }
 
 export interface SearchIndex {
@@ -50,9 +55,41 @@ const MIN_LEXICAL = 0.02;
 // rejects weak shared-token matches (e.g. one common word) without a corpus-
 // specific score threshold.
 const MIN_TERM_COVERAGE = 0.3;
-// An identifier-only query, not a natural-language question that merely cites one.
-const IDENTIFIER_QUERY =
+// An identifier-only query (the query *is* a citation), as opposed to a
+// natural-language question that merely cites one. Used to decide whether
+// neighbouring documents may still be retrieved lexically.
+const IDENTIFIER_ONLY_QUERY =
   /^(?:\S+\s+){0,2}(?:g\.?\s*r\.?|gr|r\.?\s*a\.?|ra|republic\s+act|e\.?\s*o\.?|eo|executive\s+order|p\.?\s*d\.?|pd|presidential\s+decree|b\.?\s*p\.?|bp|batas\s+pambansa|c\.?\s*a\.?|ca|commonwealth\s+act|a\.?\s*m\.?|am|act\s+no\.?)(?!\w)[^\n]{0,40}\d/i;
+
+// A typed legal identifier anywhere in the query, not only at its start: a
+// party name followed by a full citation is still an identifier query.
+function hasTypedIdentifier(text: string): boolean {
+  return (
+    /\b(?:G\.\s*R\.|R\.?\s*A\.?|E\.?\s*O\.?|P\.?\s*D\.?|A\.?\s*O\.?|M\.?\s*C\.?|A\.?\s*M\.?|B\.?\s*P\.?|C\.?\s*A\.?)\s*(?:NO\.?)?\s*[0-9]/i.test(
+      text,
+    ) ||
+    /\b(?:REPUBLIC\s+ACT|EXECUTIVE\s+ORDER|PRESIDENTIAL\s+DECREE|ADMINISTRATIVE\s+ORDER|MEMORANDUM\s+CIRCULAR|BATAS\s+PAMBANSA|COMMONWEALTH\s+ACT)\b/i.test(
+      text,
+    )
+  );
+}
+
+/**
+ * Is the query an identifier lookup, rather than a question that merely cites
+ * an identifier? Interrogative and imperative openers ("which law amended
+ * Republic Act No. 1002", "find RA 1001") keep their lexical neighbours; only
+ * a bare citation is treated as exact-only.
+ */
+export function isIdentifierQuery(text: string): boolean {
+  const trimmed = text.trim();
+  if (
+    /^(which|what|who|when|where|why|how|does|do|is|are|was|were|explain|find|summari[sz]e|tell|list|show)\b/i.test(
+      trimmed,
+    )
+  )
+    return false;
+  return hasTypedIdentifier(trimmed);
+}
 
 const STOPWORDS = new Set([
   "the",
@@ -104,31 +141,35 @@ function normalizeKey(input: string): string {
   return input.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
-/** Exact query aliases, e.g. `RA 12325` -> the canonical Republic Act key. */
+/**
+ * Exact query aliases, e.g. `RA 12325` -> the canonical Republic Act key. The
+ * forms match anywhere in the query, so a citation embedded after a party name
+ * or inside a question is canonicalised the same way as a bare one.
+ */
 function queryKeys(text: string): string[] {
   const keys = new Set<string>([normalizeKey(text)]);
   const forms: Array<[RegExp, string]> = [
     [
-      /^\s*(?:r\.?\s*a\.?|ra|republic\s+act)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
+      /\b(?:r\.?\s*a\.?|ra|republic\s+act)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
       "republicact",
     ],
     [
-      /^\s*(?:e\.?\s*o\.?|eo|executive\s+order)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
+      /\b(?:e\.?\s*o\.?|eo|executive\s+order)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
       "executiveorder",
     ],
     [
-      /^\s*(?:p\.?\s*d\.?|pd|presidential\s+decree)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
+      /\b(?:p\.?\s*d\.?|pd|presidential\s+decree)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
       "presidentialdecree",
     ],
     [
-      /^\s*(?:b\.?\s*p\.?|bp|batas\s+pambansa)(?:\s+(?:blg\.?|no\.?))?\s*(\d{1,5})\b/i,
+      /\b(?:b\.?\s*p\.?|bp|batas\s+pambansa)(?:\s+(?:blg\.?|no\.?))?\s*(\d{1,5})\b/i,
       "bataspambansa",
     ],
     [
-      /^\s*(?:c\.?\s*a\.?|ca|commonwealth\s+act)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
+      /\b(?:c\.?\s*a\.?|ca|commonwealth\s+act)(?:\s+no\.?)?\s*(\d{1,5})\b/i,
       "commonwealthact",
     ],
-    [/^\s*(?:g\.?\s*r\.?|gr)(?:\s+no\.?)?\s*(\d{1,6})\b/i, "grno"],
+    [/\b(?:g\.?\s*r\.?|gr)(?:\s+no\.?)?\s*(\d{1,6})\b/i, "grno"],
   ];
   for (const [re, prefix] of forms) {
     const match = re.exec(text);
@@ -219,6 +260,12 @@ export function buildSearchIndex(
     entries.push({
       chunkId: chunk.id,
       documentId: document.id,
+      chunkIndex: chunk.chunkIndex,
+      citationText:
+        document.citationText ??
+        document.docketNumber ??
+        document.identityKey ??
+        document.title,
       versionId: chunk.versionId ?? version?.id ?? "",
       provisionId: chunk.provisionId ?? null,
       provisionLabel: provision?.label ?? null,
@@ -248,6 +295,8 @@ export function buildSearchIndex(
       ),
       effectiveFrom: version?.effectiveFrom ?? null,
       effectiveTo: version?.effectiveTo ?? null,
+      charStart: chunk.charStart ?? null,
+      charEnd: chunk.charEnd ?? null,
     });
   }
 
@@ -302,8 +351,12 @@ function termCoverage(entry: IndexEntry, queryTerms: string[]): number {
 
 function isLiveAt(entry: IndexEntry, asOf: string | undefined): boolean {
   if (!asOf) return true;
-  if (entry.effectiveFrom && entry.effectiveFrom > asOf) return false;
-  if (entry.effectiveTo && asOf >= entry.effectiveTo) return false;
+  // A null effectiveFrom is an unknown start, not an open one: a version whose
+  // commencement is unrecorded cannot be shown to be in force at any date.
+  // A null effectiveTo is an open end (no recorded end date) and stays live.
+  if (entry.effectiveFrom === null) return false;
+  if (entry.effectiveFrom > asOf) return false;
+  if (entry.effectiveTo !== null && asOf >= entry.effectiveTo) return false;
   return true;
 }
 
@@ -322,22 +375,37 @@ export function retrieve(
       matchesFilters(entry, query.filters) && isLiveAt(entry, query.asOfDate),
   );
 
-  // Signal 1: exact identifier match (document-level).
+  // Signal 1: exact identifier match. A document-level match decides whether the
+  // document was cited; `exactPassage` records whether this particular passage
+  // restates the identifier, so callers are never told a blank passage is exact.
   const queryKeySet = new Set(queryNormalized);
   const exactRanking = candidates
     .filter((entry) => entry.exactKeys.some((key) => queryKeySet.has(key)))
-    .sort((a, b) => a.chunkId.localeCompare(b.chunkId));
+    .map((entry) => ({
+      entry,
+      exactPassage: Array.from(queryKeySet).some(
+        (key) => key.length >= 6 && normalizeKey(entry.content).includes(key),
+      ),
+    }))
+    .sort(
+      (a, b) =>
+        Number(b.exactPassage) - Number(a.exactPassage) ||
+        a.entry.chunkId.localeCompare(b.entry.chunkId),
+    );
 
   // Signal 2: lexical relevance.
   // Identifier-shaped queries are exact-only: if no identifier matches, returning
   // fuzzy neighbours would manufacture an authority that does not exist. If one
-  // does match, lexical noise from unrelated documents is suppressed.
-  const identifierQuery = IDENTIFIER_QUERY.test(query.text);
+  // does match, lexical noise from unrelated documents is suppressed. A question
+  // that merely cites an identifier ("which law amended RA 1001") keeps its
+  // lexical neighbours, because the citing/amending instruments are the answer.
+  const identifierQuery = isIdentifierQuery(query.text);
   if (exactRanking.length === 0 && identifierQuery) return [];
-  const lexicalCandidates = identifierQuery
-    ? candidates.filter((entry) =>
-        exactRanking.some((exact) => exact.documentId === entry.documentId),
-      )
+  const exactDocumentIds = new Set(
+    exactRanking.map((item) => item.entry.documentId),
+  );
+  const lexicalCandidates = IDENTIFIER_ONLY_QUERY.test(query.text)
+    ? candidates.filter((entry) => exactDocumentIds.has(entry.documentId))
     : candidates;
 
   const lexicalRanking = lexicalCandidates
@@ -355,14 +423,19 @@ export function retrieve(
   // Fusion: reciprocal rank fusion over the two lists.
   const fused = new Map<
     string,
-    { entry: IndexEntry; score: number; lexical: number; exact: boolean }
+    {
+      entry: IndexEntry;
+      score: number;
+      lexical: number;
+      exactPassage: boolean;
+    }
   >();
-  exactRanking.forEach((entry, rank) => {
-    fused.set(entry.chunkId, {
-      entry,
+  exactRanking.forEach((item, rank) => {
+    fused.set(item.entry.chunkId, {
+      entry: item.entry,
       score: 1 / (RRF_K + rank + 1),
       lexical: 0,
-      exact: true,
+      exactPassage: item.exactPassage,
     });
   });
   lexicalRanking.forEach((item, rank) => {
@@ -371,12 +444,15 @@ export function retrieve(
     if (current) {
       current.score += contribution;
       current.lexical = item.score;
+      // Nothing here adds passage evidence, so exactPassage survives unchanged:
+      // it stays true if either list already found the identifier.
     } else {
       fused.set(item.entry.chunkId, {
         entry: item.entry,
         score: contribution,
         lexical: item.score,
-        exact: false,
+        // A lexical-only hit did not match an identifier; never claim it did.
+        exactPassage: false,
       });
     }
   });
@@ -385,11 +461,14 @@ export function retrieve(
     .sort(
       (a, b) =>
         b.score - a.score ||
-        Number(b.exact) - Number(a.exact) ||
+        Number(b.exactPassage) - Number(a.exactPassage) ||
         a.entry.chunkId.localeCompare(b.entry.chunkId),
     )
     .slice(0, limit)
-    .map(({ entry, score, lexical }) => {
+    .map(({ entry, score, lexical, exactPassage }) => {
+      // Document-level: the passage's document matched the identifier, whether
+      // or not this particular passage repeats it.
+      const exact = exactDocumentIds.has(entry.documentId);
       const metadata: ChunkMetadata = {
         documentId: entry.documentId,
         documentType: entry.documentType,
@@ -404,10 +483,28 @@ export function retrieve(
       };
       return {
         documentId: entry.documentId,
+        citationText: entry.citationText,
         chunkId: entry.chunkId,
         score,
         passage: entry.content,
         metadata,
+        versionId: entry.versionId,
+        provisionId: entry.provisionId,
+        effectiveFrom: entry.effectiveFrom,
+        effectiveTo: entry.effectiveTo,
+        span:
+          entry.charStart !== null && entry.charEnd !== null
+            ? { charStart: entry.charStart, charEnd: entry.charEnd }
+            : null,
+        provenance: {
+          sourceId: entry.sourceId,
+          documentId: entry.documentId,
+          versionId: entry.versionId,
+          provisionId: entry.provisionId,
+          chunkId: entry.chunkId,
+        },
+        exactMatch: exact,
+        exactDocumentMatch: exact,
         scores: { lexical, semantic: 0, rerank: 0, authority: 0 },
       } satisfies SearchResult;
     });

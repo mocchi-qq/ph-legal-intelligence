@@ -78,6 +78,8 @@ export interface SearchFilters {
 export interface SearchResult {
   /** Canonical document the passage belongs to. */
   documentId: string;
+  /** Human-readable citation for the document, where known. */
+  citationText: string | null;
   /** The specific retrievable chunk. */
   chunkId: string;
   /** Fused, reranked relevance in [0, 1]. */
@@ -86,6 +88,34 @@ export interface SearchResult {
   passage: string;
   /** Denormalised metadata used for filtering, display and ranking. */
   metadata: ChunkMetadata;
+  /** Version of the document the passage was retrieved from. */
+  versionId: string;
+  /** Provision the chunk belongs to, where known. */
+  provisionId: string | null;
+  /** Point-in-time start of the version's validity (ISO date), where known. */
+  effectiveFrom: string | null;
+  /** Point-in-time end of the version's validity (ISO date), where known. */
+  effectiveTo: string | null;
+  /** Character offsets of the passage within its source text, where known. */
+  span: { charStart: number; charEnd: number } | null;
+  /** Traceable origin of the passage: source, document, version, provision, chunk. */
+  provenance: {
+    sourceId: string;
+    documentId: string;
+    versionId: string;
+    provisionId: string | null;
+    chunkId: string;
+  };
+  /**
+   * True when this passage's document matched an exact identifier query. This
+   * is document-level, not a claim that the passage contains the identifier.
+   */
+  exactMatch: boolean;
+  /**
+   * Whether the passage's document matched the query's identifier, even if this
+   * particular passage does not repeat it.
+   */
+  exactDocumentMatch: boolean;
   /** Per-signal breakdown, for debugging and evaluation traces. */
   scores?: RetrievalScoreBreakdown;
 }

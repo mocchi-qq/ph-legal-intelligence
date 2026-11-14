@@ -1,0 +1,43 @@
+{
+  "gate": 9,
+  "title": "Passage-Level Retrieval and Search Hardening",
+  "date": "2026-11-14",
+  "verdict": "ACCEPTED",
+  "baseline": "8d56e58",
+  "scope": "synthetic retrieval-contract hardening",
+  "contract": {
+    "result_fields_added": ["citationText", "versionId", "provisionId", "effectiveFrom", "effectiveTo", "span", "provenance", "exactMatch"],
+    "exact_match_semantics": "document-level (documented)",
+    "as_of_interval": "[effectiveFrom, effectiveTo); null start excluded, null end open",
+    "verifier_handoff": "toCitationInput (structural, no citation-engine import)"
+  },
+  "tests": {
+    "gate9": 16,
+    "full_suite": { "files": 60, "tests": 575, "passed": 565, "failed": 1, "skipped": 9 },
+    "pre_existing_failure": "tests/unit/docs-structure.test.ts",
+    "build": "exit 0",
+    "biome": "0 errors"
+  },
+  "reviews": {
+    "count": 1,
+    "blockers_found": 2,
+    "blockers_fixed": 2,
+    "majors_fixed_or_documented": 3,
+    "report": "docs/gates/gate-9/03_INDEPENDENT_REVIEW.md"
+  },
+  "limitations": [
+    "exactMatch is document-level, not a claim that the passage contains the identifier.",
+    "versionId can be an empty string for a chunk with no resolvable version.",
+    "Verifier layer 4 remains unwired to the effects ledger (Gate 8).",
+    "Retrieval quality is synthetic-only.",
+    "filters.topic and null-court filtering are pre-existing gaps."
+  ],
+  "boundaries": {
+    "real_documents_acquired": 0,
+    "counsel_determinations": 0,
+    "authorization_cells_unknown": 350,
+    "pilot_documents_blocked": 4,
+    "deployment": false,
+    "push": false
+  }
+}

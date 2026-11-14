@@ -262,3 +262,18 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G8-J | Synthetic tests + fixtures           | BLOCKED ON B–H | `tests/authority/`                                  |
 | G8-K | Docs + 3 independent reviews         | IN PROGRESS    | `docs/gates/gate-8/`                                |
 | G8-L | Verdict + status                     | PENDING        | `DECISION.md`, `gate-8-status.json`                 |
+
+---
+
+# Gate 9 — Passage-Level Retrieval and Search Hardening
+
+**Synthetic-only retrieval contract. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID   | Task                         | Status            | Evidence                                      |
+| ---- | ---------------------------- | ----------------- | --------------------------------------------- |
+| G9-A | Contract + verifier hand-off | DONE              | `legal-search/src/types.ts`, `to-citation.ts` |
+| G9-B | Result plumbing + exact flag | DONE              | `retrieve.ts`                                 |
+| G9-C | Span provenance fix          | DONE              | `extract.ts` offsets; slice invariant test    |
+| G9-D | Tests                        | DONE — 16 tests   | `tests/retrieval/gate9-passage.test.ts`       |
+| G9-E | Independent review           | DONE (2 blockers) | `docs/gates/gate-9/03_INDEPENDENT_REVIEW.md`  |
+| G9-F | Verdict/status               | DONE — ACCEPTED   | `DECISION.md`, `gate-9-status.json`           |

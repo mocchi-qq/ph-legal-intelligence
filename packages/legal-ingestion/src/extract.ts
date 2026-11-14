@@ -143,7 +143,11 @@ export function segmentProvisions(
         i + 1 < matches.length
           ? (matches[i + 1]!.index ?? normalizedText.length)
           : normalizedText.length;
-      const body = normalizedText.slice(bodyStart, end).trim();
+      const rawBody = normalizedText.slice(bodyStart, end);
+      const leading = rawBody.length - rawBody.trimStart().length;
+      const body = rawBody.trim();
+      const startOffset = bodyStart + leading;
+      const endOffset = startOffset + body.length;
       const label = match[1]!.replace(/\s+/g, " ").trim();
       const upper = label.toUpperCase();
       seeds.push({
@@ -155,8 +159,10 @@ export function segmentProvisions(
         label,
         text: body.length > 0 ? body : label,
         ordinal: i + 1,
-        startOffset: start,
-        endOffset: end,
+        // The span covers exactly the body text; an empty body falls back to
+        // the heading label, so the span covers the label's length at bodyStart.
+        startOffset: body.length > 0 ? startOffset : bodyStart,
+        endOffset: body.length > 0 ? endOffset : bodyStart + label.length,
       });
     }
     return seeds;
@@ -210,41 +216,43 @@ export function segmentChunks(provisions: ProvisionSeed[]): ChunkSeed[] {
       continue;
     }
 
+    // Sentence-bounded split. Sentence positions are tracked against
+    // provision.text so each chunk's span describes its own content instead of
+    // inheriting the provision's span.
     const sentences = provision.text.split(/(?<=[.;:])\s+/);
     let buffer = "";
-    let cursor = provision.startOffset;
-    for (const sentence of sentences) {
-      if (
-        buffer.length > 0 &&
-        buffer.length + sentence.length + 1 > MAX_CHUNK
-      ) {
-        const content = buffer.trim();
-        const lead = buffer.length - buffer.trimStart().length;
-        chunks.push({
-          provisionOrdinal: provision.ordinal,
-          chunkKind: "provision",
-          chunkIndex: chunks.length,
-          content,
-          charStart: cursor + lead,
-          charEnd: cursor + lead + content.length,
-        });
-        cursor += buffer.length;
-        buffer = "";
-      }
-      buffer += `${buffer ? " " : ""}${sentence}`;
-    }
-    if (buffer.trim().length > 0) {
+    let bufferStart = 0;
+    let searchFrom = 0;
+    const pushBuffer = () => {
       const content = buffer.trim();
       const lead = buffer.length - buffer.trimStart().length;
+      const charStart = provision.startOffset + bufferStart + lead;
       chunks.push({
         provisionOrdinal: provision.ordinal,
         chunkKind: "provision",
         chunkIndex: chunks.length,
         content,
-        charStart: cursor + lead,
-        charEnd: cursor + lead + content.length,
+        charStart,
+        charEnd: charStart + content.length,
       });
+      buffer = "";
+    };
+    for (const sentence of sentences) {
+      // Locate this sentence in order: searching from just past the previous
+      // one keeps repeated sentence text from resolving to an earlier match.
+      const at = provision.text.indexOf(sentence, searchFrom);
+      const position = at === -1 ? searchFrom : at;
+      searchFrom = position + sentence.length;
+      if (
+        buffer.length > 0 &&
+        buffer.length + sentence.length + 1 > MAX_CHUNK
+      ) {
+        pushBuffer();
+      }
+      if (buffer.length === 0) bufferStart = position;
+      buffer += `${buffer ? " " : ""}${sentence}`;
     }
+    if (buffer.trim().length > 0) pushBuffer();
   }
   return chunks;
 }
