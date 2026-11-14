@@ -18,6 +18,7 @@ import type {
   ActivityAuthorizationRegistry,
   AuthorizationBasis,
 } from "./authorization";
+import type { AuthorizationAuditService } from "./authorization-audit";
 
 /** A single artifact submitted for ingestion. Metadata is explicit, never guessed. */
 export interface ArtifactInput {
@@ -99,6 +100,8 @@ export interface IngestOptions {
   acceptedAuthorizationBases?: readonly AuthorizationBasis[];
   satisfiedAuthorizationConditions?: readonly string[];
   authorizationNow?: string;
+  /** Optional centralized authorization audit. Audit failure fails closed. */
+  authorizationAudit?: AuthorizationAuditService;
   now?: () => string;
 }
 

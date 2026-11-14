@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   ActivityAuthorizationRegistry,
+  AuthorizationAuditService,
   authorizeIndexing,
   authorizeTemporaryLocalStorage,
   CorpusStore,
@@ -9,10 +10,15 @@ import {
   type CounselDetermination,
   CounselDeterminationRepository,
   type CounselProfessional,
+  InMemoryAuthorizationAuditSink,
   ingestArtifact,
   syncToAuthorizationRegistry,
 } from "../../packages/legal-ingestion/src/index";
 import { buildSearchIndex } from "../../packages/legal-search/src/index";
+
+const AUDIT = {
+  service: new AuthorizationAuditService(new InMemoryAuthorizationAuditSink()),
+};
 
 const SOURCE = "synthetic_counsel_source";
 const OTHER_SOURCE = "synthetic_other_source";
@@ -546,10 +552,15 @@ describe("Gate 6 — reindex authorization", () => {
     );
     const index = buildSearchIndex(corpus().state, {
       authorize: (request) =>
-        authorizeIndexing(r, {
-          sourceId: request.sourceId,
-          documentId: request.documentId,
-        }),
+        authorizeIndexing(
+          r,
+          {
+            sourceId: request.sourceId,
+            documentId: request.documentId,
+          },
+          {},
+          AUDIT,
+        ),
     });
     expect(index.entries.length).toBeGreaterThan(0);
   });
@@ -558,10 +569,15 @@ describe("Gate 6 — reindex authorization", () => {
     const r = repo();
     const index = buildSearchIndex(corpus().state, {
       authorize: (request) =>
-        authorizeIndexing(r, {
-          sourceId: request.sourceId,
-          documentId: request.documentId,
-        }),
+        authorizeIndexing(
+          r,
+          {
+            sourceId: request.sourceId,
+            documentId: request.documentId,
+          },
+          {},
+          AUDIT,
+        ),
     });
     expect(index.entries).toHaveLength(0);
   });
@@ -577,10 +593,15 @@ describe("Gate 6 — reindex authorization", () => {
     const build = () =>
       buildSearchIndex(store.state, {
         authorize: (request) =>
-          authorizeIndexing(r, {
-            sourceId: request.sourceId,
-            documentId: request.documentId,
-          }),
+          authorizeIndexing(
+            r,
+            {
+              sourceId: request.sourceId,
+              documentId: request.documentId,
+            },
+            {},
+            AUDIT,
+          ),
       });
     expect(build().entries.length).toBeGreaterThan(0);
     r.revoke(DET_ID, "synthetic-counsel", "withdrawn");
@@ -614,10 +635,15 @@ describe("Gate 6 — reindex authorization", () => {
     );
     const index = buildSearchIndex(corpus().state, {
       authorize: (request) =>
-        authorizeIndexing(r, {
-          sourceId: request.sourceId,
-          documentId: request.documentId,
-        }),
+        authorizeIndexing(
+          r,
+          {
+            sourceId: request.sourceId,
+            documentId: request.documentId,
+          },
+          {},
+          AUDIT,
+        ),
     });
     expect(index.entries).toHaveLength(0);
   });
@@ -633,10 +659,12 @@ describe("Gate 6 — temporary local storage authorization", () => {
       "synthetic-registrar",
       "temp storage",
     );
-    const allow = authorizeTemporaryLocalStorage(r, {
-      sourceId: SOURCE,
-      documentId: "doc-1",
-    });
+    const allow = authorizeTemporaryLocalStorage(
+      r,
+      { sourceId: SOURCE, documentId: "doc-1" },
+      {},
+      AUDIT,
+    );
     expect(allow().allowed).toBe(true);
   });
 
@@ -649,10 +677,12 @@ describe("Gate 6 — temporary local storage authorization", () => {
       "synthetic-registrar",
       "in-memory only",
     );
-    const deny = authorizeTemporaryLocalStorage(r, {
-      sourceId: SOURCE,
-      documentId: "doc-1",
-    });
+    const deny = authorizeTemporaryLocalStorage(
+      r,
+      { sourceId: SOURCE, documentId: "doc-1" },
+      {},
+      AUDIT,
+    );
     expect(deny().allowed).toBe(false);
     expect(deny().reason).toBe("activity_not_covered");
   });
@@ -670,24 +700,29 @@ describe("Gate 6 — temporary local storage authorization", () => {
       "scoped",
     );
     expect(
-      authorizeTemporaryLocalStorage(r, {
-        sourceId: SOURCE,
-        documentId: "doc-2",
-      })().reason,
+      authorizeTemporaryLocalStorage(
+        r,
+        { sourceId: SOURCE, documentId: "doc-2" },
+        {},
+        AUDIT,
+      )().reason,
     ).toBe("document_scope_mismatch");
     expect(
       authorizeTemporaryLocalStorage(
         r,
         { sourceId: SOURCE, documentId: "doc-1" },
         { now: "2027-01-01T00:00:00Z" },
+        AUDIT,
       )().reason,
     ).toBe("expired");
     r.revoke(DET_ID, "synthetic-counsel", "withdrawn");
     expect(
-      authorizeTemporaryLocalStorage(r, {
-        sourceId: SOURCE,
-        documentId: "doc-1",
-      })().allowed,
+      authorizeTemporaryLocalStorage(
+        r,
+        { sourceId: SOURCE, documentId: "doc-1" },
+        {},
+        AUDIT,
+      )().allowed,
     ).toBe(false);
   });
 });

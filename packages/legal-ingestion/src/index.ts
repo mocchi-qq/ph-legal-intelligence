@@ -3,7 +3,13 @@
 
 export * from "./acquisition";
 export * from "./authorization";
+export * from "./authorization-audit";
+export * from "./counsel-d1-store";
 export * from "./counsel-determinations";
+export * from "./counsel-projection";
+export * from "./counsel-registry";
+export * from "./d1-types";
+export * from "./evidence";
 export * from "./extract";
 export * from "./guards";
 export * from "./identity";

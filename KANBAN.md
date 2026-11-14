@@ -174,17 +174,41 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 **Counsel determinations: 0. All 350 enforcement cells remain UNKNOWN.**
 
-| ID   | Task                                      | Status                          | Evidence                                                        |
-| ---- | ----------------------------------------- | ------------------------------- | --------------------------------------------------------------- |
-| G6-A | Baseline + task plan                      | VERIFIED                        | `00_BASELINE_AND_PLAN.md`                                       |
-| G6-B | Canonical 16/14 taxonomy                  | VERIFIED                        | `01_ACTIVITY_TAXONOMY.md`, `activity-taxonomy.json`             |
-| G6-C | Temp-storage + reindex gates              | VERIFIED                        | `02_ENFORCEMENT_COVERAGE.md`; parser/search tests                |
-| G6-D | D1 schema validation + adapter assessment | PARTIAL (adapter deferred)      | `03_…`, `04_…`, migration 0006, SQLite tests                    |
-| G6-E | Projection/revocation consistency         | VERIFIED                        | `05_PROJECTION_AND_REVOCATION.md`                               |
-| G6-F | Evidence availability hook                | VERIFIED (no store)             | `06_EVIDENCE_INTEGRITY.md`                                      |
-| G6-G | Revocation/retention governance           | VERIFIED (no deletion)          | `07_REVOCATION_AND_RETENTION_GOVERNANCE.md`                     |
-| G6-H | Synthetic tests + regression              | VERIFIED                        | 381 passed, 1 skipped; 33 new tests                             |
-| G6-I | Two reviews + remediation                 | VERIFIED                        | `09_INDEPENDENT_REVIEW.md`                                      |
-| G6-J | Final status/decision                     | VERIFIED                        | `10_FINAL_REPORT.md`, `gate-6-status.json`, `DECISION.md`       |
-| G6-K | Live D1 adapter                           | NOT_IMPLEMENTED (blocker)       | Wrangler local D1 TCMalloc OOM                                  |
-| G6-L | Counsel determination                     | BLOCKED (external)              | 0 received                                                      |
+| ID   | Task                                      | Status                     | Evidence                                                  |
+| ---- | ----------------------------------------- | -------------------------- | --------------------------------------------------------- |
+| G6-A | Baseline + task plan                      | VERIFIED                   | `00_BASELINE_AND_PLAN.md`                                 |
+| G6-B | Canonical 16/14 taxonomy                  | VERIFIED                   | `01_ACTIVITY_TAXONOMY.md`, `activity-taxonomy.json`       |
+| G6-C | Temp-storage + reindex gates              | VERIFIED                   | `02_ENFORCEMENT_COVERAGE.md`; parser/search tests         |
+| G6-D | D1 schema validation + adapter assessment | PARTIAL (adapter deferred) | `03_…`, `04_…`, migration 0006, SQLite tests              |
+| G6-E | Projection/revocation consistency         | VERIFIED                   | `05_PROJECTION_AND_REVOCATION.md`                         |
+| G6-F | Evidence availability hook                | VERIFIED (no store)        | `06_EVIDENCE_INTEGRITY.md`                                |
+| G6-G | Revocation/retention governance           | VERIFIED (no deletion)     | `07_REVOCATION_AND_RETENTION_GOVERNANCE.md`               |
+| G6-H | Synthetic tests + regression              | VERIFIED                   | 381 passed, 1 skipped; 33 new tests                       |
+| G6-I | Two reviews + remediation                 | VERIFIED                   | `09_INDEPENDENT_REVIEW.md`                                |
+| G6-J | Final status/decision                     | VERIFIED                   | `10_FINAL_REPORT.md`, `gate-6-status.json`, `DECISION.md` |
+| G6-K | Live D1 adapter                           | NOT_IMPLEMENTED (blocker)  | Wrangler local D1 TCMalloc OOM                            |
+| G6-L | Counsel determination                     | BLOCKED (external)         | 0 received                                                |
+
+---
+
+# Gate 7 — Durable D1 Counsel Registry and Atomic Authorization Decisions
+
+**Counsel determinations: 0. All 350 enforcement cells remain UNKNOWN. Four pilot documents remain BLOCKED_AUTHORIZATION.**
+
+| ID   | Task                                    | Status                          | Evidence                                                         |
+| ---- | --------------------------------------- | ------------------------------- | ---------------------------------------------------------------- |
+| G7-A | Baseline + plan                         | VERIFIED (dirty tree disclosed) | `00_BASELINE_AND_PLAN.md`                                        |
+| G7-B | Bounded D1 runtime feasibility          | BLOCKED (host)                  | `01_D1_RUNTIME_FEASIBILITY.md`; workerd TCMalloc OOM             |
+| G7-C | Repository contract + shared projection | VERIFIED                        | `02_…`, `counsel-registry.ts`, `counsel-projection.ts`           |
+| G7-D | D1 adapter + commit marker              | IMPLEMENTED_UNVERIFIED          | `03_…`, `counsel-d1-store.ts`, migration 0008                    |
+| G7-E | Atomicity + failure injection           | SQLITE_COMPATIBILITY_ONLY       | `04_…`; 10 injected-failure cases, atomic and non-atomic         |
+| G7-F | Idempotency + concurrency               | VERIFIED (shim)                 | `05_…`; 4 constraint-backed retry/race tests                     |
+| G7-G | Central audit + fail-closed fix         | VERIFIED (shim)                 | `06_…`, `audit-coverage.json`                                    |
+| G7-H | Durable projection + no fallback        | VERIFIED (shim)                 | `07_…`; PRODUCTION_D1 rejects in-memory registry                 |
+| G7-I | Evidence metadata/availability          | VERIFIED (no store)             | `08_…`, `evidence.ts`                                            |
+| G7-J | Migration validation 0001–0008          | SQLITE_COMPATIBILITY_ONLY       | `09_…`; 7 migration tests                                        |
+| G7-K | Test + regression report                | VERIFIED                        | `10_…`; 448 tests, 446 pass, 1 pre-existing fail, 1 skip; 66 new |
+| G7-L | Two independent reviews + remediation   | IN REVIEW                       | `11_…`                                                           |
+| G7-M | Final status + decision                 | PENDING                         | `12_…`, `gate-7-status.json`, `DECISION.md`                      |
+| G7-N | Actual D1 runtime acceptance            | BLOCKED (host)                  | Runbook in `01_…` §5                                             |
+| G7-O | Counsel determination                   | BLOCKED (external)              | 0 received                                                       |

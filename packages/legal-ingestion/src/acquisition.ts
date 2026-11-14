@@ -9,6 +9,10 @@ import type {
   ActivityAuthorizationRegistry,
   AuthorizationBasis,
 } from "./authorization";
+import type {
+  AuthorizationAuditInput,
+  AuthorizationAuditService,
+} from "./authorization-audit";
 import { assertFetchableUrl } from "./guards";
 import { sha256 } from "./store";
 
@@ -56,6 +60,8 @@ export interface AcquisitionInput {
   acceptedAuthorizationBases?: readonly AuthorizationBasis[];
   satisfiedAuthorizationConditions?: readonly string[];
   authorizationNow?: string;
+  /** Optional centralized authorization audit. Audit failure fails closed. */
+  authorizationAudit?: AuthorizationAuditService;
 }
 
 export interface AcquisitionRecord {
@@ -90,6 +96,16 @@ export function buildAcquisitionRecord(
   input: AcquisitionInput,
 ): { ok: true; record: AcquisitionRecord } | { ok: false; reason: string } {
   const synthetic = input.synthetic === true;
+  const audit = input.authorizationAudit;
+  const recordAudit = (entry: AuthorizationAuditInput): boolean => {
+    if (!audit) return true;
+    try {
+      audit.record(entry);
+      return true;
+    } catch {
+      return false;
+    }
+  };
   let strictRef: string | null = null;
   if (synthetic) {
     if (!input.sourceUrl.startsWith("synthetic://"))
@@ -119,8 +135,21 @@ export function buildAcquisitionRecord(
 
     if (strict) {
       const registry = input.activityAuthorization;
-      if (!registry)
+      if (!registry) {
+        if (
+          !recordAudit({
+            eventType: "REGISTRY_UNAVAILABLE",
+            outcome: "ERROR",
+            sourceId: input.sourceId,
+            documentId: input.artifactId,
+            activity: "downloading",
+            operation: "acquisition",
+            reasonCode: "activity_authorization_registry_missing",
+          })
+        )
+          return { ok: false, reason: "authorization_audit_unavailable" };
         return { ok: false, reason: "activity_authorization_registry_missing" };
+      }
       const check = registry.check(input.sourceId, "downloading", {
         now: input.authorizationNow,
         satisfiedConditions: input.satisfiedAuthorizationConditions,
@@ -128,11 +157,40 @@ export function buildAcquisitionRecord(
           "COUNSEL_DETERMINATION",
         ],
       });
-      if (!check.allowed)
+      if (!check.allowed) {
+        if (
+          !recordAudit({
+            eventType: "AUTHORIZATION_DENIED",
+            outcome: "DENIED",
+            sourceId: input.sourceId,
+            documentId: input.artifactId,
+            activity: "downloading",
+            operation: "acquisition",
+            reasonCode: check.reason,
+            determinationId: check.decision?.id ?? null,
+            registryStatus: check.status,
+          })
+        )
+          return { ok: false, reason: "authorization_audit_unavailable" };
         return {
           ok: false,
           reason: `activity_not_authorized:downloading:${check.reason}`,
         };
+      }
+      if (
+        !recordAudit({
+          eventType: "AUTHORIZATION_GRANTED",
+          outcome: "GRANTED",
+          sourceId: input.sourceId,
+          documentId: input.artifactId,
+          activity: "downloading",
+          operation: "acquisition",
+          reasonCode: check.reason,
+          determinationId: check.decision?.id ?? null,
+          registryStatus: check.status,
+        })
+      )
+        return { ok: false, reason: "authorization_audit_unavailable" };
       strictRef = check.decision?.id ?? null;
       if (!strictRef)
         return { ok: false, reason: "authorization_evidence_missing" };

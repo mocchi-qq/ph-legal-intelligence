@@ -16,6 +16,7 @@ import type {
   LegalProvision,
   SourceManifestation,
 } from "@phli/legal-schema";
+import type { AuthorizationAuditInput } from "./authorization-audit";
 import { extractText, segmentChunks, segmentProvisions } from "./extract";
 import { type CorpusStore, sha256 } from "./store";
 import type {
@@ -155,6 +156,17 @@ export function ingestArtifact(
     return outcome("FAILED", runId, contentHash, { reason });
   };
 
+  const audit = options.authorizationAudit;
+  const recordAudit = (input: AuthorizationAuditInput): boolean => {
+    if (!audit) return true;
+    try {
+      audit.record(input);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   // 1. Authorization guard — the absolute Gate 1 stop condition, in code.
   // In Gate 4 strict mode the activity registry is the authority. The legacy
   // coarse gate is not silently available: it requires an explicit opt-in.
@@ -186,7 +198,21 @@ export function ingestArtifact(
     | null = null;
   if (strictActivityMode) {
     const registry = options.activityAuthorization;
-    if (!registry) return fail("activity_authorization_registry_missing");
+    if (!registry) {
+      if (
+        !recordAudit({
+          eventType: "REGISTRY_UNAVAILABLE",
+          outcome: "ERROR",
+          sourceId: artifact.sourceId,
+          documentId: artifact.artifactId,
+          activity: "temporary_processing",
+          operation: "ingest",
+          reasonCode: "activity_authorization_registry_missing",
+        })
+      )
+        return fail("authorization_audit_unavailable");
+      return fail("activity_authorization_registry_missing");
+    }
     for (const activity of REQUIRED_INGEST_ACTIVITIES) {
       const check = registry.check(artifact.sourceId, activity, {
         now: options.authorizationNow,
@@ -195,8 +221,40 @@ export function ingestArtifact(
           "COUNSEL_DETERMINATION",
         ],
       });
-      if (!check.allowed)
+      if (!check.allowed) {
+        if (
+          !recordAudit({
+            eventType:
+              check.status === "PROHIBITED"
+                ? "AUTHORIZATION_DENIED"
+                : "PROJECTION_REJECTED",
+            outcome: "DENIED",
+            sourceId: artifact.sourceId,
+            documentId: artifact.artifactId,
+            activity,
+            operation: "ingest",
+            reasonCode: check.reason,
+            determinationId: check.decision?.id ?? null,
+            registryStatus: check.status,
+          })
+        )
+          return fail("authorization_audit_unavailable");
         return fail(`activity_not_authorized:${activity}:${check.reason}`);
+      }
+      if (
+        !recordAudit({
+          eventType: "AUTHORIZATION_GRANTED",
+          outcome: "GRANTED",
+          sourceId: artifact.sourceId,
+          documentId: artifact.artifactId,
+          activity,
+          operation: "ingest",
+          reasonCode: check.reason,
+          determinationId: check.decision?.id ?? null,
+          registryStatus: check.status,
+        })
+      )
+        return fail("authorization_audit_unavailable");
       if (check.decision?.id) strictDecisionRefs.push(check.decision.id);
       if (!strictBasisDetail) {
         const basis = check.decision?.basis;

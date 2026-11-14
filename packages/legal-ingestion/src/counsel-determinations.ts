@@ -10,6 +10,15 @@ import type {
   ActivityAuthorizationRegistry,
   DecisionInput,
 } from "./authorization";
+import type { AuditContext } from "./authorization-audit";
+import {
+  auditEventTypeFor,
+  type CounselRegistryState,
+  projectFromState,
+} from "./counsel-projection";
+
+export type { CounselRegistryState };
+export { projectFromState };
 
 export const COUNSEL_ACTIVITIES = [
   "viewing",
@@ -126,6 +135,15 @@ export interface CounselProjectionOptions {
   satisfiedConditions?: readonly string[];
   /** Optional evidence availability check; false denies with evidence_unavailable. */
   evidenceAvailable?: (reference: string) => boolean;
+  /**
+   * Pre-resolved evidence states from an explicit evidence store. When present,
+   * every reference must be VERIFIED_FOR_RECORDING. Absent means "not assessed"
+   * and preserves the Gate 5/6 opt-in behaviour.
+   */
+  evidenceStatuses?: ReadonlyMap<
+    string,
+    import("./evidence").EvidenceAvailability
+  >;
 }
 
 export interface CounselProjection {
@@ -139,10 +157,6 @@ export interface CounselProjection {
 }
 
 const VERIFIED: CounselDeterminationStatus = "VERIFIED_FOR_RECORDING";
-const APPROVED_STATUSES: readonly CounselActivityDecisionStatus[] = [
-  "APPROVED",
-  "APPROVED_WITH_CONDITIONS",
-];
 
 function isIsoDate(value: string): boolean {
   return Number.isFinite(Date.parse(value));
@@ -248,7 +262,58 @@ export function validateDetermination(
  * Append-only counsel determination repository. Records are immutable; status
  * changes, supersession and revocation are append-only audit events.
  */
-export class CounselDeterminationRepository {
+export interface CounselRepositoryContract {
+  registerCounsel(
+    counsel: CounselProfessional,
+    actor: string,
+    reason: string,
+    changedAt?: string,
+  ): CounselAuditEvent;
+  record(
+    determination: CounselDetermination,
+    actor: string,
+    reason: string,
+    changedAt?: string,
+  ): CounselAuditEvent;
+  statusOf(id: string): CounselDeterminationStatus | null;
+  transition(
+    id: string,
+    newStatus: CounselDeterminationStatus,
+    actor: string,
+    reason: string,
+    changedAt?: string,
+  ): CounselAuditEvent;
+  revoke(
+    id: string,
+    actor: string,
+    reason: string,
+    changedAt?: string,
+  ): CounselAuditEvent;
+  supersede(
+    oldId: string,
+    newId: string,
+    actor: string,
+    reason: string,
+    changedAt?: string,
+  ): CounselAuditEvent;
+  active(sourceId: string): CounselDetermination[];
+  history(): CounselDetermination[];
+  auditTrail(): CounselAuditEvent[];
+  snapshot(sourceId?: string): CounselRegistryState;
+  project(
+    sourceId: string,
+    activity: CounselActivity,
+    options?: CounselProjectionOptions,
+  ): CounselProjection;
+  toGate4Decision(
+    determinationId: string,
+    activity: CounselActivity,
+  ): DecisionInput | null;
+}
+
+export class CounselDeterminationRepository
+  implements CounselRepositoryContract
+{
   private readonly professionals = new Map<string, CounselProfessional>();
   private readonly determinations = new Map<string, CounselDetermination>();
   private readonly order: string[] = [];
@@ -419,6 +484,9 @@ export class CounselDeterminationRepository {
     reason: string,
     changedAt?: string,
   ): CounselAuditEvent {
+    if (this.statusOf(oldId) === "REVOKED")
+      throw new Error("cannot_supersede_revoked");
+    if (this.supersededBy.has(oldId)) throw new Error("already_superseded");
     this.supersededBy.set(oldId, newId);
     return this.appendEvent({
       determinationId: oldId,
@@ -475,109 +543,50 @@ export class CounselDeterminationRepository {
     return this.events.map((event) => ({ ...event }));
   }
 
+  /**
+   * Snapshot the state this repository projects from. The D1 registry returns the
+   * same shape, so projection logic is shared rather than reimplemented in SQL.
+   */
+  snapshot(sourceId?: string): CounselRegistryState {
+    const source = (
+      sourceId
+        ? this.order
+            .map((id) => this.determinations.get(id)!)
+            .filter((determination) => determination.sourceId === sourceId)
+        : this.order.map((id) => this.determinations.get(id)!)
+    ).map((determination) => ({
+      ...determination,
+      documentIds: [...determination.documentIds],
+      activityDecisions: determination.activityDecisions.map((decision) => ({
+        ...decision,
+        conditions: [...decision.conditions],
+        limitations: [...decision.limitations],
+        permittedUsers: [...decision.permittedUsers],
+      })),
+      evidenceRefs: [...determination.evidenceRefs],
+    }));
+    const statuses = new Map<string, CounselDeterminationStatus>();
+    for (const determination of source)
+      statuses.set(determination.id, this.statusOf(determination.id)!);
+    return {
+      professionals: new Map(this.professionals),
+      determinations: source,
+      statuses,
+      revision: this.events.length + this.order.length,
+    };
+  }
+
   project(
     sourceId: string,
     activity: CounselActivity,
     options: CounselProjectionOptions = {},
   ): CounselProjection {
-    const base = {
+    return projectFromState(
+      this.snapshot(sourceId),
       sourceId,
       activity,
-      determinationId: null,
-      determinationStatus: null,
-      activityStatus: "NO_DECISION" as const,
-    };
-    const active = this.active(sourceId);
-    if (active.length === 0)
-      return { ...base, allowed: false, reason: "no_verified_determination" };
-
-    const matches = active.filter((determination) =>
-      determination.activityDecisions.some(
-        (decision) => decision.activity === activity,
-      ),
+      options,
     );
-    if (matches.length === 0)
-      return { ...base, allowed: false, reason: "activity_not_covered" };
-    if (matches.length > 1)
-      return { ...base, allowed: false, reason: "conflicting_determinations" };
-
-    const determination = matches[0]!;
-    const decision = determination.activityDecisions.find(
-      (item) => item.activity === activity,
-    )!;
-    const scoped = {
-      ...base,
-      determinationId: determination.id,
-      determinationStatus: this.statusOf(determination.id),
-      activityStatus: decision.status,
-    };
-
-    if (this.statusOf(determination.id) !== VERIFIED)
-      return {
-        ...scoped,
-        allowed: false,
-        reason: "determination_not_verified",
-      };
-    if (determination.evidenceRefs.length === 0)
-      return {
-        ...scoped,
-        allowed: false,
-        reason: "determination_evidence_missing",
-      };
-    if (
-      options.evidenceAvailable &&
-      !determination.evidenceRefs.every((reference) =>
-        options.evidenceAvailable?.(reference),
-      )
-    )
-      return {
-        ...scoped,
-        allowed: false,
-        reason: "evidence_unavailable",
-      };
-    if (!APPROVED_STATUSES.includes(decision.status))
-      return {
-        ...scoped,
-        allowed: false,
-        reason:
-          decision.status === "PROHIBITED"
-            ? "prohibited"
-            : decision.status === "RESTRICTED"
-              ? "restricted"
-              : decision.status === "UNRESOLVED"
-                ? "activity_unresolved"
-                : "not_approved",
-      };
-
-    if (determination.documentIds.length > 0) {
-      if (!options.documentId)
-        return { ...scoped, allowed: false, reason: "document_scope_required" };
-      if (!determination.documentIds.includes(options.documentId))
-        return { ...scoped, allowed: false, reason: "document_scope_mismatch" };
-    }
-
-    const now = options.now ?? new Date().toISOString();
-    const effective = decision.effectiveDate ?? determination.effectiveDate;
-    const expiry = decision.expiryDate ?? determination.expiryDate;
-    if (effective && Date.parse(now) < Date.parse(effective))
-      return { ...scoped, allowed: false, reason: "not_yet_effective" };
-    if (expiry && Date.parse(now) >= Date.parse(expiry))
-      return { ...scoped, allowed: false, reason: "expired" };
-
-    if (decision.status === "APPROVED_WITH_CONDITIONS") {
-      const satisfied = new Set(options.satisfiedConditions ?? []);
-      const unmet = decision.conditions.filter(
-        (condition) => !satisfied.has(condition),
-      );
-      if (unmet.length > 0)
-        return {
-          ...scoped,
-          allowed: false,
-          reason: `conditions_unmet:${unmet.join("|")}`,
-        };
-    }
-
-    return { ...scoped, allowed: true, reason: "approved" };
   }
 
   /** Project one counsel activity into the Gate 4 decision model, if mapped. */
@@ -746,6 +755,7 @@ export function authorizeIndexing(
   repository: CounselDeterminationRepository,
   request: { sourceId: string; documentId: string },
   options: IndexingAuthorizationOptions = {},
+  audit?: AuditContext,
 ): { allowed: boolean; reason: string } {
   for (const activity of [
     "temporary_processing",
@@ -756,9 +766,36 @@ export function authorizeIndexing(
       ...options,
       documentId: request.documentId,
     });
-    if (!projection.allowed)
+    if (!projection.allowed) {
+      if (
+        !recordProjectionAudit(audit, {
+          eventType: auditEventTypeFor(projection),
+          outcome: "DENIED",
+          sourceId: request.sourceId,
+          documentId: request.documentId,
+          activity,
+          operation: "reindex",
+          reasonCode: projection.reason,
+          determinationId: projection.determinationId,
+          registryStatus: projection.determinationStatus,
+        })
+      )
+        return { allowed: false, reason: "authorization_audit_unavailable" };
       return { allowed: false, reason: `${activity}:${projection.reason}` };
+    }
   }
+  if (
+    !recordProjectionAudit(audit, {
+      eventType: "AUTHORIZATION_GRANTED",
+      outcome: "GRANTED",
+      sourceId: request.sourceId,
+      documentId: request.documentId,
+      activity: "search_indexing",
+      operation: "reindex",
+      reasonCode: "authorized",
+    })
+  )
+    return { allowed: false, reason: "authorization_audit_unavailable" };
   return { allowed: true, reason: "authorized" };
 }
 
@@ -771,6 +808,7 @@ export function authorizeTemporaryLocalStorage(
   repository: CounselDeterminationRepository,
   request: { sourceId: string; documentId: string },
   options: CounselProjectionOptions = {},
+  audit?: AuditContext,
 ): () => { allowed: boolean; reason: string } {
   return () => {
     const projection = repository.project(
@@ -778,6 +816,46 @@ export function authorizeTemporaryLocalStorage(
       "temporary_local_storage",
       { ...options, documentId: request.documentId },
     );
+    if (
+      !recordProjectionAudit(audit, {
+        eventType: auditEventTypeFor(projection),
+        outcome: projection.allowed ? "GRANTED" : "DENIED",
+        sourceId: request.sourceId,
+        documentId: request.documentId,
+        activity: "temporary_local_storage",
+        operation: "temporary_local_storage",
+        reasonCode: projection.reason,
+        determinationId: projection.determinationId,
+        registryStatus: projection.determinationStatus,
+      })
+    )
+      return { allowed: false, reason: "authorization_audit_unavailable" };
     return { allowed: projection.allowed, reason: projection.reason };
   };
+}
+
+/**
+ * Record a projection decision through the centralized audit service.
+ *
+ * A missing service is a denial, not an exemption: an authorization decision
+ * that cannot be recorded must not be treated as a grant. Callers that genuinely
+ * need an unaudited decision do not exist in this repository.
+ */
+function recordProjectionAudit(
+  audit: AuditContext | undefined,
+  input: Omit<
+    import("./authorization-audit").AuthorizationAuditInput,
+    "correlationId"
+  >,
+): boolean {
+  if (!audit?.service) return false;
+  try {
+    audit.service.record({
+      ...input,
+      correlationId: audit.correlationId ?? null,
+    });
+    return true;
+  } catch {
+    return false;
+  }
 }

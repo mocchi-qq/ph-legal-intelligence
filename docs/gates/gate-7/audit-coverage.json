@@ -1,0 +1,143 @@
+{
+  "generated_at": "2026-11-14",
+  "schema_version": "gate7.audit-coverage.v2",
+  "event_schema": {
+    "fields": [
+      "id",
+      "eventType",
+      "outcome",
+      "occurredAt",
+      "sourceId",
+      "documentId",
+      "activity",
+      "operation",
+      "reasonCode",
+      "determinationId",
+      "correlationId",
+      "registryStatus",
+      "context"
+    ],
+    "id_format": "auth_audit_<uuidv4>",
+    "outcomes": ["GRANTED", "DENIED", "ERROR"],
+    "event_types": [
+      "AUTHORIZATION_REQUESTED",
+      "AUTHORIZATION_GRANTED",
+      "AUTHORIZATION_DENIED",
+      "PROJECTION_REJECTED",
+      "EVIDENCE_UNAVAILABLE",
+      "CONDITION_UNMET",
+      "DECISION_EXPIRED",
+      "DECISION_REVOKED",
+      "DECISION_SUPERSEDED",
+      "CONFLICT_DETECTED",
+      "REGISTRY_UNAVAILABLE",
+      "OPERATION_ABORTED",
+      "RETRY_DENIED"
+    ]
+  },
+  "implemented_paths": [
+    {
+      "path": "acquisition",
+      "function": "buildAcquisitionRecord",
+      "activity": "downloading",
+      "grant_recorded": true,
+      "denial_recorded": true,
+      "registry_unavailable_recorded": true,
+      "audit_failure_denies": true
+    },
+    {
+      "path": "ingestion",
+      "function": "ingestArtifact",
+      "activity": "temporary_processing,persistent_storage,text_extraction,search_indexing",
+      "grant_recorded": true,
+      "denial_recorded": true,
+      "registry_unavailable_recorded": true,
+      "audit_failure_denies": true
+    },
+    {
+      "path": "temporary_local_storage",
+      "function": "authorizeTemporaryLocalStorage",
+      "activity": "temporary_local_storage",
+      "grant_recorded": true,
+      "denial_recorded": true,
+      "registry_unavailable_recorded": false,
+      "audit_failure_denies": true
+    },
+    {
+      "path": "reindexing",
+      "function": "authorizeIndexing",
+      "activity": "temporary_processing,text_extraction,search_indexing",
+      "grant_recorded": true,
+      "denial_recorded": true,
+      "registry_unavailable_recorded": false,
+      "audit_failure_denies": true
+    },
+    {
+      "path": "durable_projection",
+      "function": "CounselAuthorizationService.authorize",
+      "activity": "any requested",
+      "grant_recorded": true,
+      "denial_recorded": true,
+      "registry_unavailable_recorded": true,
+      "audit_failure_denies": true
+    }
+  ],
+  "not_implemented_paths": [
+    "viewing",
+    "citation_display",
+    "quotation",
+    "substantial_reproduction",
+    "redistribution",
+    "commercial_use",
+    "retention",
+    "deletion",
+    "ocr",
+    "embedding_generation",
+    "ai_assisted_analysis",
+    "background_jobs",
+    "admin",
+    "evidence_upload",
+    "evidence_download"
+  ],
+  "persistence": {
+    "schema": "migration 0007 authorization_audit_events",
+    "append_only": true,
+    "d1_sink": "IMPLEMENTED_UNVERIFIED",
+    "d1_runtime_tested": false,
+    "default_runtime": "IN_MEMORY"
+  },
+  "ordering": {
+    "decision": "audit before content access; failure denies",
+    "sync_paths": "require a synchronous sink; an async sink fails closed",
+    "async_paths": "await recordAsync before returning allowed"
+  },
+  "data_minimisation": {
+    "document_content": false,
+    "extracted_text": false,
+    "counsel_opinion": false,
+    "secrets_or_tokens": false,
+    "context_types": ["string", "number", "boolean", "null"],
+    "max_context_string": 512,
+    "forbidden_keys": [
+      "content",
+      "text",
+      "body",
+      "html",
+      "excerpt",
+      "opinion",
+      "secret",
+      "token",
+      "password",
+      "authorization",
+      "cookie",
+      "apikey",
+      "api_key"
+    ]
+  },
+  "coverage_status": "ALL_IMPLEMENTED_PATHS_COVERED",
+  "limitations": [
+    "A missing audit service is a denial (authorization_audit_unavailable), never an unaudited grant.",
+    "The async D1 sink cannot be used from the synchronous content entry points; attaching it denies with authorization_audit_unavailable.",
+    "D1 persistence of audit events is not runtime-verified on this host."
+  ]
+}

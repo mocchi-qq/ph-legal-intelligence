@@ -1,0 +1,146 @@
+{
+  "gate": 7,
+  "title": "Durable D1 Counsel Registry and Atomic Authorization Decisions",
+  "date": "2026-11-14",
+  "verdict": "BLOCKED",
+  "verdict_reason": "The D1 adapter, commit-marker atomicity design, durable projection and centralized audit are implemented and tested against a node:sqlite shim, but no D1-compatible runtime can start on this PRoot host (workerd TCMalloc mmap failure). D1 runtime behaviour is therefore unverified, which the verdict rules classify as BLOCKED.",
+  "repository": {
+    "branch": "main",
+    "head_at_gate_start": "91bb20a",
+    "commits_at_gate_start": 38,
+    "working_tree_at_start": "dirty (pre-existing uncommitted Gate 7 draft, disclosed)",
+    "gate6_baseline": "405a350",
+    "gate7_implementation_commit": "recorded after commit",
+    "pushed": false,
+    "deployed": false
+  },
+  "classification": {
+    "d1_implementation": "IMPLEMENTED_UNVERIFIED",
+    "atomicity": "SQLITE_COMPATIBILITY_ONLY",
+    "audit_coverage": "ALL_IMPLEMENTED_PATHS_COVERED",
+    "authorization": "UNKNOWN",
+    "counsel_determination": "NOT_RECEIVED",
+    "corpus_readiness": "BLOCKED_AUTHORIZATION"
+  },
+  "d1_runtime": {
+    "runtime_used": null,
+    "compatible_runtime_available": false,
+    "failure": "TCMalloc MmapAligned(1 GiB) failed; write EPIPE",
+    "wrangler_version": "4.135.0",
+    "workerd_version": "1.20250718.0",
+    "node_version": "24.22.1",
+    "test_engine_used": "node:sqlite shim (supplementary only)",
+    "runbook": "docs/gates/gate-7/01_D1_RUNTIME_FEASIBILITY.md#5"
+  },
+  "implementation": {
+    "repository_contract": "CounselRegistry",
+    "in_memory_adapter": "InMemoryCounselRegistry",
+    "d1_adapter": "D1CounselRegistry",
+    "shared_projection": "projectFromState",
+    "atomic_write_strategy": "commit-last marker + payload hash",
+    "commit_marker_verified_under_atomic_batch": true,
+    "commit_marker_verified_under_non_atomic_batch": true,
+    "d1_batch_atomicity_verified": false,
+    "partial_state_can_project": false,
+    "production_mode_rejects_memory_registry": true,
+    "silent_registry_fallback": false,
+    "append_only_history": true
+  },
+  "audit": {
+    "service": "AuthorizationAuditService",
+    "sinks": ["InMemoryAuthorizationAuditSink", "D1AuthorizationAuditSink"],
+    "missing_service_policy": "DENY",
+    "audit_failure_policy": "DENY",
+    "event_id_format": "auth_audit_<uuidv4>",
+    "append_only_schema": "migration 0007",
+    "paths_covered": [
+      "acquisition",
+      "ingestion",
+      "temporary_local_storage",
+      "reindexing",
+      "durable_projection"
+    ],
+    "temporary_storage_denials_audited": true,
+    "reindexing_denials_audited": true,
+    "d1_persistence_runtime_tested": false
+  },
+  "evidence": {
+    "states": [
+      "NOT_RECEIVED",
+      "REFERENCE_INVALID",
+      "FILE_UNAVAILABLE",
+      "HASH_MISMATCH",
+      "IDENTITY_UNVERIFIED",
+      "AUTHORITY_UNVERIFIED",
+      "EVIDENCE_INCOMPLETE",
+      "AVAILABLE_UNVERIFIED",
+      "VERIFIED_FOR_RECORDING"
+    ],
+    "store_implemented": false,
+    "unavailable_by_default": true,
+    "available_unverified_denies": true,
+    "real_evidence_created": false
+  },
+  "migrations": {
+    "applied_range": "0001-0008",
+    "new": ["0008_gate7_registry_commit.sql"],
+    "historical_rewritten": false,
+    "idempotent": ["0007", "0008"],
+    "full_sequence_rerunnable": false,
+    "d1_execution_verified": false
+  },
+  "tests": {
+    "head_baseline": { "files": 44, "tests": 382, "passed": 380, "failed": 1, "skipped": 1 },
+    "final": { "files": 51, "tests": 448, "passed": 446, "failed": 1, "skipped": 1 },
+    "new_files": 7,
+    "new_tests": 66,
+    "failure_injection_cases": 10,
+    "pre_existing_failure": "tests/unit/docs-structure.test.ts (missing docs directories at HEAD)",
+    "d1_integration_tests_run": 0,
+    "sqlite_shim_integration_tests": 99,
+    "build": "exit 0",
+    "biome": "0 errors, 74 warnings"
+  },
+  "reviews": {
+    "count": 2,
+    "blockers_found": 2,
+    "blockers_fixed": 2,
+    "majors_found": 3,
+    "majors_fixed": 2,
+    "majors_accepted": 1,
+    "minors_found": 5,
+    "nits_found": 3,
+    "report": "docs/gates/gate-7/11_INDEPENDENT_REVIEW.md"
+  },
+  "authorization": {
+    "sources": 25,
+    "activities": 14,
+    "cells": 350,
+    "unknown": 350,
+    "authorized": 0,
+    "authorized_with_conditions": 0,
+    "restricted": 0,
+    "prohibited": 0,
+    "counsel_determinations_received": 0,
+    "first_source_selected_for_review": "sc_elibrary",
+    "selection_is_authorization": false
+  },
+  "corpus": {
+    "pilot_documents": 4,
+    "blocked_authorization": 4,
+    "new_documents_acquired": 0,
+    "new_documents_processed": 0,
+    "pilot_documents_reprocessed": false,
+    "pilot_hashes_unchanged": true,
+    "gate1_benchmark_pinned": true
+  },
+  "limitations": [
+    "D1 runtime is unverified; the adapter is IMPLEMENTED_UNVERIFIED.",
+    "D1 batch atomicity, triggers, constraints and concurrency are unverified.",
+    "A synchronous content path cannot use the async D1 audit sink; attaching it denies.",
+    "In-flight operations must re-authorize before each content access; this is contractual, not enforced by the callee.",
+    "classify() maps storage errors by message text until real D1 error codes can be inspected.",
+    "The full historical migration sequence is not re-runnable (pre-existing ALTER TABLE in 0001)."
+  ],
+  "next_action": "Run the D1 verification runbook on a host where workerd starts, then re-run the failure matrix against D1 and update 01/04/09/10 and this status."
+}
