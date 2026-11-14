@@ -193,7 +193,7 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 # Gate 7 — Durable D1 Counsel Registry and Atomic Authorization Decisions
 
-**Verdict: ACCEPTED WITH LIMITATIONS (verified on actual D1; binding batch untested). Implementation commit `71fc9df`.**
+**Verdict: ACCEPTED WITH LIMITATIONS (verified on actual D1; binding batch untested). Implementation commit `71fc9df`; D1 verification `75dc849`.**
 
 **Counsel determinations: 0. All 350 enforcement cells remain UNKNOWN. Four pilot documents remain BLOCKED_AUTHORIZATION.**
 

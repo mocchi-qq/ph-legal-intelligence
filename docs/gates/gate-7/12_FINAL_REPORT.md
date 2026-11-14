@@ -4,7 +4,8 @@
 **Verdict:** **ACCEPTED WITH LIMITATIONS** — durable registry and authorization
 verified on actual Cloudflare D1; one bounded binding-level limitation remains.
 **Gate 6 baseline:** `91bb20a` (38 commits)
-**Gate 7 implementation commit:** `71fc9df` (39 commits total).
+**Gate 7 implementation commit:** `71fc9df`
+**D1 verification commit:** `75dc849`
 
 ## 1. Summary
 

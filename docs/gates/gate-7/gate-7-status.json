@@ -11,7 +11,7 @@
     "working_tree_at_start": "dirty (pre-existing uncommitted Gate 7 draft, disclosed)",
     "gate6_baseline": "405a350",
     "gate7_implementation_commit": "71fc9df",
-    "gate7_d1_verification_commit": "recorded in the session report after commit",
+    "gate7_d1_verification_commit": "75dc849",
     "pushed": false,
     "deployed": false
   },
