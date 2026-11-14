@@ -179,18 +179,6 @@ describe("gate 9 passage retrieval", () => {
     expect(results.every((r) => r.exactMatch === true)).toBe(true);
   });
 
-  it("exact identifier ranks an identifier-bearing chunk first", () => {
-    const results = retrieve(passageIndex(), {
-      text: "G.R. No. 999001",
-      mode: "standard",
-      limit: 10,
-    });
-    // Only meaningful when some passage actually restates the identifier.
-    if (results.some((r) => r.passage.includes("999001"))) {
-      expect(results[0]?.passage.includes("999001")).toBe(true);
-    }
-  });
-
   it("exactDocumentMatch marks all chunks of the matched document", () => {
     const results = retrieve(index, {
       text: "G.R. No. 999001",

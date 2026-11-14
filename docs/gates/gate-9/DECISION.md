@@ -8,7 +8,8 @@ selection, verifier hand-off. Synthetic only.
 ## 1. What was accepted
 
 - `SearchResult` now exposes `versionId`, `provisionId`, `effectiveFrom`,
-  `effectiveTo`, `span`, `provenance`, `citationText` and `exactMatch`.
+  `effectiveTo`, `span`, `provenance`, `citationText`, `exactMatch` (passage
+  contains the identifier) and `exactDocumentMatch` (document matched).
 - Exact identifier queries (including party-name + docket) return only the matched
   document, or `[]`; embedded questions still retrieve lexically.
 - `asOfDate` selects versions by `[effectiveFrom, effectiveTo)`; an unknown start
@@ -32,7 +33,7 @@ selection, verifier hand-off. Synthetic only.
 The gate's own criteria are met. The remaining items are explicitly out of scope
 or pre-existing:
 
-- `exactMatch` is document-level, documented, and not used as a pinpoint claim.
+- `exactDocumentMatch` is document-level; `exactMatch` is the pinpoint flag.
 - `versionId` can be `""` for an unversioned chunk; documented.
 - Verifier layer 4 remains unwired (Gate 8 limitation).
 - `filters.topic`/null-court gaps are pre-existing and listed as follow-ups.

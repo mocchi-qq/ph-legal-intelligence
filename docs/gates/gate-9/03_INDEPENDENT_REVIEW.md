@@ -33,8 +33,8 @@ point-in-time selection, span provenance and verifier hand-off.
 
 ## 3. Residual limitations
 
-1. `exactMatch` is document-level; callers must use `provisionLabel`/`span` for
-   pinpoint claims.
+1. `exactDocumentMatch` is document-level; use `exactMatch`/`provisionLabel`/`span`
+   for pinpoint claims.
 2. Chunks without a resolvable version carry `versionId: ""`.
 3. Verifier layer 4 remains unwired to the effects ledger (Gate 8 limitation).
 4. Retrieval quality is synthetic-only; no real-corpus claim.

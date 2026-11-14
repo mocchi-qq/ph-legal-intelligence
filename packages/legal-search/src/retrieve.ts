@@ -467,7 +467,8 @@ export function retrieve(
     .slice(0, limit)
     .map(({ entry, score, lexical, exactPassage }) => {
       // Document-level: the passage's document matched the identifier, whether
-      // or not this particular passage repeats it.
+      // or not this particular passage repeats it. Passage-level truthfulness is
+      // separate: `exactMatch` additionally requires the number in the text.
       const exact = exactDocumentIds.has(entry.documentId);
       const metadata: ChunkMetadata = {
         documentId: entry.documentId,

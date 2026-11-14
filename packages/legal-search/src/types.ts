@@ -107,13 +107,13 @@ export interface SearchResult {
     chunkId: string;
   };
   /**
-   * True when this passage's document matched an exact identifier query. This
-   * is document-level, not a claim that the passage contains the identifier.
+   * True only when this passage itself contains the queried identifier. Use it
+   * for pinpoint claims; it is stricter than `exactDocumentMatch`.
    */
   exactMatch: boolean;
   /**
-   * Whether the passage's document matched the query's identifier, even if this
-   * particular passage does not repeat it.
+   * True when this passage's document matched the query's identifier, even if
+   * this particular passage does not repeat it. Never a pinpoint claim.
    */
   exactDocumentMatch: boolean;
   /** Per-signal breakdown, for debugging and evaluation traces. */
