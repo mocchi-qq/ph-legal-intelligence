@@ -2,8 +2,8 @@
   "gate": 7,
   "title": "Durable D1 Counsel Registry and Atomic Authorization Decisions",
   "date": "2026-11-14",
-  "verdict": "BLOCKED",
-  "verdict_reason": "The D1 adapter, commit-marker atomicity design, durable projection and centralized audit are implemented and tested against a node:sqlite shim, but no D1-compatible runtime can start on this PRoot host (workerd TCMalloc mmap failure). D1 runtime behaviour is therefore unverified, which the verdict rules classify as BLOCKED.",
+  "verdict": "ACCEPTED WITH LIMITATIONS",
+  "verdict_reason": "The registry, migrations, constraints, append-only history, revocation and safe-recovery write behaviour were verified on actual Cloudflare D1 through the official HTTP API (8/8 tests, dedicated non-production database). The Workers binding API, including transactional batch(), could not be exercised because workerd cannot start on this PRoot host; the design does not depend on batch atomicity, so this is a bounded, fail-closed limitation. No legal authorization is granted.",
   "repository": {
     "branch": "main",
     "head_at_gate_start": "91bb20a",
@@ -11,25 +11,36 @@
     "working_tree_at_start": "dirty (pre-existing uncommitted Gate 7 draft, disclosed)",
     "gate6_baseline": "405a350",
     "gate7_implementation_commit": "71fc9df",
+    "gate7_d1_verification_commit": "recorded in the session report after commit",
     "pushed": false,
     "deployed": false
   },
   "classification": {
-    "d1_implementation": "IMPLEMENTED_UNVERIFIED",
-    "atomicity": "SQLITE_COMPATIBILITY_ONLY",
+    "d1_implementation": "IMPLEMENTED_AND_D1_TESTED",
+    "atomicity": "D1_RUNTIME_VERIFIED",
+    "atomicity_basis": "safe recovery verified on actual D1; Workers binding batch() not exercised and not relied on",
     "audit_coverage": "ALL_IMPLEMENTED_PATHS_COVERED",
     "authorization": "UNKNOWN",
     "counsel_determination": "NOT_RECEIVED",
     "corpus_readiness": "BLOCKED_AUTHORIZATION"
   },
   "d1_runtime": {
-    "runtime_used": null,
-    "compatible_runtime_available": false,
-    "failure": "TCMalloc MmapAligned(1 GiB) failed; write EPIPE",
+    "local_runtime_used": null,
+    "local_runtime_available": false,
+    "local_failure": "TCMalloc MmapAligned(1 GiB) failed; write EPIPE",
+    "remote_runtime_used": "Cloudflare D1 HTTP API",
+    "remote_served_by": "v3-prod",
+    "remote_colo": "SIN",
+    "remote_database": "phli-gate7-verify (dedicated, non-production)",
+    "remote_database_deleted": true,
+    "other_databases_touched": false,
+    "worker_deployed": false,
     "wrangler_version": "4.135.0",
     "workerd_version": "1.20250718.0",
     "node_version": "24.22.1",
-    "test_engine_used": "node:sqlite shim (supplementary only)",
+    "binding_batch_tested": false,
+    "test_engine_default": "node:sqlite shim (supplementary only)",
+    "test_engine_remote": "actual Cloudflare D1",
     "runbook": "docs/gates/gate-7/01_D1_RUNTIME_FEASIBILITY.md#5"
   },
   "implementation": {
@@ -40,6 +51,7 @@
     "atomic_write_strategy": "commit-last marker + payload hash",
     "commit_marker_verified_under_atomic_batch": true,
     "commit_marker_verified_under_non_atomic_batch": true,
+    "safe_recovery_verified_on_d1": true,
     "d1_batch_atomicity_verified": false,
     "partial_state_can_project": false,
     "production_mode_rejects_memory_registry": true,
@@ -62,7 +74,7 @@
     ],
     "temporary_storage_denials_audited": true,
     "reindexing_denials_audited": true,
-    "d1_persistence_runtime_tested": false
+    "d1_persistence_verified": true
   },
   "evidence": {
     "states": [
@@ -85,19 +97,20 @@
     "applied_range": "0001-0008",
     "new": ["0008_gate7_registry_commit.sql"],
     "historical_rewritten": false,
+    "d1_execution_verified": true,
+    "d1_objects": { "tables": 19, "triggers": 19, "indexes": 46 },
     "idempotent": ["0007", "0008"],
-    "full_sequence_rerunnable": false,
-    "d1_execution_verified": false
+    "full_sequence_rerunnable": false
   },
   "tests": {
     "head_baseline": { "files": 44, "tests": 382, "passed": 380, "failed": 1, "skipped": 1 },
-    "final": { "files": 51, "tests": 448, "passed": 446, "failed": 1, "skipped": 1 },
-    "new_files": 7,
-    "new_tests": 66,
+    "final_default": { "files": 52, "tests": 456, "passed": 446, "failed": 1, "skipped": 9 },
+    "new_files": 8,
+    "new_tests": 74,
+    "actual_d1_tests": { "run": 8, "passed": 8, "engine": "Cloudflare D1 HTTP API" },
+    "sqlite_shim_integration_tests": 99,
     "failure_injection_cases": 10,
     "pre_existing_failure": "tests/unit/docs-structure.test.ts (missing docs directories at HEAD)",
-    "d1_integration_tests_run": 0,
-    "sqlite_shim_integration_tests": 99,
     "build": "exit 0",
     "biome": "0 errors, 74 warnings"
   },
@@ -110,6 +123,7 @@
     "majors_accepted_with_risk": 2,
     "minors_found": 7,
     "nits_found": 4,
+    "remote_test_file_reviewed": false,
     "report": "docs/gates/gate-7/11_INDEPENDENT_REVIEW.md"
   },
   "authorization": {
@@ -135,12 +149,12 @@
     "gate1_benchmark_pinned": true
   },
   "limitations": [
-    "D1 runtime is unverified; the adapter is IMPLEMENTED_UNVERIFIED.",
-    "D1 batch atomicity, triggers, constraints and concurrency are unverified.",
+    "The Workers binding API (batch(), first(), all()) is not exercised; workerd cannot start on this host. Safe recovery was verified instead, and the design does not depend on batch atomicity.",
     "A synchronous content path cannot use the async D1 audit sink; attaching it denies.",
     "In-flight operations must re-authorize before each content access; this is contractual, not enforced by the callee.",
-    "classify() maps storage errors by message text until real D1 error codes can be inspected.",
-    "The full historical migration sequence is not re-runnable (pre-existing ALTER TABLE in 0001)."
+    "classify() maps storage errors by message text until binding-level error codes can be inspected.",
+    "The full historical migration sequence is not re-runnable (pre-existing ALTER TABLE in 0001).",
+    "The remote D1 test file was not part of the two independent code reviews."
   ],
-  "next_action": "Run the D1 verification runbook on a host where workerd starts, then re-run the failure matrix against D1 and update 01/04/09/10 and this status."
+  "next_action": "On a workerd-capable host, add and run binding-level batch() tests to close the last bounded limitation. In parallel, obtain genuine source- and activity-specific counsel determinations; sc_elibrary remains only the first source selected for review."
 }

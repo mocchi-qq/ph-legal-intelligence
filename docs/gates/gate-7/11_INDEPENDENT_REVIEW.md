@@ -73,13 +73,22 @@ exists. New regression test asserts the denial.
 | Missing audit service    | denied                                                          |
 | Migration re-run         | 0007/0008 idempotent; full history not re-runnable (documented) |
 
+## Verification added after the reviews
+
+`tests/integration/gate7-d1-remote.test.ts` and the remote execution in `01` were
+added after both reviews closed. They are test-only and do not change the reviewed
+production code paths, but they are **not covered by the two independent
+reviews**. This is recorded in `gate-7-status.json` rather than implied.
+
 ## Remaining risk (not remediable in this gate)
 
-1. **D1 runtime is unverified.** This is the reason for the `BLOCKED` verdict. No
-   amount of SQLite evidence substitutes for it.
-2. Real D1 concurrency and retry semantics.
-3. `classify()` depends on error text until real error codes can be inspected.
-4. A caller that ignores `allowed: false` is outside the gate's enforcement.
-5. The audit service is optional in signatures; at runtime absence denies, but a
+1. **Workers binding `batch()` is unverified.** Actual D1 was verified through the
+   HTTP API with sequential statements; safe recovery is proven, batch atomicity
+   is not, and the design does not rely on it.
+2. `classify()` depends on error text until binding-level error codes can be
+   inspected.
+3. A caller that ignores `allowed: false` is outside the gate's enforcement.
+4. The audit service is optional in signatures; at runtime absence denies, but a
    future caller could still forget to pass it and then see a denial rather than a
    grant — safe, but operationally noisy.
+5. The remote test file was not independently reviewed.

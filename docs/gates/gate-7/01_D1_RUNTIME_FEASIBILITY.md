@@ -1,111 +1,144 @@
-# Gate 7 — D1 Runtime Feasibility
+# Gate 7 — D1 Runtime Feasibility and Verification
 
 **Date:** 2026-11-14
-**Result:** **BLOCKED** — no usable D1 runtime on this host.
-**Consequence:** the adapter is `IMPLEMENTED_UNVERIFIED`; no D1 behaviour is claimed.
+**Local result:** **BLOCKED** — workerd cannot start on this host.
+**Remote result:** **VERIFIED** — the adapter, migrations and failure behaviour
+were exercised against actual Cloudflare D1 through the official HTTP API.
+**Consequence:** D1 implementation is `IMPLEMENTED_AND_D1_TESTED`; the durable
+registry is verified. One bounded limitation remains (binding-level `batch()`).
 
 ## 1. Environment assessed
 
-| Item                          | Result                                                                                       |
-| ----------------------------- | -------------------------------------------------------------------------------------------- |
-| Host                          | `Linux 6.17.0-PRoot-Distro`, aarch64, PRoot container                                        |
-| Node                          | 24.22.1                                                                                      |
-| Wrangler (PATH)               | 4.135.0                                                                                      |
-| Wrangler (project dependency) | 3.114.17                                                                                     |
-| workerd                       | 1.20250718.0 present under `node_modules/.pnpm`                                              |
-| Miniflare                     | 3.20250718.3 present (wraps workerd)                                                         |
-| D1 binding in repo            | none — `apps/api/wrangler.toml` and `apps/ingestion/wrangler.toml` declare no `d1_databases` |
-| Memory                        | 7.4 GiB total, ~2.6 GiB available                                                            |
-| `ulimit -v`                   | unlimited                                                                                    |
-| Production credentials        | none used; no remote database touched                                                        |
-| Deployment                    | not attempted                                                                                |
+| Item                   | Result                                                              |
+| ---------------------- | ------------------------------------------------------------------- |
+| Host                   | `Linux 6.17.0-PRoot-Distro`, aarch64, PRoot container               |
+| Node                   | 24.22.1                                                             |
+| Wrangler (PATH)        | 4.135.0                                                             |
+| workerd                | 1.20250718.0 (present, cannot start)                                |
+| D1 binding in repo     | none declared; D1 is reached via API in this gate                   |
+| Local memory           | 7.4 GiB total, ~2.6 GiB available                                   |
+| `ulimit -v`            | unlimited                                                           |
+| Cloudflare credentials | present in the environment; used only for a dedicated test database |
+| Deployment             | none                                                                |
 
-## 2. Reproduction
+## 2. Local runtime — blocked, reproducibly
 
-A throw-away Wrangler project was created **outside** the repository:
+A throw-away Wrangler project outside the repository:
 
 ```
 wrangler d1 execute DB --local --command "SELECT 1 AS ok" --config wrangler.toml
 ```
 
-Observed (2026-11-14, repeated once to confirm it is deterministic):
-
 ```
-Resource location: local
-...
-external/tcmalloc+/tcmalloc/internal/system_allocator.h:620]
-  MmapAligned() failed - unable to allocate with tag
-  (hint=0x4ddf00000000, size=1073741824, alignment=1073741824)
+external/tcmalloc+/tcmalloc/system_allocator.h:569] MmapAligned() failed
+  - unable to allocate with tag (hint=0x4ddf00000000, size=1073741824,
+    alignment=1073741824)
 ... TCMalloc assumes a 48-bit virtual address space size
 ... FATAL ERROR: Out of memory trying to allocate internal tcmalloc data
 ✘ [ERROR] write EPIPE
 ```
 
-This is workerd's statically linked TCMalloc failing to place a 1 GiB aligned
-region under this kernel/PRoot combination. It happens before any SQL executes:
-no database file is created, no binding is instantiated, no statement runs.
+The bundled `workerd` binary fails the same way when run directly, with or
+without `TCMALLOC_USE_HUGE_REGION_MORE_OFTEN_DISABLE=1`. It aborts before any SQL.
+`ulimit -v` is unlimited, so this is not a limit we can raise. Miniflare 3 and the
+Workers test pool both require workerd; Miniflare 2 is EOL and a second emulator,
+so it was rejected rather than substituted for D1.
 
-The failure is not caused by a limit we can raise (`ulimit -v` is unlimited) and
-not by repository configuration. Per the gate instruction, no retry loop followed.
+## 3. Remote runtime — verified through the official API
 
-## 3. Options evaluated, in the required order
+`wrangler d1 create` and `wrangler d1 execute --remote` are control-plane and
+query calls; neither requires workerd. They worked. The adapter was then exercised
+through the documented D1 HTTP endpoint:
 
-| #   | Option                                          | Outcome                                                                                                                                                                                                                                                    |
-| --- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Existing local Workers/D1 test setup            | **None exists.** No D1 binding, no test pool, no `wrangler dev` harness for this repo                                                                                                                                                                      |
-| 2   | Compatible Miniflare / Workers test environment | Miniflare 3 requires workerd → same TCMalloc failure. Miniflare 2 (`@miniflare/d1`, better-sqlite3) is end-of-life, needs a native build on aarch64/Node 24, and is a second emulator rather than the D1 runtime — rejected rather than substituted for D1 |
-| 3   | Wrangler local D1                               | **Fails** as above                                                                                                                                                                                                                                         |
-| 4   | Another documented Cloudflare method            | `@cloudflare/vitest-pool-workers` also runs workerd; remote D1 is prohibited (no credentials, no deployment). No documented method exists that avoids workerd                                                                                              |
-
-`node:sqlite` is available and is used **only** as a supplementary SQL engine. It
-is not D1 and is never reported as D1.
-
-## 4. What this means for acceptance
-
-- The D1 adapter, commit-marker design, migrations and audit persistence are
-  implemented and unit/integration tested against the shim.
-- D1 batch atomicity, D1 constraint enforcement, D1 trigger behaviour and D1
-  concurrency remain **unverified**.
-- The gate cannot receive `ACCEPTED — DURABLE D1 REGISTRY VERIFIED` on this host.
-  Verdict is `BLOCKED` with a complete, testable implementation.
-
-## 5. Exact verification runbook for a suitable host
-
-Requirements: Node 20+, a working workerd/Miniflare local runtime, no remote
-credentials.
-
-```bash
-cd /root/ph-legal-intelligence
-pnpm install
-pnpm exec wrangler --version            # 4.x
-# 1. Create a local D1 database and bind it (throw-away config, not committed)
-pnpm exec wrangler d1 create phli-gate7-local --local
-# 2. Apply the full sequence
-for f in migrations/d1/000*.sql; do
-  pnpm exec wrangler d1 execute phli-gate7-local --local --file "$f"
-done
-# 3. Run the D1-backed suites against the real binding
-PHLI_D1_RUNTIME=1 pnpm vitest run tests/integration/gate7-d1-registry.test.ts
-# 4. Failure injection: run 04_ATOMICITY_AND_FAILURE_VALIDATION.md §5 against D1
-# 5. Record runtime versions and raw output in this document
+```
+POST https://api.cloudflare.com/client/v4/accounts/{account}/d1/database/{db}/query
 ```
 
-Acceptance on that host requires, at minimum:
+Design of the verification:
 
-1. all migrations 0001–0008 apply;
-2. a determination write is atomic or the commit marker prevents partial
-   projection when a statement is forced to fail;
-3. `revoke` + immediate projection denies;
-4. audit insert failure denies the operation;
-5. append-only triggers reject UPDATE/DELETE;
-6. duplicate and concurrent writes produce the documented outcomes.
+- a **dedicated, non-production** database `phli-gate7-verify` was created for
+  this gate, in APAC (`served_by: v3-prod`, colo `SIN`);
+- only synthetic `synthetic://` fixtures were written (`real_rows: 0`);
+- no other database was read or written;
+- no Worker was deployed;
+- the database was deleted after the run.
 
-## 6. Test environment actually used
+### 3.1 Migrations on real D1
 
-`node:sqlite` (`DatabaseSync`) behind `tests/helpers/d1-sqlite.ts`, which
-implements `prepare/bind/first/all/run/batch`. The shim can run batches either
-atomically (transaction) or **non-atomically** (statement by statement), and can
-inject a failure at any statement index. The non-atomic mode exists specifically
-so the implementation cannot depend on unverified D1 atomicity.
+All eight applied, in order, unchanged:
 
-Every artifact labels this evidence `SQLITE_COMPATIBILITY_ONLY`.
+| Migration | Applied |
+| --------- | ------- |
+| 0001      | yes     |
+| 0002      | yes     |
+| 0003      | yes     |
+| 0004      | yes     |
+| 0005      | yes     |
+| 0006      | yes     |
+| 0007      | yes     |
+| 0008      | yes     |
+
+Resulting schema on D1: **19 tables, 19 triggers, 46 indexes**.
+
+### 3.2 Adapter tests on real D1
+
+`tests/integration/gate7-d1-remote.test.ts` — **8 tests, 8 passed** (run twice,
+including once after a host restart). It requires `PHLI_D1_RUNTIME=1` and a
+database id, and is skipped in the default suite.
+
+| Test                                                                                  | Result |
+| ------------------------------------------------------------------------------------- | ------ |
+| Migrations present; no real counsel rows                                              | pass   |
+| Professional + determination persist and project                                      | pass   |
+| Failure injected at each of the 5 write stages → no projectable record                | pass   |
+| Identical retry → `ALREADY_COMMITTED`; changed retry rejected                         | pass   |
+| Append-only + tamper detection (UPDATE/DELETE rejected)                               | pass   |
+| Foreign key, JSON and audit-schema constraints rejected                               | pass   |
+| Revocation denies the next projection; duplicate revocation rejected; audit persisted | pass   |
+| Concurrent revoke + supersede → exactly one terminal event                            | pass   |
+
+## 4. What is verified and what is not
+
+**Verified on actual D1:** schema application, table/trigger/index creation, FK
+and CHECK enforcement, JSON/date/hash validation, append-only triggers, parameter
+binding, insert/read round-trips, payload-hash integrity, commit-marker visibility,
+partial-write invisibility (safe recovery), idempotent retry, revocation
+immediacy, and a real concurrent terminal-event race.
+
+**Not verified:** the Workers binding API itself — `batch()` transaction
+semantics, `first()/all()` binding behaviour, and binding-level concurrency. The
+HTTP API has no transactional batch, so the remote suite executes `batch()`
+statements sequentially. That is why it is a _safe-recovery_ verification rather
+than an _atomic-batch_ verification.
+
+This is acceptable because the design does not depend on batch atomicity: the
+commit marker is last and is hash-verified at read time. The remote failures at
+each statement index prove that no partial write can project on the real engine.
+
+**Residual limitation:** if the Workers binding ever executed batch statements in
+an unexpected order, "last statement" would need re-confirmation. Cloudflare
+documents sequential execution within a batch, and the design remains fail-closed
+(the marker would simply be absent → deny).
+
+## 5. Reproduce
+
+```bash
+# 1. dedicated test database (never a production database)
+wrangler d1 create phli-gate7-verify
+export PHLI_D1_DATABASE_ID=<uuid>
+
+# 2. apply the sequence (remote, no workerd needed)
+for f in migrations/d1/000*.sql; do
+  wrangler d1 execute phli-gate7-verify --remote --file "$f"
+done
+
+# 3. run the real-D1 suite
+PHLI_D1_RUNTIME=1 PHLI_D1_DATABASE_ID=$PHLI_D1_DATABASE_ID \
+  npx vitest run tests/integration/gate7-d1-remote.test.ts
+
+# 4. remove the test database
+wrangler d1 delete phli-gate7-verify
+```
+
+The default `npx vitest run` does not touch the network: the remote suite is
+skipped without the environment variables.

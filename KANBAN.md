@@ -193,24 +193,24 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 # Gate 7 — Durable D1 Counsel Registry and Atomic Authorization Decisions
 
-**Verdict: BLOCKED (D1 runtime unavailable on this host). Implementation commit `71fc9df`.**
+**Verdict: ACCEPTED WITH LIMITATIONS (verified on actual D1; binding batch untested). Implementation commit `71fc9df`.**
 
 **Counsel determinations: 0. All 350 enforcement cells remain UNKNOWN. Four pilot documents remain BLOCKED_AUTHORIZATION.**
 
-| ID   | Task                                    | Status                          | Evidence                                                         |
-| ---- | --------------------------------------- | ------------------------------- | ---------------------------------------------------------------- |
-| G7-A | Baseline + plan                         | VERIFIED (dirty tree disclosed) | `00_BASELINE_AND_PLAN.md`                                        |
-| G7-B | Bounded D1 runtime feasibility          | BLOCKED (host)                  | `01_D1_RUNTIME_FEASIBILITY.md`; workerd TCMalloc OOM             |
-| G7-C | Repository contract + shared projection | VERIFIED                        | `02_…`, `counsel-registry.ts`, `counsel-projection.ts`           |
-| G7-D | D1 adapter + commit marker              | IMPLEMENTED_UNVERIFIED          | `03_…`, `counsel-d1-store.ts`, migration 0008                    |
-| G7-E | Atomicity + failure injection           | SQLITE_COMPATIBILITY_ONLY       | `04_…`; 10 injected-failure cases, atomic and non-atomic         |
-| G7-F | Idempotency + concurrency               | VERIFIED (shim)                 | `05_…`; 4 constraint-backed retry/race tests                     |
-| G7-G | Central audit + fail-closed fix         | VERIFIED (shim)                 | `06_…`, `audit-coverage.json`                                    |
-| G7-H | Durable projection + no fallback        | VERIFIED (shim)                 | `07_…`; PRODUCTION_D1 rejects in-memory registry                 |
-| G7-I | Evidence metadata/availability          | VERIFIED (no store)             | `08_…`, `evidence.ts`                                            |
-| G7-J | Migration validation 0001–0008          | SQLITE_COMPATIBILITY_ONLY       | `09_…`; 7 migration tests                                        |
-| G7-K | Test + regression report                | VERIFIED                        | `10_…`; 448 tests, 446 pass, 1 pre-existing fail, 1 skip; 66 new |
-| G7-L | Two independent reviews + remediation   | IN REVIEW                       | `11_…`                                                           |
-| G7-M | Final status + decision                 | PENDING                         | `12_…`, `gate-7-status.json`, `DECISION.md`                      |
-| G7-N | Actual D1 runtime acceptance            | BLOCKED (host)                  | Runbook in `01_…` §5                                             |
-| G7-O | Counsel determination                   | BLOCKED (external)              | 0 received                                                       |
+| ID   | Task                                    | Status                              | Evidence                                                                        |
+| ---- | --------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------- |
+| G7-A | Baseline + plan                         | VERIFIED (dirty tree disclosed)     | `00_BASELINE_AND_PLAN.md`                                                       |
+| G7-B | Bounded D1 runtime feasibility          | VERIFIED (remote; local blocked)    | `01_D1_RUNTIME_FEASIBILITY.md`; workerd TCMalloc OOM                            |
+| G7-C | Repository contract + shared projection | VERIFIED                            | `02_…`, `counsel-registry.ts`, `counsel-projection.ts`                          |
+| G7-D | D1 adapter + commit marker              | IMPLEMENTED_AND_D1_TESTED           | `03_…`, `counsel-d1-store.ts`, migration 0008                                   |
+| G7-E | Atomicity + failure injection           | D1_RUNTIME_VERIFIED (safe recovery) | `04_…`; 10 injected-failure cases, atomic and non-atomic                        |
+| G7-F | Idempotency + concurrency               | VERIFIED (shim)                     | `05_…`; 4 constraint-backed retry/race tests                                    |
+| G7-G | Central audit + fail-closed fix         | VERIFIED (shim)                     | `06_…`, `audit-coverage.json`                                                   |
+| G7-H | Durable projection + no fallback        | VERIFIED (shim)                     | `07_…`; PRODUCTION_D1 rejects in-memory registry                                |
+| G7-I | Evidence metadata/availability          | VERIFIED (no store)                 | `08_…`, `evidence.ts`                                                           |
+| G7-J | Migration validation 0001–0008          | SQLITE_COMPATIBILITY_ONLY           | `09_…`; 7 migration tests                                                       |
+| G7-K | Test + regression report                | VERIFIED                            | `10_…`; 456 tests, 446 pass, 1 pre-existing fail, 9 skip; 74 new (8 on real D1) |
+| G7-L | Two independent reviews + remediation   | IN REVIEW                           | `11_…`                                                                          |
+| G7-M | Final status + decision                 | PENDING                             | `12_…`, `gate-7-status.json`, `DECISION.md`                                     |
+| G7-N | Actual D1 runtime verification          | VERIFIED (8/8 on real D1)           | `01_…` §3; `tests/integration/gate7-d1-remote.test.ts`                          |
+| G7-O | Counsel determination                   | BLOCKED (external)                  | 0 received                                                                      |

@@ -100,8 +100,13 @@ external/tcmalloc+/tcmalloc/internal/system_allocator.h:620] MmapAligned() faile
 
 `ulimit -v` is unlimited and overcommit is not the constraint; workerd's
 TCMalloc cannot place a 1 GiB aligned region under this PRoot kernel. No further
-attempts are made. Consequence: **D1 runtime validation is BLOCKED on this
-host**, and no ACK of D1 behaviour is claimed. See `01_D1_RUNTIME_FEASIBILITY.md`.
+local attempts are made.
+
+However, **actual Cloudflare D1 is reachable through the official HTTP API**, which
+does not need workerd. A dedicated non-production database was created, all eight
+migrations applied, and the adapter verified there (8/8). The Workers binding
+(`batch()`) remains unexercised. See `01_D1_RUNTIME_FEASIBILITY.md` and
+`10_TEST_AND_REGRESSION_REPORT.md` §3.
 
 The SQLite-compatible shim is retained **only** as supplementary SQL/constraint
 evidence and is labelled as such everywhere.

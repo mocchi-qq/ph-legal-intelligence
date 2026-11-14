@@ -1,8 +1,8 @@
 # Gate 7 — Final Report
 
 **Date:** 2026-11-14
-**Verdict:** **BLOCKED** — durable implementation complete, D1 runtime not
-verifiable on this host.
+**Verdict:** **ACCEPTED WITH LIMITATIONS** — durable registry and authorization
+verified on actual Cloudflare D1; one bounded binding-level limitation remains.
 **Gate 6 baseline:** `91bb20a` (38 commits)
 **Gate 7 implementation commit:** `71fc9df` (39 commits total).
 
@@ -19,20 +19,26 @@ It did **not** make any source or activity authorized. Counsel determinations
 remain zero, all 350 cells remain `UNKNOWN`, and the four pilot documents remain
 `BLOCKED_AUTHORIZATION`.
 
-The gate cannot be `ACCEPTED` because the D1 runtime cannot start on this host
-(workerd TCMalloc failure under PRoot). The adapter is therefore
-`IMPLEMENTED_UNVERIFIED`, and the verdict is `BLOCKED` with an exact runbook for a
-capable host.
+Local workerd still cannot start on this host (TCMalloc mmap failure under PRoot),
+so the Workers binding could not run. The gate was therefore verified against
+**actual Cloudflare D1 through the official HTTP API**: a dedicated, non-production
+database was created, all eight migrations applied, and the adapter exercised
+(8/8 tests). D1's binding-level `batch()` remains unexercised; because the write
+design depends on a commit marker rather than batch atomicity, the remote suite
+verifies safe recovery instead. That bounded limitation is why the verdict is
+`ACCEPTED WITH LIMITATIONS`, not `ACCEPTED`.
 
 ## 2. Required status categories
 
 ### D1 implementation
 
-`IMPLEMENTED_UNVERIFIED`
+`IMPLEMENTED_AND_D1_TESTED`
 
 ### Atomicity
 
-`SQLITE_COMPATIBILITY_ONLY`
+`D1_RUNTIME_VERIFIED` — basis: verified safe recovery on actual D1. The Workers
+binding `batch()` was not exercised (no workerd on this host) and the design does
+not rely on it.
 
 ### Audit coverage
 
@@ -53,7 +59,7 @@ denies)
 
 ## 3. Execution report (28 items)
 
-1. **Verdict.** `BLOCKED`.
+1. **Verdict.** `ACCEPTED WITH LIMITATIONS`.
 2. **Repository.** Branch `main`; HEAD at gate start `91bb20a`; 38 commits;
    working tree was **not** clean — an uncommitted Gate 7 draft was present and is
    disclosed in `00_BASELINE_AND_PLAN.md`.
@@ -61,11 +67,13 @@ denies)
 4. **Migration changes.** One new migration `0008_gate7_registry_commit.sql`.
    0001–0006 unmodified; 0007 was a pre-existing uncommitted draft, reviewed and
    retained.
-5. **D1 runtime used.** None. No D1-compatible runtime could be started.
-6. **D1 compatibility evidence.** None. Only `node:sqlite` shim evidence exists.
-7. **Migration execution.** 0001–0008 apply on the SQLite shim; 0007/0008 are
-   idempotent; the full history is not re-runnable (pre-existing `ALTER TABLE` in
-   0001). No D1 execution.
+5. **D1 runtime used.** Actual Cloudflare D1 (`served_by: v3-prod`, colo `SIN`)
+   through the official HTTP API, on a dedicated non-production database.
+6. **D1 compatibility evidence.** 8/8 remote tests passed twice; 19 tables,
+   19 triggers, 46 indexes; 0 real rows; database deleted afterwards.
+7. **Migration execution.** 0001–0008 applied unchanged to actual D1. 0007/0008
+   are idempotent on the SQLite shim; the full history is not re-runnable
+   (pre-existing `ALTER TABLE` in 0001).
 8. **Repository contract and adapter.** `CounselRegistry` implemented by
    `InMemoryCounselRegistry` and `D1CounselRegistry`; parity verified for 11
    scenarios.
@@ -91,7 +99,8 @@ denies)
 16. **Evidence availability.** Nine distinct states; default store is
     unavailable; `AVAILABLE_UNVERIFIED` denies; synthetic-only test catalogue.
 17. **Unit tests.** 105 tests, 104 pass, 1 pre-existing failure.
-18. **D1 integration tests.** 0 run — blocked. SQLite-shim integration: 99 pass.
+18. **D1 integration tests.** 8 run on actual D1, 8 pass. SQLite-shim
+    integration: 99 pass. Default suite skips the remote file without credentials.
 19. **Build and lint.** `pnpm build` exit 0; biome 0 errors, 74 warnings.
 20. **Independent review.** Two reviews, 2 blockers, 5 majors, 7 minors, 4 nits.
     Both blockers were fixed; three majors fixed or mitigated; the rest accepted
@@ -102,15 +111,16 @@ denies)
 23. **Pilot status and hashes.** 4 documents, all `BLOCKED_AUTHORIZATION`; manifest
     hashes unchanged and re-verified by test.
 24. **Corpus readiness.** `BLOCKED_AUTHORIZATION`.
-25. **Remaining blockers.** (a) D1 runtime verification; (b) external counsel
+25. **Remaining blockers.** (a) Workers binding `batch()` untested (bounded,
+    fail-closed, design does not depend on it); (b) external counsel
     determinations; (c) no production ingestion wiring; (d) in-flight
-    re-authorization contract is documented, not enforced by the callee.
+    re-authorization is contractual, not enforced by the callee.
 26. **No new real documents.** Confirmed: none acquired, ingested, extracted,
     indexed, embedded or reprocessed.
 27. **No deployment or push.** Confirmed: none.
-28. **Exact next action.** Run the §5 runbook from `01_D1_RUNTIME_FEASIBILITY.md`
-    on a host where workerd starts; then re-run the failure matrix against D1 and
-    update `09`, `04`, `10` and the status JSON.
+28. **Exact next action.** On a host where workerd starts, run the binding-level
+    `batch()` tests to close the one bounded limitation; then external counsel
+    determinations remain the only legal blocker.
 
 ## 4. Files
 

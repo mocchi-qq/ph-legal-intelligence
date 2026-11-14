@@ -2,7 +2,8 @@
 
 **Date:** 2026-11-14
 **Command:** `npx vitest run`
-**Engine for D1-shaped tests:** `node:sqlite` shim — supplementary, not D1.
+**Engines:** actual Cloudflare D1 (remote suite) and `node:sqlite` shim
+(supplementary).
 
 ## 1. Headline counts, separated by evidence class
 
@@ -23,9 +24,9 @@ deliberately separate.
 No existing test file changed its test count. The delta is exactly the seven new
 files: 382 → 448.
 
-**D1 integration tests:** none passed, because none could run. D1 runtime is
-`BLOCKED`. The 99 integration tests run on the SQLite shim and are labelled
-`SQLITE_COMPATIBILITY_ONLY`.
+**D1 integration tests:** 8 run against actual Cloudflare D1, 8 passed. The file
+is skipped in the default suite because it needs credentials and a test database.
+The 99 SQLite-shim integration tests remain supplementary evidence.
 
 ## 2. Gate 7 new tests
 
@@ -39,7 +40,24 @@ files: 382 → 448.
 | `tests/legal-data/authorization-audit.test.ts`     | 7     | acquisition/ingest/temp-storage/reindex grant + denial, audit failure denies                                                                                                                                       |
 | `tests/regression/gate7-invariants.test.ts`        | 6     | 350 cells, empty registry, pilot hashes, no new documents, benchmark pin, no evidence store                                                                                                                        |
 
-## 3. Failure-injection detail
+## 3. Actual D1 tests
+
+Run with `PHLI_D1_RUNTIME=1` against the dedicated database described in `01`.
+`batch()` is executed sequentially over the HTTP API, i.e. deliberately
+non-atomic. Result: **8/8 passed**, twice (including after a host restart).
+
+| Test                                                        | Result |
+| ----------------------------------------------------------- | ------ |
+| Migrations present; no real counsel rows                    | pass   |
+| Professional + determination persist and project            | pass   |
+| Failure at each of 5 write stages → no projectable record   | pass   |
+| Identical retry `ALREADY_COMMITTED`; changed retry rejected | pass   |
+| Append-only and tamper detection                            | pass   |
+| FK / JSON / audit-schema constraints                        | pass   |
+| Revocation denies next projection; audit persisted          | pass   |
+| Concurrent revoke + supersede → one terminal event          | pass   |
+
+## 4. Failure-injection detail
 
 `gate7-d1-registry.test.ts` injects a failure at each of the 5 statements of a
 determination write, under **two** batch semantics:
@@ -49,10 +67,11 @@ determination write, under **two** batch semantics:
 | Atomic batch (transaction) | 5     | rollback; nothing recorded; projection denies                                              |
 | Non-atomic batch           | 5     | partial rows may remain; **no commit marker**; projection denies; incomplete id observable |
 
-10 injected-failure cases. Every one asserts `getDetermination === null`,
-`loadState().determinations.length === 0` and `projectFromState().allowed === false`.
+10 injected-failure cases on the shim, plus the same 5-stage matrix on actual D1.
+Every one asserts `getDetermination === null`, `loadState().determinations.length
+=== 0` and `projectFromState().allowed === false`.
 
-## 4. Regression invariants (all pass)
+## 5. Regression invariants (all pass)
 
 - 25 sources × 14 activities = 350 cells; every `authorization_status` is
   `UNKNOWN`.
@@ -66,7 +85,7 @@ determination write, under **two** batch semantics:
 - No `legal-data/counsel`, `legal-data/evidence`, `.wrangler/state` or
   `counsel.sqlite` exists.
 
-## 5. Pre-existing failure (not caused by Gate 7)
+## 6. Pre-existing failure (not caused by Gate 7)
 
 ```
 tests/unit/docs-structure.test.ts > has all required doc directories
@@ -79,16 +98,16 @@ Verified by stashing all Gate 7 work and running the suite at HEAD `91bb20a`:
 "381 passed" was therefore inaccurate. The failure is disclosed, not masked, and
 not fixed inside Gate 7 to avoid unrelated scope changes.
 
-## 6. Build and lint
+## 7. Build and lint
 
 | Check               | Result                                               |
 | ------------------- | ---------------------------------------------------- |
 | `pnpm build`        | exit 0 (all packages and apps typecheck)             |
 | `npx biome check .` | 0 errors, 74 warnings (pre-existing warning classes) |
 
-## 7. What the tests do not prove
+## 8. What the tests do not prove
 
-- D1 batch atomicity, D1 trigger behaviour, D1 constraint enforcement.
-- Real D1 concurrency.
+- Workers binding `batch()` atomicity (the HTTP API has no transactional batch).
+- Binding-level `first()`/`all()` behaviour.
 - That any real counsel determination exists or authorizes anything.
 - That any pilot document is ready for ingestion.

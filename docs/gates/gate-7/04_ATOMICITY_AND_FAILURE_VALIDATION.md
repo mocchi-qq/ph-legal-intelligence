@@ -2,7 +2,8 @@
 
 **Date:** 2026-11-14
 **Result:** design safe under atomic **and** non-atomic batch execution.
-**D1 runtime:** not tested (`BLOCKED`); evidence is `SQLITE_COMPATIBILITY_ONLY`.
+**D1 runtime:** **verified for safe recovery** on actual D1 (see §8); local workerd
+remains blocked.
 
 ## 1. Why this is not a D1 atomicity claim
 
@@ -94,6 +95,24 @@ statement 1, which writes nothing).
 
 If D1 executes batch statements concurrently rather than in order, "last" would
 not be an ordering guarantee. D1's documented behaviour is sequential within a
-batch, but this is **not verified here**. On a D1-capable host the failure matrix
-above must be re-run before any stronger verdict. Until then the marker design is
-the strongest safe option available, and the verdict cannot be `ACCEPTED`.
+batch. The HTTP API cannot issue a transactional batch, so the binding-level
+`batch()` path is still unexercised; the design does not depend on it.
+
+## 8. Actual D1 verification
+
+`tests/integration/gate7-d1-remote.test.ts` ran against real D1 through the
+official HTTP API, with `batch()` executed sequentially (i.e. deliberately
+non-atomic). Results: **8/8 passed**.
+
+The injected-failure test repeats the matrix from §5 against the real engine:
+for every statement index 1–5 the write fails, `getDetermination` returns `null`,
+`loadState` returns no determinations, and `listIncompleteDeterminations` shows the
+partial row for indices 2–5. This is the safe-recovery property, verified on D1
+rather than inferred from SQLite.
+
+Verified on D1: commit-marker invisibility, payload-hash integrity, append-only
+triggers, idempotent retry, revocation immediacy, and a concurrent
+revoke/supersede race producing exactly one terminal event.
+
+Not verified on D1: Workers binding `batch()` atomicity. The residual risk is
+bounded and fail-closed: if the marker were not written, projection denies.

@@ -1,7 +1,8 @@
 # Gate 7 — Migration and Compatibility Validation
 
 **Date:** 2026-11-14
-**Engine used:** `node:sqlite` (`DatabaseSync`) — **not D1**. Supplementary only.
+**Engines used:** actual Cloudflare D1 (HTTP API) and `node:sqlite` as a fast
+supplementary check.
 **Suite:** `tests/integration/gate7-migration.test.ts`
 
 ## 1. Sequence
@@ -59,6 +60,15 @@ sequence once; 0007 and 0008 are safe to re-run.
 
 ## 5. D1 acceptance status
 
-D1 runtime validation is **BLOCKED**. The exact commands to repeat this validation
-against a real local D1 binding are in `01_D1_RUNTIME_FEASIBILITY.md` §5. No claim
-of D1 migration compatibility is made.
+## 5. Actual D1 execution
+
+All eight migrations were applied, unchanged and in order, to a dedicated
+non-production D1 database (`phli-gate7-verify`, APAC). Result: **19 tables, 19
+triggers, 46 indexes**. The full constraint/trigger suite then ran against that
+database through the HTTP API and passed (see `01` and `10`).
+
+`wrangler d1 execute --remote` was used for the application; it does not require
+workerd. The database was deleted after verification.
+
+Local workerd remains blocked, so binding-level behaviour is still unverified.
+Reproduction commands are in `01_D1_RUNTIME_FEASIBILITY.md` §5.
