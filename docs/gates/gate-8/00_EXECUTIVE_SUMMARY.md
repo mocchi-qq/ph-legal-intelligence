@@ -4,6 +4,7 @@
 **Date:** 2026-11-14
 **Verdict:** **ACCEPTED WITH LIMITATIONS** (see `DECISION.md` for the final
 disposition and review findings).
+**Implementation commit:** `d8b5d0f`.
 **Evidence level:** synthetic unit/integration + SQLite-compatible schema.
 No real corpus, no counsel determinations, no deployment.
 

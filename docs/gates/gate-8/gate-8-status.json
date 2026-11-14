@@ -9,7 +9,7 @@
     "head_at_gate_start": "e948df5",
     "commits_at_gate_start": 44,
     "working_tree_at_start": "clean",
-    "gate8_commit": "recorded after commit",
+    "gate8_commit": "d8b5d0f",
     "pushed": false,
     "deployed": false
   },
@@ -45,10 +45,25 @@
     "existing_migrations_modified": false
   },
   "tests": {
-    "baseline": { "files": 52, "tests": 456, "passed": 446, "failed": 1, "skipped": 9 },
-    "final": { "files": 58, "tests": 558, "passed": 548, "failed": 1, "skipped": 9 },
+    "baseline": {
+      "files": 52,
+      "tests": 456,
+      "passed": 446,
+      "failed": 1,
+      "skipped": 9
+    },
+    "final": {
+      "files": 58,
+      "tests": 558,
+      "passed": 548,
+      "failed": 1,
+      "skipped": 9
+    },
     "gate8_tests": 102,
-    "authority_suite": { "files": 5, "tests": 96 },
+    "authority_suite": {
+      "files": 5,
+      "tests": 96
+    },
     "citation_integrity_tests": 6,
     "pre_existing_failure": "tests/unit/docs-structure.test.ts (missing docs directories at HEAD)",
     "build": "exit 0",
@@ -57,9 +72,28 @@
   },
   "reviews": {
     "count": 3,
-    "review_a": { "scope": "legal domain model", "blockers": 0, "majors": 0, "disposition": "minors fixed or documented" },
-    "review_b": { "scope": "data architecture and integrity", "blockers": 2, "majors": 10, "blockers_fixed": 2, "majors_fixed": 8, "majors_documented": 2 },
-    "review_c": { "scope": "citation and retrieval", "blockers": 4, "majors": 10, "blockers_fixed": 4, "majors_fixed": 8, "majors_documented": 2 },
+    "review_a": {
+      "scope": "legal domain model",
+      "blockers": 0,
+      "majors": 0,
+      "disposition": "minors fixed or documented"
+    },
+    "review_b": {
+      "scope": "data architecture and integrity",
+      "blockers": 2,
+      "majors": 10,
+      "blockers_fixed": 2,
+      "majors_fixed": 8,
+      "majors_documented": 2
+    },
+    "review_c": {
+      "scope": "citation and retrieval",
+      "blockers": 4,
+      "majors": 10,
+      "blockers_fixed": 4,
+      "majors_fixed": 8,
+      "majors_documented": 2
+    },
     "report": "docs/gates/gate-8/13_INDEPENDENT_REVIEW.md"
   },
   "limitations": [
@@ -93,5 +127,5 @@
     "deployment": false,
     "push": false
   },
-  "next_gate": "Gate 9 — Passage-Level Retrieval and Search Hardening (synthetic)"
+  "next_gate": "Gate 9 \u2014 Passage-Level Retrieval and Search Hardening (synthetic)"
 }
