@@ -105,11 +105,11 @@
     "count": 2,
     "blockers_found": 2,
     "blockers_fixed": 2,
-    "majors_found": 3,
-    "majors_fixed": 2,
-    "majors_accepted": 1,
-    "minors_found": 5,
-    "nits_found": 3,
+    "majors_found": 5,
+    "majors_fixed_or_mitigated": 3,
+    "majors_accepted_with_risk": 2,
+    "minors_found": 7,
+    "nits_found": 4,
     "report": "docs/gates/gate-7/11_INDEPENDENT_REVIEW.md"
   },
   "authorization": {

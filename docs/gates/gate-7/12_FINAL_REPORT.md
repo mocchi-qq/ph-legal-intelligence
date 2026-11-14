@@ -93,8 +93,9 @@ denies)
 17. **Unit tests.** 105 tests, 104 pass, 1 pre-existing failure.
 18. **D1 integration tests.** 0 run — blocked. SQLite-shim integration: 99 pass.
 19. **Build and lint.** `pnpm build` exit 0; biome 0 errors, 74 warnings.
-20. **Independent review.** Two reviews, 2 blockers, 3 majors, 5 minors, 3 nits.
-    Both blockers and three majors fixed; the rest accepted with recorded risk.
+20. **Independent review.** Two reviews, 2 blockers, 5 majors, 7 minors, 4 nits.
+    Both blockers were fixed; three majors fixed or mitigated; the rest accepted
+    with recorded risk.
 21. **Counsel determinations received.** 0.
 22. **Authorization cell counts.** 25 × 14 = 350; 0 authorized, 0 conditional, 0
     restricted, 0 prohibited; 350 `UNKNOWN`.
