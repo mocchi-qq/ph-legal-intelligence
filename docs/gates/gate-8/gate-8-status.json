@@ -1,0 +1,97 @@
+{
+  "gate": 8,
+  "title": "Philippine Legal Authority Core, Canonical Identity, Versioning, and Effects Ledger",
+  "date": "2026-11-14",
+  "verdict": "ACCEPTED WITH LIMITATIONS",
+  "verdict_reason": "The synthetic authority core (three planes, provision identity, append-only effects ledger, deterministic projection, temporal queries, citation resolver, additive migration) is implemented and tested, and all reviewer-identified blockers were fixed. Remaining gaps are bounded: mapping review is not operable, there is no D1 writer adapter or deterministic ledger ID, citation-verifier layer 4 is not wired, and the support proxy is negation-blind. No real corpus or counsel determination exists.",
+  "repository": {
+    "branch": "main",
+    "head_at_gate_start": "e948df5",
+    "commits_at_gate_start": 44,
+    "working_tree_at_start": "clean",
+    "gate8_commit": "recorded after commit",
+    "pushed": false,
+    "deployed": false
+  },
+  "classification": {
+    "document_identity": "EXISTING_EXTENDED",
+    "provision_identity": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "versioning": "EXISTING_MODEL_PLUS_APPEND_ONLY_TABLES",
+    "effects_ledger": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "authority_projection": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "temporal_queries": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "citation_parser_resolver": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "citation_verifier_integration": "NOT_IMPLEMENTED",
+    "d1_ledger_persistence": "SCHEMA_VALIDATED_SQLITE_ONLY",
+    "authorization": "UNKNOWN",
+    "counsel_determination": "NOT_RECEIVED",
+    "corpus_readiness": "BLOCKED_AUTHORIZATION"
+  },
+  "planes": {
+    "source_authorization": "unchanged Gate 4/5/7 registry; 350 cells UNKNOWN",
+    "document_identity_provenance": "existing LegalDocument/SourceManifestation/DocumentVersion + citation aliases",
+    "legal_effects": "new EffectAssertion/EffectEvidence/LegalEffectReview/AuthorityProjection"
+  },
+  "implementation": {
+    "types": "packages/legal-schema/src/authority.ts",
+    "ledger": "packages/legal-ingestion/src/authority-ledger.ts",
+    "projection": "packages/legal-ingestion/src/authority-projection.ts",
+    "temporal": "packages/legal-ingestion/src/temporal-query.ts",
+    "citation_resolver": "packages/legal-ingestion/src/citation-resolver.ts",
+    "migration": "migrations/d1/0009_authority_core.sql",
+    "tables": 7,
+    "append_only_triggers": 21,
+    "indexes": 13,
+    "existing_migrations_modified": false
+  },
+  "tests": {
+    "baseline": { "files": 52, "tests": 456, "passed": 446, "failed": 1, "skipped": 9 },
+    "final": { "files": 58, "tests": 558, "passed": 548, "failed": 1, "skipped": 9 },
+    "gate8_tests": 102,
+    "authority_suite": { "files": 5, "tests": 96 },
+    "citation_integrity_tests": 6,
+    "pre_existing_failure": "tests/unit/docs-structure.test.ts (missing docs directories at HEAD)",
+    "build": "exit 0",
+    "biome": "0 errors, 77 warnings",
+    "performance": "500 assertions, 200 projections in 176.6 ms (~0.88 ms/projection), synthetic in-memory"
+  },
+  "reviews": {
+    "count": 3,
+    "review_a": { "scope": "legal domain model", "blockers": 0, "majors": 0, "disposition": "minors fixed or documented" },
+    "review_b": { "scope": "data architecture and integrity", "blockers": 2, "majors": 10, "blockers_fixed": 2, "majors_fixed": 8, "majors_documented": 2 },
+    "review_c": { "scope": "citation and retrieval", "blockers": 4, "majors": 10, "blockers_fixed": 4, "majors_fixed": 8, "majors_documented": 2 },
+    "report": "docs/gates/gate-8/13_INDEPENDENT_REVIEW.md"
+  },
+  "limitations": [
+    "Provision-version mappings cannot be reviewed/corrected under the current UNIQUE + append-only design; projection does not consume mappings.",
+    "No D1 ledger writer adapter; ids are caller-supplied, so content-level replay idempotency is not implemented.",
+    "Citation-verifier layer 4 is a documented contract, not wired to the authority projection.",
+    "The support proxy is lexical and negation-blind; it is not entailment.",
+    "The SYNTH-* convention remains in the parser for synthetic fixtures.",
+    "Existing document/version tables are not append-only at the database level (Gate 1 design)."
+  ],
+  "authorization": {
+    "sources": 25,
+    "activities": 14,
+    "cells": 350,
+    "unknown": 350,
+    "counsel_determinations_received": 0,
+    "pilot_documents": 4,
+    "pilot_blocked_authorization": 4,
+    "first_source_selected_for_review": "sc_elibrary",
+    "selection_is_authorization": false
+  },
+  "corpus": {
+    "new_documents_acquired": 0,
+    "new_documents_processed": 0,
+    "pilot_documents_reprocessed": false,
+    "real_legal_text_ingested": false
+  },
+  "boundaries": {
+    "new_source_authorization_decisions": 0,
+    "new_counsel_determinations": 0,
+    "deployment": false,
+    "push": false
+  },
+  "next_gate": "Gate 9 — Passage-Level Retrieval and Search Hardening (synthetic)"
+}

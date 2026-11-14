@@ -241,3 +241,24 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | RG-N | Two independent reviews                            | IN REVIEW                | `DECISION.md`                                       |
 | RG-O | Research verdict and final response                | PENDING                  | `DECISION.md`                                       |
 | RG-P | Real counsel determinations                        | BLOCKED (external)       | 0 received — research cannot clear this             |
+
+---
+
+# Gate 8 — Philippine Legal Authority Core, Identity, Versioning, Effects Ledger
+
+**Synthetic-only engineering gate. Counsel determinations: 0. All 350 authorization cells remain UNKNOWN. Four pilot documents remain BLOCKED_AUTHORIZATION.**
+
+| ID   | Task                                 | Status         | Evidence                                            |
+| ---- | ------------------------------------ | -------------- | --------------------------------------------------- |
+| G8-A | Baseline + capability reconciliation | DONE           | `docs/gates/gate-8/01_…`; HEAD `e948df5`, 456 tests |
+| G8-B | Authority domain types               | IN PROGRESS    | `packages/legal-schema/src/authority.ts`            |
+| G8-C | Provision identity + mappings        | BLOCKED ON B   | `authority-ledger.ts`                               |
+| G8-D | Effects ledger + evidence + reviews  | BLOCKED ON C   | append-only; validation; conflicts                  |
+| G8-E | Authority projection + abstention    | BLOCKED ON D   | `authority-projection.ts`                           |
+| G8-F | As-of temporal queries               | BLOCKED ON E   | interval semantics; boundary tests                  |
+| G8-G | Citation parser + resolver           | BLOCKED ON B   | `citation-resolver.ts`                              |
+| G8-H | Migration 0009                       | BLOCKED ON D   | additive; FK/CHECK/append-only                      |
+| G8-I | D1 ledger adapter                    | OPTIONAL       | only if core completes                              |
+| G8-J | Synthetic tests + fixtures           | BLOCKED ON B–H | `tests/authority/`                                  |
+| G8-K | Docs + 3 independent reviews         | IN PROGRESS    | `docs/gates/gate-8/`                                |
+| G8-L | Verdict + status                     | PENDING        | `DECISION.md`, `gate-8-status.json`                 |

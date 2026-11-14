@@ -120,6 +120,19 @@ function normalize(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
+/**
+ * Canonical form of a provision label, so `"2"`, `"Section 2"` and `"Sec. 2"`
+ * all compare equal while `"Section 2(a)"` stays distinct from `"Section 2A"`.
+ * Delimiters that carry legal meaning (`-`, `(`, `)`) are preserved.
+ */
+export function normalizeProvisionLabel(label: string): string {
+  return label
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "")
+    .replace(/^(SECTION|SEC\.?|S\.)(?=\d|\()/, "");
+}
+
 /** Fraction of the proposition's operative terms present in the passage. */
 export function supportCoverage(passage: string, proposition: string): number {
   const wanted = terms(proposition);
@@ -146,22 +159,35 @@ export function stripInstructions(passage: string): string {
 }
 
 /** The version in force on `relevantDate`, else the current version. */
+export interface VersionSelection {
+  version: CorpusVersionView | null;
+  /** True when more than one version covers the supplied date. */
+  conflict: boolean;
+}
+
 export function selectVersion(
   versions: CorpusVersionView[],
   documentId: string,
   relevantDate?: string,
-): CorpusVersionView | undefined {
+): VersionSelection {
   const own = versions.filter((v) => v.documentId === documentId);
-  if (own.length === 0) return undefined;
-  if (relevantDate) {
-    const inForce = own.find(
+  if (own.length === 0) return { version: null, conflict: false };
+  // A supplied date must resolve to exactly one version; never fall back to
+  // the current text when the point-in-time version cannot be established.
+  if (typeof relevantDate === "string" && relevantDate.trim().length > 0) {
+    const inForce = own.filter(
       (v) =>
         (!v.effectiveFrom || v.effectiveFrom <= relevantDate) &&
         (!v.effectiveTo || relevantDate < v.effectiveTo),
     );
-    if (inForce) return inForce;
+    if (inForce.length === 1) return { version: inForce[0], conflict: false };
+    if (inForce.length > 1) return { version: null, conflict: true };
+    return { version: null, conflict: false };
   }
-  return own.find((v) => v.isCurrent) ?? own[own.length - 1];
+  return {
+    version: own.find((v) => v.isCurrent) ?? own[own.length - 1] ?? null,
+    conflict: false,
+  };
 }
 
 export function createCitationVerifier(
@@ -180,8 +206,10 @@ export function createCitationVerifier(
       let supportMethod: "lexical_proxy" | "technical_annotation" =
         "lexical_proxy";
 
-      // Layer 1 — identity.
-      const doc = corpus.documents.find((candidate) => {
+      // Layer 1 — identity. Collect every match; an identifier that resolves
+      // to more than one document is ambiguous and must not be guessed.
+      const wanted = normalize(citation.citationText);
+      const matches = corpus.documents.filter((candidate) => {
         const keys = [
           candidate.citationText,
           candidate.docketNumber,
@@ -190,9 +218,9 @@ export function createCitationVerifier(
         ]
           .filter((value): value is string => Boolean(value))
           .map(normalize);
-        return keys.includes(normalize(citation.citationText));
+        return keys.includes(wanted);
       });
-      if (!doc) {
+      if (matches.length === 0) {
         layerResults.IDENTITY = {
           passed: false,
           evidence: "no document matches the cited identifier",
@@ -207,6 +235,27 @@ export function createCitationVerifier(
           supportMethod,
         );
       }
+      if (matches.length > 1) {
+        layerResults.IDENTITY = {
+          passed: false,
+          evidence: "ambiguous_identity",
+          notes: `${matches.length} documents match the cited identifier (${matches
+            .map((candidate) => candidate.id)
+            .join(
+              ", ",
+            )}); identity cannot be established from an ambiguous identifier`,
+        };
+        states.push("INVALID");
+        return finish(
+          citation,
+          layerResults,
+          states,
+          undefined,
+          supportClass,
+          supportMethod,
+        );
+      }
+      const doc = matches[0] as CorpusDocumentView;
       layerResults.IDENTITY = {
         passed: true,
         evidence: `matched ${doc.title}`,
@@ -216,47 +265,74 @@ export function createCitationVerifier(
       // Layer 2 — location.
       let passageText: string | null = null;
       let provision: CorpusProvisionView | undefined;
-      const pinpoint = citation.passageId
-        ? corpus.chunks.find((chunk) => chunk.id === citation.passageId)
-        : undefined;
-      if (pinpoint) {
-        passageText = pinpoint.content;
-        provision = pinpoint.provisionId
-          ? corpus.provisions.find((p) => p.id === pinpoint.provisionId)
-          : undefined;
-      } else if (citation.passageId) {
-        layerResults.LOCATION = {
-          passed: false,
-          evidence: "cited passage id does not exist",
-        };
+      let locationFailure: { evidence: string; notes?: string } | undefined;
+      if (citation.passageId) {
+        const pinpoint = corpus.chunks.find(
+          (chunk) => chunk.id === citation.passageId,
+        );
+        if (!pinpoint) {
+          locationFailure = { evidence: "cited passage id does not exist" };
+        } else if (pinpoint.documentId !== doc.id) {
+          // Ownership: a passage can only support a citation to its own document.
+          locationFailure = { evidence: "passage_document_mismatch" };
+        } else {
+          passageText = pinpoint.content;
+          if (pinpoint.provisionId) {
+            const candidate = corpus.provisions.find(
+              (p) => p.id === pinpoint.provisionId,
+            );
+            if (candidate && candidate.documentId !== doc.id) {
+              passageText = null;
+              locationFailure = { evidence: "provision_document_mismatch" };
+            } else {
+              provision = candidate;
+            }
+          }
+        }
       } else if (citation.location) {
         // Pinpoint against the version in force at the relevant date, never
         // merely the first matching label in the document.
-        const version = selectVersion(
+        const selection = selectVersion(
           corpus.versions,
           doc.id,
           citation.relevantDate,
         );
-        provision = corpus.provisions.find(
-          (p) =>
-            p.documentId === doc.id &&
-            p.label.trim().toLowerCase() ===
-              citation.location!.trim().toLowerCase() &&
-            (version ? p.versionId === version.id : true),
-        );
-        if (provision) passageText = provision.text;
-        else
-          layerResults.LOCATION = {
-            passed: false,
-            evidence: `no provision labelled ${citation.location}`,
+        if (selection.conflict) {
+          locationFailure = {
+            evidence: "overlapping_versions",
+            notes: `more than one version of ${doc.id} covers ${citation.relevantDate}`,
           };
+        } else if (citation.relevantDate && !selection.version) {
+          locationFailure = {
+            evidence: "no_version_in_force",
+            notes: `no version of ${doc.id} covers ${citation.relevantDate}`,
+          };
+        } else {
+          provision = corpus.provisions.find(
+            (p) =>
+              p.documentId === doc.id &&
+              normalizeProvisionLabel(p.label) ===
+                normalizeProvisionLabel(citation.location as string) &&
+              (selection.version ? p.versionId === selection.version.id : true),
+          );
+          if (provision) passageText = provision.text;
+          else
+            locationFailure = {
+              evidence: `no provision labelled ${citation.location}`,
+            };
+        }
       } else {
-        layerResults.LOCATION = {
-          passed: false,
+        locationFailure = {
           evidence: "no pinpoint location or passage supplied",
         };
       }
-      if (passageText !== null) {
+      if (locationFailure) {
+        layerResults.LOCATION = {
+          passed: false,
+          evidence: locationFailure.evidence,
+          ...(locationFailure.notes ? { notes: locationFailure.notes } : {}),
+        };
+      } else if (passageText !== null) {
         layerResults.LOCATION = {
           passed: true,
           evidence: provision ? `found ${provision.label}` : "found passage",
@@ -353,6 +429,27 @@ function checkTemporal(
   provision: CorpusProvisionView | undefined,
   relevantDate: string,
 ): { passed: boolean; evidence: string; notes?: string } {
+  // A terminal status with no end date cannot be evaluated: fail closed rather
+  // than assume the text was still in force.
+  if (
+    (doc.legalStatus === "REPEALED" ||
+      doc.legalStatus === "EXPIRED" ||
+      doc.legalStatus === "SUPERSEDED") &&
+    !doc.repealDate
+  ) {
+    return {
+      passed: false,
+      evidence: "end_date_unknown",
+      notes: `document ${doc.id} is ${doc.legalStatus} but no repeal/end date is recorded`,
+    };
+  }
+  if (doc.legalStatus === "NOT_YET_EFFECTIVE" && !doc.effectivityDate) {
+    return {
+      passed: false,
+      evidence: "effectivity_date_unknown",
+      notes: `document ${doc.id} is NOT_YET_EFFECTIVE but no effectivity date is recorded`,
+    };
+  }
   const effective = doc.effectivityDate ?? doc.promulgationDate ?? null;
   if (effective && relevantDate < effective) {
     return {
@@ -417,8 +514,17 @@ function finish(
   if (status === VerificationStatus.FAILED && !states.includes("INVALID"))
     states.push("UNVERIFIED");
 
+  const hashKey = [
+    citation.citationText,
+    citation.proposition,
+    citation.relevantDate ?? "",
+    ids?.documentId ?? citation.documentId ?? "",
+    citation.location ?? "",
+    ids?.passageId ?? citation.passageId ?? "",
+  ].join("|");
+
   return {
-    citationId: `cite_${Math.abs(hashString(`${citation.citationText}|${citation.proposition}|${citation.relevantDate ?? ""}`))}`,
+    citationId: `cite_${Math.abs(hashString(hashKey))}`,
     documentId: ids?.documentId ?? "",
     passageId: ids?.passageId ?? citation.passageId ?? "",
     citationText: citation.citationText,
