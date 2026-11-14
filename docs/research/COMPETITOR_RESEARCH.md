@@ -1,5 +1,13 @@
 # Competitor Research — Philippine Legal Intelligence Platform
 
+> **⚠️ SUPERSEDED (2026-11-14).** This file is retained for history only. It is
+> superseded by the source-registered dossier in
+> `docs/research/international-legal-tech/`. Its pricing figures (USD), its vLex
+> "Philippines coverage present" claim, and its hallucination citation are **stale
+> or unverified** and must not be used. Current vLex coverage excludes the
+> Philippines (S03 in the new source register); current pricing is in
+> `international-legal-tech/14_COMMERCIAL_MODELS.md`.
+
 > **The following are observed from public sources as of 2026-11-09. They do not represent our implemented capabilities. Our planned scope is defined separately in product requirements.**
 
 ## Competitors Analyzed

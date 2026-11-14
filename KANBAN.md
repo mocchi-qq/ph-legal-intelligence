@@ -214,3 +214,30 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G7-M | Final status + decision                 | PENDING                             | `12_…`, `gate-7-status.json`, `DECISION.md`                                     |
 | G7-N | Actual D1 runtime verification          | VERIFIED (8/8 on real D1)           | `01_…` §3; `tests/integration/gate7-d1-remote.test.ts`                          |
 | G7-O | Counsel determination                   | BLOCKED (external)                  | 0 received                                                                      |
+
+---
+
+# Research Gate — International Legal Technology Landscape
+
+**Research only. This section does not change any implementation status, authorization cell, or corpus state.**
+
+**Counsel determinations: 0. All 350 authorization cells remain UNKNOWN. Four pilot documents remain BLOCKED_AUTHORIZATION.**
+
+| ID   | Task                                               | Status                   | Evidence                                            |
+| ---- | -------------------------------------------------- | ------------------------ | --------------------------------------------------- |
+| RG-A | Method, source hierarchy, selection criteria       | DONE                     | `docs/research/international-legal-tech/01_…`       |
+| RG-B | Platform discovery (22 identified)                 | DONE                     | `02_INTERNATIONAL_PLATFORM_LANDSCAPE.md`            |
+| RG-C | Deep profiles (10) + brief profiles (12)           | DONE                     | `03_PLATFORM_PROFILES.md`                           |
+| RG-D | Normalized feature matrix (18 capabilities)        | DONE                     | `04_…`, `feature-matrix.csv`, `feature-matrix.json` |
+| RG-E | Search, retrieval, citation navigation             | DONE                     | `05_LEGAL_SEARCH_AND_RETRIEVAL.md`                  |
+| RG-F | AI evaluation and comparison                       | DONE                     | `06_AI_LEGAL_RESEARCH_COMPARISON.md`                |
+| RG-G | Temporal validity and authority state              | DONE                     | `07_LEGAL_AUTHORITY_AND_TEMPORAL_VALIDITY.md`       |
+| RG-H | Provenance and content operations                  | DONE                     | `08_CONTENT_PROVENANCE_AND_OPERATIONS.md`           |
+| RG-I | Jurisdiction comparison (9 jurisdictions)          | DONE                     | `09_JURISDICTION_COMPARISON.md`                     |
+| RG-J | Philippine market and gap analysis                 | DONE (hypotheses marked) | `10_PHILIPPINE_MARKET_AND_GAP_ANALYSIS.md`          |
+| RG-K | Positioning, prioritisation, architecture, pricing | DONE                     | `11_…`–`14_…`                                       |
+| RG-L | Source register + machine-readable data            | DONE                     | `15_…`, `source-register.json`                      |
+| RG-M | Gaps, uncertainties, roadmap                       | DONE                     | `16_…`, `17_…`                                      |
+| RG-N | Two independent reviews                            | IN REVIEW                | `DECISION.md`                                       |
+| RG-O | Research verdict and final response                | PENDING                  | `DECISION.md`                                       |
+| RG-P | Real counsel determinations                        | BLOCKED (external)       | 0 received — research cannot clear this             |

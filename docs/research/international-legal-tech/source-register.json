@@ -1,0 +1,374 @@
+{
+  "schema_version": "gate8.research.source-register.v1",
+  "research_date": "2026-11-14",
+  "access_date": "2026-11-14",
+  "classification_key": [
+    "PRIMARY/OFFICIAL",
+    "PRIMARY/OPEN",
+    "VENDOR",
+    "SECONDARY",
+    "INDEPENDENT",
+    "BLOCKED",
+    "INTERNAL"
+  ],
+  "notes": "A claim without an entry here does not appear in the dossier. Vendor performance figures are COMPANY CLAIM, not fact.",
+  "sources": [
+    {
+      "id": "S01",
+      "title": "Westlaw product page",
+      "publisher": "Thomson Reuters",
+      "url": [
+        "https://legal.thomsonreuters.com/en/products/westlaw"
+      ],
+      "date_shown": "undated (live)",
+      "accessed": "2026-11-14",
+      "type": "vendor",
+      "classification": "VENDOR",
+      "claims": [
+        "KeyCite Overruling Risk",
+        "compare two versions of a statute or regulation",
+        "AI-Assisted Research",
+        "Deep Research (agentic)",
+        "Claims Explorer",
+        "Litigation Document Analyzer",
+        "Practical Law 650+ attorney editors"
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "Lexis+ with Prot\u00e9g\u00e9",
+      "publisher": "LexisNexis (RELX)",
+      "url": [
+        "https://www.lexisnexis.com/en-us/products/lexis-plus-ai.page"
+      ],
+      "date_shown": "renamed February 2026",
+      "accessed": "2026-11-14",
+      "type": "vendor",
+      "classification": "VENDOR",
+      "claims": [
+        "Prot\u00e9g\u00e9 assistant",
+        "Shepard's citations",
+        "Shepard's Verify flags unsupported statements",
+        "multi-model (OpenAI/Google/Anthropic)",
+        "Vault limits 50 vaults / 1-500 docs",
+        "DMS integrations",
+        "no public pricing"
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "Vincent by Clio",
+      "publisher": "Clio (Themis Solutions)",
+      "url": [
+        "https://vlex.com/vincent-ai"
+      ],
+      "date_shown": "news 2025-2026",
+      "accessed": "2026-11-14",
+      "type": "vendor",
+      "classification": "VENDOR",
+      "claims": [
+        "Clio ownership",
+        "1B+ documents / 100+ countries",
+        "coverage list excludes Philippines",
+        "vector search",
+        "hybrid generative + rules-based pipeline",
+        "20+ workflows",
+        "SOC2 / ISO 27001 claims",
+        "company claims 38% productivity gain (cited studies not published in full)",
+        "company claims 3.67x reliability vs leading LLMs"
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "Bloomberg Law (home and AI pages)",
+      "publisher": "Bloomberg Industry Group",
+      "url": [
+        "https://pro.bloomberglaw.com/",
+        "https://pro.bloomberglaw.com/products/ai-and-bloomberg-law/"
+      ],
+      "date_shown": "2026",
+      "accessed": "2026-11-14",
+      "type": "vendor",
+      "classification": "VENDOR",
+      "claims": [
+        "all-in-one research and workflow",
+        "40+ news channels",
+        "docket search AI classifies 200+ motion/brief types",
+        "Draft Analyzer",
+        "Litigation Analytics",
+        "Chart Builder",
+        "Regology acquisition",
+        "one platform one price"
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "Harvey (home and Knowledge)",
+      "publisher": "Harvey AI",
+      "url": [
+        "https://www.harvey.ai/",
+        "https://www.harvey.ai/platform/knowledge"
+      ],
+      "date_shown": "2026",
+      "accessed": "2026-11-14",
+      "type": "vendor",
+      "classification": "VENDOR",
+      "claims": [
+        "Agents, Vault, Knowledge, Spaces, Command Center",
+        "3,500+ organisations and 200,000+ professionals claimed",
+        "85+ countries",
+        "data partners including LexisNexis, SCC Online, Wolters Kluwer, EUR-Lex",
+        "500+ legal sources",
+        "SOC2 II, ISO 27001/27701/42001, FedRAMP Class D",
+        "no public pricing",
+        "company blog claims $15.5B valuation (https://www.harvey.ai/blog/harvey-raises-dollar550m-at-a-dollar155b-valuation-to-help-legal-teams-own-their-intelligence)"
+      ]
+    },
+    {
+      "id": "S06",
+      "title": "CoCounsel Legal",
+      "publisher": "Thomson Reuters",
+      "url": [
+        "https://legal.thomsonreuters.com/en/products/cocounsel-legal"
+      ],
+      "date_shown": "2026",
+      "accessed": "2026-11-14",
+      "type": "vendor",
+      "classification": "VENDOR",
+      "claims": [
+        "Westlaw + Practical Law Global (100+ jurisdictions)",
+        "visible step-by-step reasoning",
+        "linked citations",
+        "Westlaw Brief Builder",
+        "Tabular Analysis 10,000 docs x 100 questions",
+        "SOC2 and ISO 42001",
+        "Forrester TEI study commissioned by TR"
+      ]
+    },
+    {
+      "id": "S07",
+      "title": "CourtListener REST API v4.7 and site",
+      "publisher": "Free Law Project",
+      "url": [
+        "https://www.courtlistener.com/help/api/rest/",
+        "https://www.courtlistener.com/"
+      ],
+      "date_shown": "docs last updated ~2 months before access",
+      "accessed": "2026-11-14",
+      "type": "primary/open",
+      "classification": "PRIMARY/OPEN",
+      "claims": [
+        "8.3M precedential opinions",
+        "472 jurisdictions on site",
+        "citation lookup and verification API to fight hallucinations",
+        "citation graph APIs",
+        "rate limits 5/min 50/hour 125/day",
+        "commercial agreements available",
+        "open source",
+        "site claims ~half a billion PACER/RECAP items (site statistic, not audited)"
+      ]
+    },
+    {
+      "id": "S08",
+      "title": "legislation.gov.uk XML metadata (Equality Act 2010)",
+      "publisher": "The National Archives",
+      "url": [
+        "https://www.legislation.gov.uk/ukpga/2010/15/data.xml"
+      ],
+      "date_shown": "modified 2026-10-30",
+      "accessed": "2026-11-14",
+      "type": "primary/official",
+      "classification": "PRIMARY/OFFICIAL",
+      "claims": [
+        "DocumentStatus revised",
+        "EnactmentDate 2010-04-08",
+        "dct:valid 2026-10-30",
+        "~100 hasVersion point-in-time URIs",
+        "dct:replaces / isReplacedBy",
+        "UnappliedEffect with commencement and savings",
+        "prospective and unapplied effects disclosed",
+        "stable IdURI and per-section URIs",
+        "XML/AKN/RDF/CSV/PDF"
+      ]
+    },
+    {
+      "id": "S09",
+      "title": "Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools",
+      "publisher": "Stanford RegLab / arXiv",
+      "url": [
+        "https://reglab.stanford.edu/publications/hallucination-free-assessing-the-reliability-of-leading-ai-legal-research-tools/"
+      ],
+      "date_shown": "May 2024",
+      "accessed": "2026-11-14",
+      "type": "independent",
+      "classification": "INDEPENDENT",
+      "claims": [
+        "17%-33% hallucination for Lexis+ AI, Westlaw AI-Assisted Research and Ask Practical Law AI",
+        "vendor hallucination-free claims overstated",
+        "first preregistered evaluation",
+        "tested 2022-23 product versions, not 2026 versions"
+      ]
+    },
+    {
+      "id": "S10",
+      "title": "Supreme Court E-Library",
+      "publisher": "Supreme Court of the Philippines",
+      "url": [
+        "https://elibrary.judiciary.gov.ph/"
+      ],
+      "date_shown": "live",
+      "accessed": "2026-11-14",
+      "type": "primary/official",
+      "classification": "PRIMARY/OFFICIAL",
+      "claims": [
+        "SC decisions 1996-2026 by month",
+        "Philippine Reports e-books",
+        "RA/PD/EO/AO/MC/MO sections",
+        "Rules of Court and Constitution",
+        "National Administrative Register",
+        "treaties",
+        "missing monthly links observed",
+        "no API observed"
+      ]
+    },
+    {
+      "id": "S11",
+      "title": "Official Gazette",
+      "publisher": "Office of the President (PCO)",
+      "url": [
+        "https://www.officialgazette.gov.ph/"
+      ],
+      "date_shown": "live 2026",
+      "accessed": "2026-11-14",
+      "type": "primary/official",
+      "classification": "PRIMARY/OFFICIAL",
+      "claims": [
+        "official journal",
+        "Republic Acts / Executive Orders / Proclamations / Administrative Orders / Memorandum Circulars / Memorandum Orders",
+        "master list",
+        "constitutions",
+        "public domain unless otherwise stated",
+        "mobile apps"
+      ]
+    },
+    {
+      "id": "S12",
+      "title": "LawPhil Acceptable Use Policy",
+      "publisher": "Arellano Law Foundation",
+      "url": [
+        "https://lawphil.net/usepolicy.html"
+      ],
+      "date_shown": "undated",
+      "accessed": "2026-11-14",
+      "type": "secondary",
+      "classification": "SECONDARY",
+      "claims": [
+        "informational purposes only",
+        "users must verify information",
+        "express disclaimer of liability and accuracy",
+        "no legal advice"
+      ]
+    },
+    {
+      "id": "S13",
+      "title": "Anycase.ai home and pricing",
+      "publisher": "Anycase.ai",
+      "url": [
+        "https://anycase.ai/",
+        "https://anycase.ai/pricing"
+      ],
+      "date_shown": "published 2026-11-06",
+      "accessed": "2026-11-14",
+      "type": "vendor",
+      "classification": "VENDOR",
+      "claims": [
+        "160k+ docs homepage and 140k+ pricing page (inconsistent)",
+        "daily-updated library",
+        "AI analysis with citations",
+        "full-text and PDF download",
+        "uploads PDF/DOCX/TXT and images",
+        "Free 15 credits",
+        "Pro from PHP 999/month",
+        "Education PHP 599/month",
+        "14,000+ users claim"
+      ]
+    },
+    {
+      "id": "S14",
+      "title": "Singapore Statutes Online",
+      "publisher": "Attorney-General's Chambers of Singapore",
+      "url": [
+        "https://sso.agc.gov.sg/"
+      ],
+      "date_shown": "updated 2026-11-13",
+      "accessed": "2026-11-14",
+      "type": "primary/official",
+      "classification": "PRIMARY/OFFICIAL",
+      "claims": [
+        "free official legislation",
+        "Current / Repealed-Spent / Uncommenced buckets for Acts and subsidiary legislation",
+        "As Published supplements",
+        "Revised Editions",
+        "Pair Search",
+        "daily new legislation"
+      ]
+    },
+    {
+      "id": "S15",
+      "title": "EUR-Lex (Official Journal)",
+      "publisher": "EU Publications Office",
+      "url": [
+        "https://eur-lex.europa.eu/"
+      ],
+      "date_shown": "OJ 2026-11-14",
+      "accessed": "2026-11-14",
+      "type": "primary/official",
+      "classification": "PRIMARY/OFFICIAL (partial)",
+      "claims": [
+        "daily Official Journal Series L and C",
+        "OJ authenticity verification link",
+        "consolidated-text and ELI pages not accessible in this pass (UNKNOWN)"
+      ]
+    },
+    {
+      "id": "S16",
+      "title": "Access-blocked platforms",
+      "publisher": "CanLII, AustLII, Indian Kanoon, HKLII, Caselaw Access Project",
+      "url": [
+        "https://www.canlii.org/en/",
+        "https://www.austlii.edu.au/",
+        "https://indiankanoon.org/",
+        "https://www.hklii.hk/",
+        "https://case.law/"
+      ],
+      "date_shown": "n/a",
+      "accessed": "2026-11-14",
+      "type": "blocked",
+      "classification": "BLOCKED",
+      "claims": [
+        "HTTP 403 or empty response",
+        "capabilities UNKNOWN"
+      ]
+    },
+    {
+      "id": "S17",
+      "title": "Project gate documents and prior competitor note",
+      "publisher": "This repository",
+      "url": [
+        "docs/gates/gate-1/",
+        "docs/gates/gate-3/",
+        "docs/gates/gate-7/",
+        "docs/research/COMPETITOR_RESEARCH.md"
+      ],
+      "date_shown": "2026-11",
+      "accessed": "2026-11-14",
+      "type": "internal",
+      "classification": "INTERNAL",
+      "claims": [
+        "existing architecture and gates",
+        "authorization constraints (350 UNKNOWN cells, 0 determinations, 4 blocked documents)",
+        "prior competitor note is partially stale and unverified"
+      ]
+    }
+  ]
+}
