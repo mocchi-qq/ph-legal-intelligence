@@ -5,6 +5,7 @@
 **Branch:** `main`
 **HEAD at Gate 7 start:** `91bb20a` (38 commits)
 **Gate 6 baseline:** `405a350` (feature commit), HEAD `91bb20a`
+**Gate 7 implementation commit:** `71fc9df` (39 commits)
 
 ## 1. Baseline verification
 

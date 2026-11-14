@@ -10,7 +10,7 @@
     "commits_at_gate_start": 38,
     "working_tree_at_start": "dirty (pre-existing uncommitted Gate 7 draft, disclosed)",
     "gate6_baseline": "405a350",
-    "gate7_implementation_commit": "recorded after commit",
+    "gate7_implementation_commit": "71fc9df",
     "pushed": false,
     "deployed": false
   },

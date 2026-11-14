@@ -4,7 +4,7 @@
 **Verdict:** **BLOCKED** — durable implementation complete, D1 runtime not
 verifiable on this host.
 **Gate 6 baseline:** `91bb20a` (38 commits)
-**Gate 7 implementation commit:** recorded in `gate-7-status.json` after commit.
+**Gate 7 implementation commit:** `71fc9df` (39 commits total).
 
 ## 1. Summary
 

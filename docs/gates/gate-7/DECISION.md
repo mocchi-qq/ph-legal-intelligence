@@ -3,6 +3,7 @@
 **Verdict:** **BLOCKED**
 **Date:** 2026-11-14
 **Gate:** Durable D1 Counsel Registry and Atomic Authorization Decisions
+**Implementation commit:** `71fc9df`
 
 ## Why BLOCKED and not ACCEPTED
 

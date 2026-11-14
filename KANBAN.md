@@ -193,6 +193,8 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 # Gate 7 — Durable D1 Counsel Registry and Atomic Authorization Decisions
 
+**Verdict: BLOCKED (D1 runtime unavailable on this host). Implementation commit `71fc9df`.**
+
 **Counsel determinations: 0. All 350 enforcement cells remain UNKNOWN. Four pilot documents remain BLOCKED_AUTHORIZATION.**
 
 | ID   | Task                                    | Status                          | Evidence                                                         |
