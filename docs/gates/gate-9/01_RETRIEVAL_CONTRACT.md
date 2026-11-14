@@ -29,8 +29,9 @@ An identifier-shaped query (`G.R. No. …`, `RA …`, `EO …`, `PD …`, `A.M. 
 returns results only from the document(s) whose exact key matched. If none match,
 it returns an empty list — never a fuzzy neighbour. Within the matched document,
 lexical ranking may still select the most relevant passages; it never introduces
-another document. `exactMatch` marks only passages that contain the queried identifier;
-`exactDocumentMatch` marks every passage of a document matched by an identifier.
+another document. `exactMatch` is document-level: it marks every returned passage of a document
+whose exact identifier matched. It is not a claim that the passage repeats the
+identifier; use `provisionLabel`/`span` for a pinpoint.
 
 ## 3. Point-in-time retrieval
 

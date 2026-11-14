@@ -505,7 +505,6 @@ export function retrieve(
           chunkId: entry.chunkId,
         },
         exactMatch: exact,
-        exactDocumentMatch: exact,
         scores: { lexical, semantic: 0, rerank: 0, authority: 0 },
       } satisfies SearchResult;
     });

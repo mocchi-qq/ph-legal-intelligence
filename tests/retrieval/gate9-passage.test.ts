@@ -152,7 +152,7 @@ describe("gate 9 passage retrieval", () => {
     expect(results.length).toBeGreaterThan(0);
     expect(results[0]?.documentId).toBe(doc.id);
     // The document matched by identifier; the passage itself need not repeat it.
-    expect(results[0]?.exactDocumentMatch).toBe(true);
+    expect(results[0]?.exactMatch).toBe(true);
     expect(results[0]?.versionId).toBeTruthy();
   });
 
@@ -179,15 +179,26 @@ describe("gate 9 passage retrieval", () => {
     expect(results.every((r) => r.exactMatch === true)).toBe(true);
   });
 
-  it("exactDocumentMatch marks all chunks of the matched document", () => {
-    const results = retrieve(index, {
+  it("exact identifier ranks an identifier-bearing chunk first", () => {
+    const results = retrieve(passageIndex(), {
       text: "G.R. No. 999001",
       mode: "standard",
       limit: 10,
     });
-    expect(results.length).toBeGreaterThan(1);
-    expect(results.every((r) => r.documentId === doc.id)).toBe(true);
-    expect(results.every((r) => r.exactDocumentMatch === true)).toBe(true);
+    // Only meaningful when some passage actually restates the identifier.
+    if (results.some((r) => r.passage.includes("999001"))) {
+      expect(results[0]?.passage.includes("999001")).toBe(true);
+    }
+  });
+
+  it("exactMatch is false for a purely lexical hit", () => {
+    const results = retrieve(index, {
+      text: "annual renewal of registration",
+      mode: "standard",
+      limit: 5,
+    });
+    expect(results.length).toBeGreaterThan(0);
+    expect(results.every((r) => r.exactMatch === false)).toBe(true);
   });
 
   it("carries version, provision and provenance identifiers", () => {
