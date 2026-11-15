@@ -6,13 +6,14 @@
 
 import type { AuthorityProjection, EffectAssertion } from "@phli/legal-schema";
 import type { AuthorityLedger, AuthoritySnapshot } from "./authority-ledger";
+import type { AuthorizationInput } from "./authority-projection";
 import { projectAuthorityState } from "./authority-projection";
 
 export interface TemporalQueryRequest {
   documentId: string;
   provisionIdentityId?: string | null;
   asOf: string;
-  authorization: "AUTHORIZED" | "UNAUTHORIZED" | "NOT_CHECKED";
+  authorization: AuthorizationInput;
   satisfiedConditions?: string[];
 }
 

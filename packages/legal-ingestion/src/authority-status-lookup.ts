@@ -8,10 +8,19 @@
 // authorized one.
 
 import type { D1AuthorityStore } from "./authority-d1-store";
-import { projectAuthorityState } from "./authority-projection";
+import {
+  type AuthorizationInput,
+  projectAuthorityState,
+} from "./authority-projection";
 
 export interface AuthorityLookupOptions {
-  authorization: "AUTHORIZED" | "UNAUTHORIZED" | "NOT_CHECKED";
+  /**
+   * A scalar decision applies to every document; a resolver is asked per
+   * document. An unrecognised decision — scalar or returned by a resolver — is
+   * treated as `NOT_CHECKED` by the projection, so it never authorizes
+   * processing. There is no default: the caller must supply a decision.
+   */
+  authorization: AuthorizationInput;
 }
 
 export function createAuthorityStatusLookup(

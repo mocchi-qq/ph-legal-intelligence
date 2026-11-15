@@ -11,12 +11,29 @@ import type {
 } from "@phli/legal-schema";
 import type { AuthoritySnapshot } from "./authority-ledger";
 
+// Named `ProjectionAuthorizationDecision` because `@phli/legal-ingestion` already
+// exports an `AuthorizationDecision` (the counsel-registry record), and the package
+// barrel star-exports both modules.
+export type ProjectionAuthorizationDecision =
+  | "AUTHORIZED"
+  | "UNAUTHORIZED"
+  | "NOT_CHECKED";
+
+/**
+ * A single decision applies to every document; a resolver is asked per document.
+ * Any unrecognised value, whether returned by a resolver or passed directly, is
+ * treated as NOT_CHECKED, so an unrecognised answer never authorizes processing.
+ */
+export type AuthorizationInput =
+  | ProjectionAuthorizationDecision
+  | ((documentId: string) => ProjectionAuthorizationDecision);
+
 export interface ProjectionRequest {
   snapshot: AuthoritySnapshot;
   documentId: string;
   provisionIdentityId?: string | null;
   asOf: string;
-  authorization: "AUTHORIZED" | "UNAUTHORIZED" | "NOT_CHECKED";
+  authorization: AuthorizationInput;
   satisfiedConditions?: string[];
 }
 
@@ -34,6 +51,30 @@ const CONFIRMED_OUTCOMES: ReadonlySet<string> = new Set([
   "CONFIRMED",
   "CONFIRMED_WITH_CONDITIONS",
 ]);
+
+const AUTHORIZATION_DECISIONS: ReadonlySet<string> = new Set([
+  "AUTHORIZED",
+  "UNAUTHORIZED",
+  "NOT_CHECKED",
+]);
+
+/**
+ * Resolve the authorization decision for one document. Any unrecognised value,
+ * whether returned by a resolver or supplied directly, yields NOT_CHECKED: the
+ * answer is untrusted, and an untrusted answer is not an authorization. A boxed
+ * `String` object is not a primitive string, so it is unrecognised and therefore
+ * NOT_CHECKED — fail-closed by design, not an oversight.
+ */
+function decide(
+  input: AuthorizationInput,
+  documentId: string,
+): ProjectionAuthorizationDecision {
+  const decision: unknown =
+    typeof input === "function" ? input(documentId) : input;
+  return typeof decision === "string" && AUTHORIZATION_DECISIONS.has(decision)
+    ? (decision as ProjectionAuthorizationDecision)
+    : "NOT_CHECKED";
+}
 
 /** Active reviews for one assertion, newest decision first superseding older. */
 export function listActiveReviews(
@@ -65,7 +106,7 @@ export function projectAuthorityState(
   req: ProjectionRequest,
 ): AuthorityProjection {
   if (!isRealIsoDate(req.asOf)) {
-    return buildProjection(req, {
+    return buildProjection(req, decide(req.authorization, req.documentId), {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       missing: ["INVALID_DATE"],
@@ -74,8 +115,10 @@ export function projectAuthorityState(
     });
   }
 
-  if (req.authorization === "UNAUTHORIZED") {
-    return buildProjection(req, {
+  const targetDecision = decide(req.authorization, req.documentId);
+
+  if (targetDecision === "UNAUTHORIZED") {
+    return buildProjection(req, targetDecision, {
       outcome: "UNAUTHORIZED",
       state: "UNKNOWN",
       missing: ["NOT_AUTHORIZED"],
@@ -84,9 +127,20 @@ export function projectAuthorityState(
     });
   }
 
+  if (targetDecision === "NOT_CHECKED") {
+    return buildProjection(req, targetDecision, {
+      outcome: "UNKNOWN",
+      state: "UNKNOWN",
+      missing: ["AUTHORIZATION_NOT_CHECKED"],
+      explanation:
+        "Authorization for this document has not been checked; no determination is projected.",
+      abstained: true,
+    });
+  }
+
   const snapshot = req.snapshot;
   if (!snapshot.documents.some((document) => document.id === req.documentId)) {
-    return buildProjection(req, {
+    return buildProjection(req, targetDecision, {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       missing: ["MISSING_DOCUMENT"],
@@ -114,7 +168,7 @@ export function projectAuthorityState(
     .sort(compareAssertions);
 
   if (assertions.length === 0) {
-    return buildProjection(req, {
+    return buildProjection(req, targetDecision, {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       missing: ["NO_ASSERTION"],
@@ -123,19 +177,51 @@ export function projectAuthorityState(
     });
   }
 
-  const assertionIds = assertions.map((assertion) => assertion.id).sort();
+  const sourceCodes: string[] = [];
+  // One decision per source document per projection: a resolver that is not
+  // deterministic (cache, side effect, I/O) must not authorize one assertion
+  // from a source and refuse another from the same source in the same answer.
+  const sourceDecisions = new Map<string, ProjectionAuthorizationDecision>();
+  const gatedAssertions = assertions.filter((assertion) => {
+    let decision = sourceDecisions.get(assertion.sourceDocumentId);
+    if (decision === undefined) {
+      decision = decide(req.authorization, assertion.sourceDocumentId);
+      sourceDecisions.set(assertion.sourceDocumentId, decision);
+    }
+    if (decision === "AUTHORIZED") return true;
+    sourceCodes.push(
+      decision === "UNAUTHORIZED"
+        ? `SOURCE_NOT_AUTHORIZED:${assertion.id}`
+        : `SOURCE_AUTHORIZATION_NOT_CHECKED:${assertion.id}`,
+    );
+    return false;
+  });
+  sourceCodes.sort();
+
+  if (gatedAssertions.length === 0) {
+    return buildProjection(req, targetDecision, {
+      outcome: "UNKNOWN",
+      state: "UNKNOWN",
+      missing: sourceCodes,
+      explanation:
+        "Every candidate assertion came from a source whose processing is not authorized; no determination is projected.",
+      abstained: true,
+    });
+  }
+
+  const assertionIds = gatedAssertions.map((assertion) => assertion.id).sort();
   const active: LegalEffectReview[] = [];
-  for (const assertion of assertions) {
+  for (const assertion of gatedAssertions) {
     active.push(...listActiveReviews(snapshot, assertion.id));
   }
   const activeIds = active.map((review) => review.id).sort();
 
   if (active.length === 0) {
-    return buildProjection(req, {
+    return buildProjection(req, targetDecision, {
       outcome: "PARTIALLY_DETERMINED",
       state: "UNKNOWN",
       assertions: assertionIds,
-      missing: ["NO_REVIEWED_CONCLUSION"],
+      missing: ["NO_REVIEWED_CONCLUSION", ...sourceCodes],
       explanation: "Assertions exist but no qualified review is recorded.",
       abstained: true,
     });
@@ -149,13 +235,13 @@ export function projectAuthorityState(
   );
   const hasRejected = active.some((review) => review.outcome === "REJECTED");
   if (hasConflicted || (hasConfirmed && hasRejected)) {
-    return buildProjection(req, {
+    return buildProjection(req, targetDecision, {
       outcome: "CONFLICTED",
       state: "UNKNOWN",
       assertions: assertionIds,
       reviews: activeIds,
       conflicts: activeIds,
-      missing: ["CONFLICTING_REVIEWS"],
+      missing: ["CONFLICTING_REVIEWS", ...sourceCodes],
       explanation: "Active reviews disagree; no conclusion is projected.",
       abstained: true,
     });
@@ -166,22 +252,22 @@ export function projectAuthorityState(
   );
   if (confirmed.length === 0) {
     if (active.some((review) => review.outcome === "INCONCLUSIVE")) {
-      return buildProjection(req, {
+      return buildProjection(req, targetDecision, {
         outcome: "INSUFFICIENT_EVIDENCE",
         state: "UNKNOWN",
         assertions: assertionIds,
         reviews: activeIds,
-        missing: ["INCONCLUSIVE_REVIEW"],
+        missing: ["INCONCLUSIVE_REVIEW", ...sourceCodes],
         explanation: "Reviews are inconclusive.",
         abstained: true,
       });
     }
-    return buildProjection(req, {
+    return buildProjection(req, targetDecision, {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       assertions: assertionIds,
       reviews: activeIds,
-      missing: ["NO_CONFIRMED_EFFECT"],
+      missing: ["NO_CONFIRMED_EFFECT", ...sourceCodes],
       explanation: "All recorded reviews rejected the assertion.",
       abstained: true,
     });
@@ -198,13 +284,13 @@ export function projectAuthorityState(
       (candidate) => candidate.id === review.assertionId,
     );
     if (assertion === undefined) {
-      return buildProjection(req, {
+      return buildProjection(req, targetDecision, {
         outcome: "INSUFFICIENT_EVIDENCE",
         state: "UNKNOWN",
         assertions: assertionIds,
         reviews: activeIds,
         evidence: [...evidenceIds].sort(),
-        missing: ["MISSING_ASSERTION"],
+        missing: ["MISSING_ASSERTION", ...sourceCodes],
         explanation: "The reviewed assertion is not in the ledger.",
         abstained: true,
       });
@@ -223,13 +309,13 @@ export function projectAuthorityState(
         evidence.assertionId !== review.assertionId ||
         evidence.availability !== "AVAILABLE"
       ) {
-        return buildProjection(req, {
+        return buildProjection(req, targetDecision, {
           outcome: "INSUFFICIENT_EVIDENCE",
           state: "UNKNOWN",
           assertions: assertionIds,
           reviews: activeIds,
           evidence: [...evidenceIds].sort(),
-          missing: ["EVIDENCE_UNAVAILABLE"],
+          missing: ["EVIDENCE_UNAVAILABLE", ...sourceCodes],
           explanation:
             "Supporting evidence is missing, unowned, or unavailable.",
           abstained: true,
@@ -242,26 +328,26 @@ export function projectAuthorityState(
       review.outcome === "CONFIRMED_WITH_CONDITIONS" &&
       !review.conditions.every((condition) => satisfied.has(condition))
     ) {
-      return buildProjection(req, {
+      return buildProjection(req, targetDecision, {
         outcome: "INSUFFICIENT_EVIDENCE",
         state: "UNKNOWN",
         assertions: assertionIds,
         reviews: activeIds,
         evidence: [...evidenceIds].sort(),
-        missing: ["CONDITIONS_UNMET"],
+        missing: ["CONDITIONS_UNMET", ...sourceCodes],
         explanation: "Review conditions are not satisfied.",
         abstained: true,
       });
     }
 
     if (assertion.claimedEffectiveDate === null) {
-      return buildProjection(req, {
+      return buildProjection(req, targetDecision, {
         outcome: "INSUFFICIENT_EVIDENCE",
         state: "UNKNOWN",
         assertions: assertionIds,
         reviews: activeIds,
         evidence: [...evidenceIds].sort(),
-        missing: ["UNKNOWN_EFFECTIVE_DATE"],
+        missing: ["UNKNOWN_EFFECTIVE_DATE", ...sourceCodes],
         explanation: "The reviewed effect has no established effective date.",
         abstained: true,
       });
@@ -281,13 +367,13 @@ export function projectAuthorityState(
   }
   const dateConflict = Array.from(byType.values()).some((set) => set.size > 1);
   if (dateConflict) {
-    return buildProjection(req, {
+    return buildProjection(req, targetDecision, {
       outcome: "CONFLICTED",
       state: "UNKNOWN",
       assertions: assertionIds,
       reviews: activeIds,
       conflicts: activeIds,
-      missing: ["CONFLICTING_EFFECTIVE_DATES"],
+      missing: ["CONFLICTING_EFFECTIVE_DATES", ...sourceCodes],
       explanation:
         "Confirmed reviews claim different effective dates for the same effect type.",
       abstained: true,
@@ -327,14 +413,14 @@ export function projectAuthorityState(
   );
 
   if (applied.length === 0) {
-    return buildProjection(req, {
+    return buildProjection(req, targetDecision, {
       outcome: "DETERMINED_WITH_REVIEWED_EVIDENCE",
       state: "NOT_YET_EFFECTIVE",
       assertions: assertionIds,
       reviews: activeIds,
       evidence: [...evidenceIds].sort(),
       versionId,
-      missing: versionMissing,
+      missing: [...versionMissing, ...sourceCodes],
       explanation: "Reviewed effect is prospective relative to the as-of date.",
       abstained: false,
     });
@@ -346,27 +432,27 @@ export function projectAuthorityState(
   }
 
   if (state === "UNKNOWN") {
-    return buildProjection(req, {
+    return buildProjection(req, targetDecision, {
       outcome: "PARTIALLY_DETERMINED",
       state: "UNKNOWN",
       assertions: assertionIds,
       reviews: activeIds,
       evidence: [...evidenceIds].sort(),
       versionId,
-      missing: ["EFFECT_NOT_INTERPRETED", ...versionMissing],
+      missing: ["EFFECT_NOT_INTERPRETED", ...versionMissing, ...sourceCodes],
       explanation: "A reviewed effect exists but its state is not interpreted.",
       abstained: true,
     });
   }
 
-  return buildProjection(req, {
+  return buildProjection(req, targetDecision, {
     outcome: "DETERMINED_WITH_REVIEWED_EVIDENCE",
     state,
     assertions: assertionIds,
     reviews: activeIds,
     evidence: [...evidenceIds].sort(),
     versionId,
-    missing: versionMissing,
+    missing: [...versionMissing, ...sourceCodes],
     explanation:
       "State derived from reviewed effect(s) effective on or before the as-of date.",
     abstained: false,
@@ -388,6 +474,7 @@ interface ProjectionFields {
 
 function buildProjection(
   req: ProjectionRequest,
+  authorization: ProjectionAuthorizationDecision,
   fields: ProjectionFields,
 ): AuthorityProjection {
   return {
@@ -404,7 +491,7 @@ function buildProjection(
     missing: fields.missing ?? [],
     explanation: fields.explanation,
     abstained: fields.abstained,
-    authorization: req.authorization,
+    authorization,
   };
 }
 

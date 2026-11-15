@@ -145,13 +145,26 @@ function addSecondReview(
 function project(
   ledger: AuthorityLedger,
   asOf: string,
-  authorization: "AUTHORIZED" | "UNAUTHORIZED" | "NOT_CHECKED" = "NOT_CHECKED",
+  authorization: "AUTHORIZED" | "UNAUTHORIZED" | "NOT_CHECKED" = "AUTHORIZED",
 ) {
   return projectAuthorityState({
     snapshot: ledger.snapshot(),
     documentId: "SYNTH-ACT-0001",
     asOf,
     authorization,
+  });
+}
+
+/**
+ * Regression net for the fail-closed default: `project` now defaults to
+ * "AUTHORIZED", so this helper keeps NOT_CHECKED reachable from the core suite.
+ */
+function projectUnchecked(ledger: AuthorityLedger, asOf: string) {
+  return projectAuthorityState({
+    snapshot: ledger.snapshot(),
+    documentId: "SYNTH-ACT-0001",
+    asOf,
+    authorization: "NOT_CHECKED",
   });
 }
 
@@ -320,11 +333,108 @@ describe("authority projection", () => {
       snapshot: ledger.snapshot(),
       documentId: "SYNTH-ACT-0001",
       asOf: "2026-07-01",
-      authorization: "NOT_CHECKED" as const,
+      authorization: "AUTHORIZED" as const,
     };
     expect(projectAuthorityState(request)).toEqual(
       projectAuthorityState(request),
     );
+  });
+
+  it("abstains with AUTHORIZATION_NOT_CHECKED when authorization is NOT_CHECKED", () => {
+    const { ledger } = seed();
+    addAmendment(ledger, {
+      effective: "2026-07-01",
+      review: "CONFIRMED",
+    });
+    const projection = projectUnchecked(ledger, "2026-07-01");
+    expect(projection.outcome).toBe("UNKNOWN");
+    expect(projection.abstained).toBe(true);
+    expect(projection.missing).toContain("AUTHORIZATION_NOT_CHECKED");
+  });
+
+  it("memoises one source decision per source document: two assertions sharing a source are both authorized", () => {
+    const { ledger } = seed();
+    addAmendment(ledger, {
+      effective: "2026-07-01",
+      review: "CONFIRMED",
+    });
+    // Second assertion, same target and same source document as the first.
+    ledger.addAssertion({
+      id: "synth-assert-0002",
+      effectType: "PARTIAL_AMENDMENT",
+      sourceDocumentId: "SYNTH-ACT-0002",
+      sourceVersionId: null,
+      sourceProvisionId: null,
+      targetDocumentId: "SYNTH-ACT-0001",
+      targetProvisionIdentityId: "SYNTH-PROV-0001",
+      targetVersionId: "SYNTH-ACT-0001-v1",
+      scope: "SYNTH-ACT-0001 Section 2",
+      claimedDate: "2026-06-01",
+      claimedEffectiveDate: "2026-07-01",
+      evidenceId: "synth-evidence-0002",
+      sourceLocator: "Section 3",
+      assertionOrigin: "synthetic-fixture",
+      recordedAt: "2026-06-01T00:00:00Z",
+      recordedBy: "synth-fixture-loader",
+      state: "UNREVIEWED",
+      supersedesAssertionId: null,
+      conflictGroupId: null,
+    });
+    ledger.addEvidence({
+      id: "synth-evidence-0002",
+      assertionId: "synth-assert-0002",
+      documentVersionId: null,
+      provisionVersionId: null,
+      artifactId: null,
+      contentHash: null,
+      passage: null,
+      locator: null,
+      evidenceDate: null,
+      classification: "OFFICIAL_PRIMARY",
+      availability: "AVAILABLE",
+      checkedAt: "2026-11-14T00:00:00Z",
+    });
+    ledger.addReview({
+      id: "synth-review-0002",
+      assertionId: "synth-assert-0002",
+      outcome: "CONFIRMED",
+      reviewerId: "synth-reviewer-01",
+      reviewerCapacity: "synthetic-legal-reviewer",
+      decisionDate: "2026-06-15",
+      scope: "synthetic scope",
+      propositionReviewed: "Synthetic amendment proposition",
+      conditions: [],
+      evidenceRefs: ["synth-evidence-0002"],
+      notes: "Synthetic fixture. Not a real counsel determination.",
+      supersedesReviewId: null,
+      status: "ACTIVE",
+      recordedAt: "2026-06-15T00:00:00Z",
+    });
+
+    // The first source lookup is authorized; every later lookup is refused. The
+    // target document is answered separately, so only source lookups are counted.
+    let calls = 0;
+    const projection = projectAuthorityState({
+      snapshot: ledger.snapshot(),
+      documentId: "SYNTH-ACT-0001",
+      asOf: "2026-07-01",
+      authorization: (documentId: string) =>
+        documentId === "SYNTH-ACT-0001"
+          ? "AUTHORIZED"
+          : calls++ === 0
+            ? "AUTHORIZED"
+            : "UNAUTHORIZED",
+    });
+
+    expect(projection.outcome).toBe("DETERMINED_WITH_REVIEWED_EVIDENCE");
+    expect(projection.assertions).toEqual([
+      "synth-assert-0001",
+      "synth-assert-0002",
+    ]);
+    expect(projection.missing).not.toContain(
+      "SOURCE_NOT_AUTHORIZED:synth-assert-0002",
+    );
+    expect(projection.missing).toEqual([]);
   });
 });
 

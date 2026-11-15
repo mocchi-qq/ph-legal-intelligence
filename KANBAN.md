@@ -304,3 +304,16 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G11-A | Restore docs/product, data-governance, retrieval, api | IN PROGRESS | `docs/gates/gate-11/00_PLAN.md`                 |
 | G11-B | Deterministic authority record ids                    | IN PROGRESS | `packages/legal-ingestion/src/authority-ids.ts` |
 | G11-C | Full suite, review, verdict                           | TODO        | —                                               |
+
+---
+
+# Gate 12 — Authorization Is Checked, Not Assumed
+
+**Synthetic-only correctness gate. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID    | Task                                         | Status      | Evidence                     |
+| ----- | -------------------------------------------- | ----------- | ---------------------------- |
+| G12-A | Fail closed on NOT_CHECKED in the projection | IN PROGRESS | `authority-projection.ts`    |
+| G12-B | Per-source authorization for assertions      | IN PROGRESS | `authority-projection.ts`    |
+| G12-C | Bridge + verifier end-to-end proof           | TODO        | `authority-status-lookup.ts` |
+| G12-D | Full suite, review, verdict                  | TODO        | —                            |

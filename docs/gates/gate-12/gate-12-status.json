@@ -1,0 +1,48 @@
+{
+  "gate": 12,
+  "title": "Authorization Is Checked, Not Assumed",
+  "date": "2026-11-15",
+  "verdict": "ACCEPTED WITH LIMITATIONS",
+  "baseline": "71365a7",
+  "implementation": {
+    "not_checked_fails_closed": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "unrecognised_decision_fails_closed": "IMPLEMENTED_TESTED",
+    "source_document_authorization": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "resolver_memoisation_per_source": "IMPLEMENTED_TESTED",
+    "supersession_before_gating": "PRESERVED",
+    "verifier_layer4_unchanged": "PROVEN_END_TO_END",
+    "activity_level_authorization": "NOT_IMPLEMENTED"
+  },
+  "tests": {
+    "gate12_new": 23,
+    "full_suite": { "files": 65, "tests": 642, "passed": 633, "failed": 0, "skipped": 9 },
+    "build": "exit 0",
+    "biome": "exit 0, 0 errors"
+  },
+  "reviews": {
+    "count": 1,
+    "cross_lane": true,
+    "findings": 4,
+    "fixed": 3,
+    "accepted_as_limitation": 1,
+    "report": "docs/gates/gate-12/03_INDEPENDENT_REVIEW.md"
+  },
+  "limitations": [
+    "Authorization is per document, not per (document, activity); the 14-activity matrix is not consulted at projection time.",
+    "The projection trusts its snapshot; it does not re-validate the provenance of the rows it is given.",
+    "D1 remains shim-validated only; no remote D1 or workerd run.",
+    "Two similarly named authorization types are exported from the package barrel.",
+    "No lifecycle-transition record type; state, reviewStatus, status and availability are immutable in place.",
+    "Support verification remains the lexical proxy, not entailment.",
+    "No real corpus or counsel determination."
+  ],
+  "boundaries": {
+    "real_documents_acquired": 0,
+    "counsel_determinations": 0,
+    "authorization_cells_unknown": 350,
+    "pilot_documents_blocked": 4,
+    "migrations_changed": 0,
+    "deployment": false,
+    "push": false
+  }
+}
