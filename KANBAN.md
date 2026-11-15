@@ -317,3 +317,18 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G12-B | Per-source authorization for assertions      | IN PROGRESS | `authority-projection.ts`    |
 | G12-C | Bridge + verifier end-to-end proof           | TODO        | `authority-status-lookup.ts` |
 | G12-D | Full suite, review, verdict                  | TODO        | —                            |
+
+---
+
+# Gate 13 — Document-Activity Authorization and End-to-End Enforcement
+
+**Synthetic-only authorization-enforcement gate. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID    | Task                                                         | Status      | Evidence                                      |
+| ----- | ------------------------------------------------------------ | ----------- | --------------------------------------------- |
+| G13-A | Document/activity contract + registry adapter + memoisation  | IN PROGRESS | `document-activity-authorization.ts`          |
+| G13-B | Projection: required activity, target/source/evidence gating | TODO        | `authority-projection.ts`                     |
+| G13-C | Bridge + verifier end-to-end                                 | TODO        | `authority-status-lookup.ts`                  |
+| G13-D | Test matrix A–E and regression                               | TODO        | `tests/authority/gate13-*.test.ts`            |
+| G13-E | Three independent reviews + remediation                      | TODO        | `docs/gates/gate-13/13_INDEPENDENT_REVIEW.md` |
+| G13-F | Deliverables, KANBAN, decision                               | TODO        | `docs/gates/gate-13/`                         |

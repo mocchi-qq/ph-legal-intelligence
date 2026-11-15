@@ -126,7 +126,11 @@ function query(ledger: AuthorityLedger, asOf: string) {
     documentId: DOCUMENT_ID,
     provisionIdentityId: PROVISION_IDENTITY_ID,
     asOf,
-    authorization: "AUTHORIZED",
+    activity: "citation_display",
+    authorizationAssertion: {
+      activity: "citation_display",
+      decision: "AUTHORIZED",
+    },
   });
 }
 
@@ -189,7 +193,11 @@ describe("queryAuthorityAsOf", () => {
       documentId: DOCUMENT_ID,
       provisionIdentityId: PROVISION_IDENTITY_ID,
       asOf: "2026-07-01",
-      authorization: "UNAUTHORIZED",
+      activity: "citation_display",
+      authorizationAssertion: {
+        activity: "citation_display",
+        decision: "UNAUTHORIZED",
+      },
     });
 
     expect(projection.outcome).toBe("UNAUTHORIZED");

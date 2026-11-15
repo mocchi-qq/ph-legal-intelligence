@@ -3,6 +3,8 @@
 import { describe, expect, it } from "vitest";
 import { AuthorityLedger } from "../../packages/legal-ingestion/src/authority-ledger";
 import {
+  type DocumentActivityDecision,
+  type DocumentActivityRequest,
   type ProjectionAuthorizationDecision,
   type ProjectionRequest,
   projectAuthorityState,
@@ -137,35 +139,88 @@ function addEffect(ledger: AuthorityLedger, opts: EffectOptions): void {
   }
 }
 
-function request(
+/** A caller assertion for the projection's own activity. */
+function asserted(
+  decision: ProjectionAuthorizationDecision,
+): Pick<ProjectionRequest, "authorizationAssertion"> {
+  return { authorizationAssertion: { activity: "citation_display", decision } };
+}
+
+function requestWith(
   ledger: AuthorityLedger,
-  authorization: ProjectionRequest["authorization"],
+  input: Pick<
+    ProjectionRequest,
+    "authorizationAssertion" | "documentActivityAuthorization"
+  >,
   asOf = "2026-07-01",
 ): ProjectionRequest {
   return {
     snapshot: ledger.snapshot(),
     documentId: TARGET_DOCUMENT_ID,
     asOf,
-    authorization,
+    activity: "citation_display",
+    ...input,
+  };
+}
+
+function request(
+  ledger: AuthorityLedger,
+  decision: ProjectionAuthorizationDecision,
+  asOf = "2026-07-01",
+): ProjectionRequest {
+  return requestWith(ledger, asserted(decision), asOf);
+}
+
+/**
+ * A full document/activity decision, as a registry adapter would answer it. These
+ * fixtures resolve from the requested document id alone, so `sourceId`, `status`
+ * and `decisionRef` stay null: nothing here is a recorded decision.
+ */
+function decisionFor(
+  check: DocumentActivityRequest,
+  decision: ProjectionAuthorizationDecision,
+): DocumentActivityDecision {
+  return {
+    documentId: check.documentId,
+    activity: check.activity,
+    role: check.role,
+    decision,
+    sourceId: null,
+    status: null,
+    reason:
+      decision === "AUTHORIZED"
+        ? "synthetic_authorized"
+        : decision === "UNAUTHORIZED"
+          ? "synthetic_unauthorized"
+          : "synthetic_not_checked",
+    decisionRef: null,
   };
 }
 
 /** Target is authorized; only the second source document is not. */
 function notCheckedSourceResolver(
-  documentId: string,
-): ProjectionAuthorizationDecision {
-  return documentId === TARGET_DOCUMENT_ID || documentId === SOURCE_DOCUMENT_ID
-    ? "AUTHORIZED"
-    : "NOT_CHECKED";
+  check: DocumentActivityRequest,
+): DocumentActivityDecision {
+  return decisionFor(
+    check,
+    check.documentId === TARGET_DOCUMENT_ID ||
+      check.documentId === SOURCE_DOCUMENT_ID
+      ? "AUTHORIZED"
+      : "NOT_CHECKED",
+  );
 }
 
 /** Target is authorized; only the second source document is denied. */
 function unauthorizedSourceResolver(
-  documentId: string,
-): ProjectionAuthorizationDecision {
-  return documentId === TARGET_DOCUMENT_ID || documentId === SOURCE_DOCUMENT_ID
-    ? "AUTHORIZED"
-    : "UNAUTHORIZED";
+  check: DocumentActivityRequest,
+): DocumentActivityDecision {
+  return decisionFor(
+    check,
+    check.documentId === TARGET_DOCUMENT_ID ||
+      check.documentId === SOURCE_DOCUMENT_ID
+      ? "AUTHORIZED"
+      : "UNAUTHORIZED",
+  );
 }
 
 describe("Gate 12 — target authorization gating", () => {
@@ -191,11 +246,15 @@ describe("Gate 12 — target authorization gating", () => {
 
     expect(projection.outcome).toBe("UNAUTHORIZED");
     expect(projection.state).toBe("UNKNOWN");
-    expect(projection.missing).toEqual(["NOT_AUTHORIZED"]);
+    // Gate 13 adds the activity the denial applies to; the Gate 12 code stays.
+    expect(projection.missing).toEqual([
+      "NOT_AUTHORIZED",
+      "activity:citation_display",
+    ]);
     expect(projection.abstained).toBe(false);
   });
 
-  it("reproduces the pre-change result exactly for a scalar AUTHORIZED", () => {
+  it("reproduces the pre-change result for a scalar AUTHORIZED, plus the Gate 13 trace", () => {
     const ledger = seed();
     addEffect(ledger, { id: "synth-assert-0001", review: "CONFIRMED" });
 
@@ -217,6 +276,32 @@ describe("Gate 12 — target authorization gating", () => {
         "State derived from reviewed effect(s) effective on or before the as-of date.",
       abstained: false,
       authorization: "AUTHORIZED",
+      // Gate 13 provenance: a scalar is a caller assertion, never a registry
+      // answer, and the evidence record names no document version, so only the
+      // target and the effect source were consulted.
+      authorizationSource: "caller_asserted",
+      authorizationChecks: [
+        {
+          documentId: TARGET_DOCUMENT_ID,
+          activity: "citation_display",
+          role: "TARGET",
+          decision: "AUTHORIZED",
+          sourceId: null,
+          status: null,
+          reason: "caller_asserted",
+          decisionRef: null,
+        },
+        {
+          documentId: SOURCE_DOCUMENT_ID,
+          activity: "citation_display",
+          role: "SOURCE",
+          decision: "AUTHORIZED",
+          sourceId: null,
+          status: null,
+          reason: "caller_asserted",
+          decisionRef: null,
+        },
+      ],
     });
   });
 
@@ -225,10 +310,10 @@ describe("Gate 12 — target authorization gating", () => {
     addEffect(ledger, { id: "synth-assert-0001", review: "CONFIRMED" });
 
     const projection = projectAuthorityState(
-      request(
-        ledger,
-        () => undefined as unknown as ProjectionAuthorizationDecision,
-      ),
+      requestWith(ledger, {
+        documentActivityAuthorization: () =>
+          ({ decision: undefined }) as unknown as DocumentActivityDecision,
+      }),
     );
 
     expect(projection.outcome).toBe("UNKNOWN");
@@ -236,27 +321,52 @@ describe("Gate 12 — target authorization gating", () => {
     expect(projection.missing).toContain("AUTHORIZATION_NOT_CHECKED");
     expect(projection.abstained).toBe(true);
     expect(projection.authorization).toBe("NOT_CHECKED");
+    expect(projection.authorizationChecks?.[0]?.reason).toBe(
+      "unrecognised_decision",
+    );
   });
 
-  it("treats an out-of-vocabulary scalar answer as not checked", () => {
+  it("treats an out-of-vocabulary assertion decision as not checked", () => {
     const ledger = seed();
     addEffect(ledger, { id: "synth-assert-0001", review: "CONFIRMED" });
 
     const projection = projectAuthorityState(
-      request(ledger, "authorized" as unknown as "AUTHORIZED"),
+      requestWith(ledger, {
+        authorizationAssertion: {
+          activity: "citation_display",
+          decision: "authorized" as unknown as ProjectionAuthorizationDecision,
+        },
+      }),
     );
 
     expect(projection.outcome).toBe("UNKNOWN");
     expect(projection.missing).toContain("AUTHORIZATION_NOT_CHECKED");
     expect(projection.abstained).toBe(true);
+    expect(projection.authorizationChecks).toEqual([
+      {
+        documentId: TARGET_DOCUMENT_ID,
+        activity: "citation_display",
+        role: "TARGET",
+        decision: "NOT_CHECKED",
+        sourceId: null,
+        status: null,
+        reason: "unrecognised_decision",
+        decisionRef: null,
+      },
+    ]);
   });
 
-  it("treats an empty scalar answer as not checked", () => {
+  it("treats an empty assertion decision as not checked", () => {
     const ledger = seed();
     addEffect(ledger, { id: "synth-assert-0001", review: "CONFIRMED" });
 
     const projection = projectAuthorityState(
-      request(ledger, "" as unknown as "AUTHORIZED"),
+      requestWith(ledger, {
+        authorizationAssertion: {
+          activity: "citation_display",
+          decision: "" as unknown as ProjectionAuthorizationDecision,
+        },
+      }),
     );
 
     expect(projection.outcome).toBe("UNKNOWN");
@@ -302,7 +412,9 @@ describe("Gate 12 — source authorization gating", () => {
     });
 
     const projection = projectAuthorityState(
-      request(ledger, notCheckedSourceResolver),
+      requestWith(ledger, {
+        documentActivityAuthorization: notCheckedSourceResolver,
+      }),
     );
 
     expect(projection.outcome).toBe("UNKNOWN");
@@ -323,7 +435,9 @@ describe("Gate 12 — source authorization gating", () => {
     });
 
     const projection = projectAuthorityState(
-      request(ledger, unauthorizedSourceResolver),
+      requestWith(ledger, {
+        documentActivityAuthorization: unauthorizedSourceResolver,
+      }),
     );
 
     expect(projection.outcome).toBe("UNKNOWN");
@@ -343,7 +457,9 @@ describe("Gate 12 — source authorization gating", () => {
     });
 
     const projection = projectAuthorityState(
-      request(ledger, notCheckedSourceResolver),
+      requestWith(ledger, {
+        documentActivityAuthorization: notCheckedSourceResolver,
+      }),
     );
 
     expect(projection.outcome).toBe("DETERMINED_WITH_REVIEWED_EVIDENCE");
@@ -370,7 +486,9 @@ describe("Gate 12 — source authorization gating", () => {
     });
 
     const projection = projectAuthorityState(
-      request(ledger, unauthorizedSourceResolver),
+      requestWith(ledger, {
+        documentActivityAuthorization: unauthorizedSourceResolver,
+      }),
     );
 
     expect(projection.outcome).toBe("UNKNOWN");
@@ -398,7 +516,9 @@ describe("Gate 12 — source authorization gating", () => {
     });
 
     const projection = projectAuthorityState(
-      request(ledger, unauthorizedSourceResolver),
+      requestWith(ledger, {
+        documentActivityAuthorization: unauthorizedSourceResolver,
+      }),
     );
 
     // Supersession runs before gating, so the unauthorized superseder still
@@ -416,7 +536,9 @@ describe("Gate 12 — source authorization gating", () => {
     const ledger = seed();
 
     const projection = projectAuthorityState(
-      request(ledger, unauthorizedSourceResolver),
+      requestWith(ledger, {
+        documentActivityAuthorization: unauthorizedSourceResolver,
+      }),
     );
 
     expect(projection.outcome).toBe("UNKNOWN");
@@ -434,7 +556,11 @@ describe("Gate 12 — temporal query entry point", () => {
       documentId: TARGET_DOCUMENT_ID,
       provisionIdentityId: TARGET_PROVISION_IDENTITY_ID,
       asOf: "2026-07-01",
-      authorization: "NOT_CHECKED",
+      activity: "citation_display",
+      authorizationAssertion: {
+        activity: "citation_display",
+        decision: "NOT_CHECKED",
+      },
     });
 
     expect(projection.outcome).toBe("UNKNOWN");
@@ -456,7 +582,8 @@ describe("Gate 12 — temporal query entry point", () => {
       documentId: TARGET_DOCUMENT_ID,
       provisionIdentityId: TARGET_PROVISION_IDENTITY_ID,
       asOf: "2026-07-01",
-      authorization: notCheckedSourceResolver,
+      activity: "citation_display",
+      documentActivityAuthorization: notCheckedSourceResolver,
     });
 
     expect(projection.outcome).toBe("UNKNOWN");

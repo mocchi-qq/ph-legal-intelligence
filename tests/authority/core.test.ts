@@ -139,7 +139,11 @@ function project(ledger: AuthorityLedger, asOf: string) {
     documentId: "SYNTH-ACT-0001",
     provisionIdentityId: "SYNTH-PROV-0001",
     asOf,
-    authorization: "AUTHORIZED",
+    activity: "citation_display",
+    authorizationAssertion: {
+      activity: "citation_display",
+      decision: "AUTHORIZED",
+    },
   });
 }
 
@@ -390,7 +394,11 @@ describe("projectAuthorityState", () => {
       documentId: "SYNTH-ACT-0001",
       provisionIdentityId: "SYNTH-PROV-0001",
       asOf: "2026-08-01",
-      authorization: "UNAUTHORIZED",
+      activity: "citation_display",
+      authorizationAssertion: {
+        activity: "citation_display",
+        decision: "UNAUTHORIZED",
+      },
     });
 
     expect(projection.outcome).toBe("UNAUTHORIZED");
@@ -579,7 +587,11 @@ function projectDocument(ledger: AuthorityLedger, asOf: string) {
     snapshot: ledger.snapshot(),
     documentId: "SYNTH-ACT-0001",
     asOf,
-    authorization: "AUTHORIZED",
+    activity: "citation_display",
+    authorizationAssertion: {
+      activity: "citation_display",
+      decision: "AUTHORIZED",
+    },
   });
 }
 
@@ -645,7 +657,11 @@ describe("authority integrity — evidence binding", () => {
       documentId: "SYNTH-ACT-0001",
       provisionIdentityId: "SYNTH-PROV-0001",
       asOf: "2026-08-01",
-      authorization: "AUTHORIZED",
+      activity: "citation_display",
+      authorizationAssertion: {
+        activity: "citation_display",
+        decision: "AUTHORIZED",
+      },
     });
 
     expect(projection.outcome).toBe("INSUFFICIENT_EVIDENCE");

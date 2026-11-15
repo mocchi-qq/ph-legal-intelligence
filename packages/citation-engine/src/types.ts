@@ -139,6 +139,12 @@ export interface AuthorityStatusView {
   missing?: string[];
   /** Version established for the as-of date, when exactly one covers it. */
   versionId?: string | null;
+  /**
+   * Which authorization the projection consulted: a registry-backed
+   * document/activity decision or a caller assertion. Absent when the projection
+   * rejected the request shape and consulted nothing.
+   */
+  authorizationSource?: "document_activity" | "caller_asserted";
 }
 
 /** Resolves the projected authority status for a document/provision at a date. */

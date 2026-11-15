@@ -187,7 +187,11 @@ async function seed(): Promise<D1AuthorityStore> {
 function verifierFor(store: D1AuthorityStore) {
   return createCitationVerifier(corpus, {
     authority: createAuthorityStatusLookup(store, {
-      authorization: "AUTHORIZED",
+      activity: "citation_display",
+      authorizationAssertion: {
+        activity: "citation_display",
+        decision: "AUTHORIZED",
+      },
     }),
   });
 }

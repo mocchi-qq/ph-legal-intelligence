@@ -444,7 +444,15 @@ export function createCitationVerifier(
         };
         if (passed) states.push("VERIFIED_TEMPORAL_STATUS");
         temporalSource = "authority_projection";
-        authorityStatus = status;
+        // Provenance travels with the recorded status: the layer's pass
+        // predicate above is unchanged, but a reader can tell whether the
+        // authorization behind it came from the registry or from the caller.
+        authorityStatus = {
+          ...status,
+          ...(status.authorizationSource !== undefined
+            ? { authorizationSource: status.authorizationSource }
+            : {}),
+        };
       } else {
         const temporal = checkTemporal(doc, provision, relevantDate);
         layerResults.TEMPORAL_VALIDITY = temporal;

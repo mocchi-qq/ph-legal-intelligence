@@ -142,29 +142,38 @@ function addSecondReview(
   ledger.addReview({ ...original, ...overrides });
 }
 
+type ProjectionDecision = "AUTHORIZED" | "UNAUTHORIZED" | "NOT_CHECKED";
+
 function project(
   ledger: AuthorityLedger,
   asOf: string,
-  authorization: "AUTHORIZED" | "UNAUTHORIZED" | "NOT_CHECKED" = "AUTHORIZED",
+  decision: ProjectionDecision = "AUTHORIZED",
 ) {
   return projectAuthorityState({
     snapshot: ledger.snapshot(),
     documentId: "SYNTH-ACT-0001",
     asOf,
-    authorization,
+    activity: "citation_display",
+    authorizationAssertion: { activity: "citation_display", decision },
   });
 }
 
 /**
  * Regression net for the fail-closed default: `project` now defaults to
  * "AUTHORIZED", so this helper keeps NOT_CHECKED reachable from the core suite.
+ * It is deliberately kept as the Gate 12 net for the NOT_CHECKED invariant: an
+ * unchecked authorization must never yield a determined projection.
  */
 function projectUnchecked(ledger: AuthorityLedger, asOf: string) {
   return projectAuthorityState({
     snapshot: ledger.snapshot(),
     documentId: "SYNTH-ACT-0001",
     asOf,
-    authorization: "NOT_CHECKED",
+    activity: "citation_display",
+    authorizationAssertion: {
+      activity: "citation_display",
+      decision: "NOT_CHECKED",
+    },
   });
 }
 
@@ -333,7 +342,11 @@ describe("authority projection", () => {
       snapshot: ledger.snapshot(),
       documentId: "SYNTH-ACT-0001",
       asOf: "2026-07-01",
-      authorization: "AUTHORIZED" as const,
+      activity: "citation_display" as const,
+      authorizationAssertion: {
+        activity: "citation_display" as const,
+        decision: "AUTHORIZED" as const,
+      },
     };
     expect(projectAuthorityState(request)).toEqual(
       projectAuthorityState(request),
@@ -411,21 +424,40 @@ describe("authority projection", () => {
       recordedAt: "2026-06-15T00:00:00Z",
     });
 
-    // The first source lookup is authorized; every later lookup is refused. The
-    // target document is answered separately, so only source lookups are counted.
+    // The first source lookup is authorized; every later lookup would be refused.
+    // Only one resolution may happen per (document, activity), so the second
+    // assertion from the same source must not trigger a second lookup — that is
+    // what the call counter proves.
     let calls = 0;
     const projection = projectAuthorityState({
       snapshot: ledger.snapshot(),
       documentId: "SYNTH-ACT-0001",
       asOf: "2026-07-01",
-      authorization: (documentId: string) =>
-        documentId === "SYNTH-ACT-0001"
-          ? "AUTHORIZED"
-          : calls++ === 0
+      activity: "citation_display",
+      documentActivityAuthorization: (check) => {
+        const decision: ProjectionDecision =
+          check.documentId === "SYNTH-ACT-0001"
             ? "AUTHORIZED"
-            : "UNAUTHORIZED",
+            : calls++ === 0
+              ? "AUTHORIZED"
+              : "UNAUTHORIZED";
+        return {
+          documentId: check.documentId,
+          activity: check.activity,
+          role: check.role,
+          decision,
+          sourceId: null,
+          status: null,
+          reason:
+            decision === "AUTHORIZED"
+              ? "synthetic_authorized"
+              : "synthetic_unauthorized",
+          decisionRef: null,
+        };
+      },
     });
 
+    expect(calls).toBe(1);
     expect(projection.outcome).toBe("DETERMINED_WITH_REVIEWED_EVIDENCE");
     expect(projection.assertions).toEqual([
       "synth-assert-0001",

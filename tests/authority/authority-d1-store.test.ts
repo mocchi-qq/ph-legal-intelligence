@@ -156,7 +156,11 @@ describe("D1AuthorityStore", () => {
       snapshot,
       documentId: "doc1",
       asOf: "2026-08-01",
-      authorization: "AUTHORIZED",
+      activity: "citation_display",
+      authorizationAssertion: {
+        activity: "citation_display",
+        decision: "AUTHORIZED",
+      },
     });
     expect(projection.outcome).toBe("DETERMINED_WITH_REVIEWED_EVIDENCE");
     expect(projection.state).toBe("PARTIALLY_AMENDED");
@@ -271,7 +275,11 @@ describe("D1AuthorityStore", () => {
       snapshot,
       documentId: "doc1",
       asOf: "2026-12-01",
-      authorization: "AUTHORIZED",
+      activity: "citation_display",
+      authorizationAssertion: {
+        activity: "citation_display",
+        decision: "AUTHORIZED",
+      },
     });
     expect(projection.assertions).not.toContain("a1");
     expect(projection.outcome).toBe("UNKNOWN");
@@ -358,7 +366,11 @@ describe("D1AuthorityStore", () => {
           documentId,
           ...(identity ? { provisionIdentityId: identity.id } : {}),
           asOf,
-          authorization: "AUTHORIZED",
+          activity: "citation_display",
+          authorizationAssertion: {
+            activity: "citation_display",
+            decision: "AUTHORIZED",
+          },
         });
         return {
           outcome: projection.outcome,

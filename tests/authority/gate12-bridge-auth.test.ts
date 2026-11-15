@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import type { CitationCorpusView } from "../../packages/citation-engine/src/index";
 import { createCitationVerifier } from "../../packages/citation-engine/src/index";
 import {
-  type AuthorizationInput,
+  type AuthorityLookupOptions,
   createAuthorityStatusLookup,
   D1AuthorityStore,
 } from "../../packages/legal-ingestion/src/index";
@@ -184,12 +184,29 @@ async function seed(options: SeedOptions = {}): Promise<D1AuthorityStore> {
   return store;
 }
 
-function verifierFor(
-  store: D1AuthorityStore,
-  authorization: AuthorizationInput,
-) {
+/**
+ * The authorization input for the lookup under test. Both forms are passed
+ * through unchanged: the caller-asserted form names its activity, and the
+ * document-activity form answers per (document, activity, role).
+ */
+type LookupInput = Pick<
+  AuthorityLookupOptions,
+  "authorizationAssertion" | "documentActivityAuthorization"
+>;
+
+/** A caller assertion for the activity every verification path performs. */
+function asserted(
+  decision: "AUTHORIZED" | "UNAUTHORIZED" | "NOT_CHECKED",
+): LookupInput {
+  return { authorizationAssertion: { activity: "citation_display", decision } };
+}
+
+function verifierFor(store: D1AuthorityStore, input: LookupInput) {
   return createCitationVerifier(corpus, {
-    authority: createAuthorityStatusLookup(store, { authorization }),
+    authority: createAuthorityStatusLookup(store, {
+      activity: "citation_display",
+      ...input,
+    }),
   });
 }
 
@@ -205,7 +222,9 @@ describe("Gate 12 bridge — authorization gating reaches the verifier", () => {
   it("fails layer 4 when authorization was not checked", async () => {
     const store = await seed();
 
-    const result = await verifierFor(store, "NOT_CHECKED").verify(CITATION);
+    const result = await verifierFor(store, asserted("NOT_CHECKED")).verify(
+      CITATION,
+    );
 
     expect(result.layerResults.TEMPORAL_VALIDITY.passed).toBe(false);
     expect(result.authorityStatus?.outcome).toBe("UNKNOWN");
@@ -221,11 +240,18 @@ describe("Gate 12 bridge — authorization gating reaches the verifier", () => {
   it("fails layer 4 when processing is unauthorized", async () => {
     const store = await seed();
 
-    const result = await verifierFor(store, "UNAUTHORIZED").verify(CITATION);
+    const result = await verifierFor(store, asserted("UNAUTHORIZED")).verify(
+      CITATION,
+    );
 
     expect(result.layerResults.TEMPORAL_VALIDITY.passed).toBe(false);
     expect(result.authorityStatus?.outcome).toBe("UNAUTHORIZED");
-    expect(result.authorityStatus?.missing).toEqual(["NOT_AUTHORIZED"]);
+    expect(result.authorityStatus?.missing).toEqual([
+      "NOT_AUTHORIZED",
+      // `activity:citation_display` is the only addition: the projection now
+      // records which activity the refusal was made for.
+      "activity:citation_display",
+    ]);
     expect(result.temporalValidity).toBe(false);
     expect(result.states).not.toContain("VERIFIED_TEMPORAL_STATUS");
   });
@@ -233,7 +259,9 @@ describe("Gate 12 bridge — authorization gating reaches the verifier", () => {
   it("still passes layer 4 when the target is authorized", async () => {
     const store = await seed();
 
-    const result = await verifierFor(store, "AUTHORIZED").verify(CITATION);
+    const result = await verifierFor(store, asserted("AUTHORIZED")).verify(
+      CITATION,
+    );
 
     expect(result.layerResults.TEMPORAL_VALIDITY.passed).toBe(true);
     expect(result.temporalValidity).toBe(true);
@@ -249,9 +277,22 @@ describe("Gate 12 bridge — authorization gating reaches the verifier", () => {
   it("does not let an unchecked source ground a determination for an authorized target", async () => {
     const store = await seed({ sourceDocumentId: SOURCE_DOCUMENT_ID });
 
-    const result = await verifierFor(store, (documentId) =>
-      documentId === DOCUMENT_ID ? "AUTHORIZED" : "NOT_CHECKED",
-    ).verify(CITATION);
+    const result = await verifierFor(store, {
+      documentActivityAuthorization: (request) => ({
+        documentId: request.documentId,
+        activity: request.activity,
+        role: request.role,
+        decision:
+          request.documentId === DOCUMENT_ID ? "AUTHORIZED" : "NOT_CHECKED",
+        sourceId: null,
+        status: null,
+        reason:
+          request.documentId === DOCUMENT_ID
+            ? "synthetic_authorized"
+            : "synthetic_not_checked",
+        decisionRef: null,
+      }),
+    }).verify(CITATION);
 
     expect(result.layerResults.TEMPORAL_VALIDITY.passed).toBe(false);
     expect(result.temporalValidity).toBe(false);

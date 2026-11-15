@@ -4,23 +4,36 @@
 // questions. The decision logic itself lives in authority-projection.ts so
 // every adapter answers as-of queries the same way.
 
-import type { AuthorityProjection, EffectAssertion } from "@phli/legal-schema";
+import type { EffectAssertion } from "@phli/legal-schema";
 import type { AuthorityLedger, AuthoritySnapshot } from "./authority-ledger";
-import type { AuthorizationInput } from "./authority-projection";
+import type {
+  AuthorityProjectionWithTrace,
+  AuthorizationAssertion,
+} from "./authority-projection";
 import { projectAuthorityState } from "./authority-projection";
+import type { Activity } from "./authorization";
+import type { DocumentActivityAuthorization } from "./document-activity-authorization";
 
 export interface TemporalQueryRequest {
   documentId: string;
   provisionIdentityId?: string | null;
   asOf: string;
-  authorization: AuthorizationInput;
+  /** Gate 13: the one activity this query answers for. */
+  activity: Activity;
+  /**
+   * Caller-asserted decision for `activity`; see
+   * `ProjectionRequest.authorizationAssertion`.
+   */
+  authorizationAssertion?: AuthorizationAssertion;
+  /** Registry-backed decision; see `ProjectionRequest`. */
+  documentActivityAuthorization?: DocumentActivityAuthorization;
   satisfiedConditions?: string[];
 }
 
 export function queryAuthorityAsOf(
   ledger: AuthorityLedger,
   request: TemporalQueryRequest,
-): AuthorityProjection {
+): AuthorityProjectionWithTrace {
   return projectAuthorityState({ ...request, snapshot: ledger.snapshot() });
 }
 

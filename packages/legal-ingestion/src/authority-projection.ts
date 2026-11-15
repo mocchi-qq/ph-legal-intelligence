@@ -10,6 +10,16 @@ import type {
   LegalEffectReview,
 } from "@phli/legal-schema";
 import type { AuthoritySnapshot } from "./authority-ledger";
+import {
+  ACTIVITIES,
+  type Activity,
+  type ActivityStatus,
+} from "./authorization";
+import type {
+  DocumentActivityAuthorization,
+  DocumentActivityDecision,
+  DocumentRole,
+} from "./document-activity-authorization";
 
 // Named `ProjectionAuthorizationDecision` because `@phli/legal-ingestion` already
 // exports an `AuthorizationDecision` (the counsel-registry record), and the package
@@ -20,22 +30,52 @@ export type ProjectionAuthorizationDecision =
   | "NOT_CHECKED";
 
 /**
- * A single decision applies to every document; a resolver is asked per document.
- * Any unrecognised value, whether returned by a resolver or passed directly, is
- * treated as NOT_CHECKED, so an unrecognised answer never authorizes processing.
+ * A caller-asserted authorization, covering exactly one activity.
+ *
+ * Gate 13 asks the authorization question per (document, activity, role), so a
+ * bare decision is not an input any more: a decision that does not say which
+ * activity it was made for cannot be checked against the activity the projection
+ * performs, and would therefore authorize whatever activity the caller happened
+ * to name. The assertion carries its activity, and a projection for a different
+ * activity refuses it instead of applying it.
+ *
+ * An assertion is still only an assertion: it is recorded as caller-asserted,
+ * with no registry identity, because the system can record the claim but cannot
+ * verify it.
  */
-export type AuthorizationInput =
-  | ProjectionAuthorizationDecision
-  | ((documentId: string) => ProjectionAuthorizationDecision);
+export interface AuthorizationAssertion {
+  /** The one activity this assertion covers. Must equal the projection's activity. */
+  readonly activity: Activity;
+  readonly decision: ProjectionAuthorizationDecision;
+}
 
 export interface ProjectionRequest {
   snapshot: AuthoritySnapshot;
   documentId: string;
   provisionIdentityId?: string | null;
   asOf: string;
-  authorization: AuthorizationInput;
+  /** Gate 13: the one activity this projection answers for. */
+  activity: Activity;
+  /**
+   * Caller-asserted decision for `activity`. Exactly one of this and
+   * `documentActivityAuthorization` must be supplied; the projection refuses to
+   * guess which one the caller meant.
+   */
+  authorizationAssertion?: AuthorizationAssertion;
+  /** Registry-backed decision, resolved once per (document, activity). */
+  documentActivityAuthorization?: DocumentActivityAuthorization;
   satisfiedConditions?: string[];
 }
+
+/**
+ * The schema projection plus Gate 13 provenance. Which activity a decision was
+ * made for, and which decisions were consulted, are carried on the result so a
+ * caller cannot mistake a caller assertion for a registry answer.
+ */
+export type AuthorityProjectionWithTrace = AuthorityProjection & {
+  authorizationSource?: "document_activity" | "caller_asserted";
+  authorizationChecks?: DocumentActivityDecision[];
+};
 
 type ProjectionOutcome = AuthorityProjection["outcome"];
 type ProjectionState = AuthorityProjection["state"];
@@ -58,22 +98,204 @@ const AUTHORIZATION_DECISIONS: ReadonlySet<string> = new Set([
   "NOT_CHECKED",
 ]);
 
+const ACTIVITY_SET: ReadonlySet<string> = new Set<string>(ACTIVITIES);
+
+function isDecision(value: unknown): value is ProjectionAuthorizationDecision {
+  return typeof value === "string" && AUTHORIZATION_DECISIONS.has(value);
+}
+
+/** True only for a primitive string that is one of the 14 Gate 4 activities. */
+function isCanonicalActivity(value: unknown): value is Activity {
+  return typeof value === "string" && ACTIVITY_SET.has(value);
+}
+
 /**
- * Resolve the authorization decision for one document. Any unrecognised value,
- * whether returned by a resolver or supplied directly, yields NOT_CHECKED: the
- * answer is untrusted, and an untrusted answer is not an authorization. A boxed
- * `String` object is not a primitive string, so it is unrecognised and therefore
- * NOT_CHECKED — fail-closed by design, not an oversight.
+ * The authorization answer for one `(documentId, activity)` pair, before a role
+ * is attached. Role is provenance, not authority: the same pair must resolve the
+ * same way whichever part of the request asks about it, so the role is added when
+ * the check is recorded, not when the question is answered.
  */
-function decide(
-  input: AuthorizationInput,
+interface Resolution {
+  documentId: string;
+  activity: Activity;
+  decision: ProjectionAuthorizationDecision;
+  sourceId: string | null;
+  status: ActivityStatus | null;
+  reason: string;
+  decisionRef: string | null;
+}
+
+interface CallerAssertionVerdict {
+  decision: ProjectionAuthorizationDecision;
+  reason: string;
+}
+
+/**
+ * Judge a caller assertion against the activity this projection performs, before
+ * any document is resolved or authorised. Every rejection is fail-closed and
+ * says why:
+ *
+ * - `unknown_activity` — the assertion does not name a canonical activity, so
+ *   there is no activity it could be checked against.
+ * - `activity_mismatch` — the assertion names a different activity from the
+ *   projection; an assertion made for `viewing` says nothing about
+ *   `citation_display`, so it must not authorize it.
+ * - `unrecognised_decision` — the assertion is missing, malformed, or carries a
+ *   decision outside AUTHORIZED / UNAUTHORIZED / NOT_CHECKED. A boxed `String`
+ *   is not a primitive string, so it is unrecognised too.
+ *
+ * An accepted assertion is recorded with `reason: "caller_asserted"` and no
+ * registry identity: the caller may state a decision, but never a source id,
+ * registry status or decision reference.
+ */
+function readCallerAssertion(
+  input: unknown,
+  activity: Activity,
+): CallerAssertionVerdict {
+  if (typeof input !== "object" || input === null)
+    return { decision: "NOT_CHECKED", reason: "unrecognised_decision" };
+  const fields = input as Record<string, unknown>;
+  if (!isCanonicalActivity(fields.activity))
+    return { decision: "NOT_CHECKED", reason: "unknown_activity" };
+  if (fields.activity !== activity)
+    return { decision: "NOT_CHECKED", reason: "activity_mismatch" };
+  if (!isDecision(fields.decision))
+    return { decision: "NOT_CHECKED", reason: "unrecognised_decision" };
+  return { decision: fields.decision, reason: "caller_asserted" };
+}
+
+/**
+ * Normalise a resolver answer. The registry adapter always answers in the
+ * documented shape, but a hand-written resolver is untrusted input: anything
+ * unrecognised becomes NOT_CHECKED, and the identity fields are taken from the
+ * question asked rather than from the answer, so a trace entry always names the
+ * document and activity it actually covers.
+ */
+function normalizeResolution(
+  answer: unknown,
   documentId: string,
-): ProjectionAuthorizationDecision {
-  const decision: unknown =
-    typeof input === "function" ? input(documentId) : input;
-  return typeof decision === "string" && AUTHORIZATION_DECISIONS.has(decision)
-    ? (decision as ProjectionAuthorizationDecision)
-    : "NOT_CHECKED";
+  activity: Activity,
+): Resolution {
+  const fields: Record<string, unknown> =
+    typeof answer === "object" && answer !== null
+      ? (answer as Record<string, unknown>)
+      : {};
+  const sourceId = fields.sourceId;
+  const status = fields.status;
+  const reason = fields.reason;
+  const decisionRef = fields.decisionRef;
+  return {
+    documentId,
+    activity,
+    decision: isDecision(fields.decision) ? fields.decision : "NOT_CHECKED",
+    sourceId:
+      typeof sourceId === "string" && sourceId.trim() !== "" ? sourceId : null,
+    status: typeof status === "string" ? (status as ActivityStatus) : null,
+    reason:
+      typeof reason === "string" && reason.trim() !== ""
+        ? reason
+        : "unrecognised_decision",
+    decisionRef: typeof decisionRef === "string" ? decisionRef : null,
+  };
+}
+
+/**
+ * The resolved authorization context for one projection.
+ *
+ * `resolutions` is the memo: exactly one answer per
+ * `${documentId}\u0000${activity}`, whichever input form produced it, so a
+ * resolver with cache, side effects or I/O cannot answer twice for the same pair
+ * within one projection.
+ *
+ * `checks` is the trace: one entry per `(documentId, activity, role)`. When one
+ * document is consulted as both the TARGET and a SOURCE, two entries are
+ * recorded — same decision, different role — because collapsing them to the
+ * first asker's role misreports what the projection depended on. The decision is
+ * still resolved once.
+ */
+interface ProjectionContext {
+  activity: Activity;
+  authorizationSource: "document_activity" | "caller_asserted";
+  consult: (documentId: string, role: DocumentRole) => DocumentActivityDecision;
+  entries: () => DocumentActivityDecision[];
+}
+
+function createContext(
+  activity: Activity,
+  authorizationSource: "document_activity" | "caller_asserted",
+  request: {
+    authorizationAssertion?: unknown;
+    documentActivityAuthorization?: DocumentActivityAuthorization;
+  },
+): ProjectionContext {
+  const resolutions = new Map<string, Resolution>();
+  const checks = new Map<string, DocumentActivityDecision>();
+  const resolver = request.documentActivityAuthorization;
+  let caller: CallerAssertionVerdict | null = null;
+
+  const resolutionFor = (
+    documentId: string,
+    role: DocumentRole,
+  ): Resolution => {
+    const key = `${documentId}\u0000${activity}`;
+    const cached = resolutions.get(key);
+    if (cached !== undefined) return cached;
+    let resolution: Resolution;
+    if (authorizationSource === "document_activity" && resolver !== undefined) {
+      resolution = normalizeResolution(
+        resolver({ documentId, activity, role }),
+        documentId,
+        activity,
+      );
+    } else {
+      // One verdict covers the whole assertion: it names one activity and one
+      // decision, so every document it is applied to gets the same answer.
+      caller ??= readCallerAssertion(request.authorizationAssertion, activity);
+      resolution = {
+        documentId,
+        activity,
+        decision: caller.decision,
+        sourceId: null,
+        status: null,
+        reason: caller.reason,
+        decisionRef: null,
+      };
+    }
+    resolutions.set(key, resolution);
+    return resolution;
+  };
+
+  const consult = (
+    documentId: string,
+    role: DocumentRole,
+  ): DocumentActivityDecision => {
+    const checkKey = `${documentId}\u0000${activity}\u0000${role}`;
+    const existing = checks.get(checkKey);
+    if (existing !== undefined) return existing;
+    const resolution = resolutionFor(documentId, role);
+    const entry: DocumentActivityDecision = {
+      documentId: resolution.documentId,
+      activity: resolution.activity,
+      role,
+      decision: resolution.decision,
+      sourceId: resolution.sourceId,
+      status: resolution.status,
+      reason: resolution.reason,
+      decisionRef: resolution.decisionRef,
+    };
+    checks.set(checkKey, entry);
+    return entry;
+  };
+
+  /** Trace order is stable: documentId, then role. */
+  const entries = (): DocumentActivityDecision[] =>
+    Array.from(checks.values()).sort(
+      (a, b) =>
+        a.documentId.localeCompare(b.documentId) ||
+        a.role.localeCompare(b.role),
+    );
+
+  return { activity, authorizationSource, consult, entries };
 }
 
 /** Active reviews for one assertion, newest decision first superseding older. */
@@ -104,9 +326,78 @@ export function listActiveReviews(
 /** Project the authority state of one target from a ledger snapshot. */
 export function projectAuthorityState(
   req: ProjectionRequest,
-): AuthorityProjection {
+): AuthorityProjectionWithTrace {
+  const base: ProjectionBase = req;
+  // `activity` is required by the type, but a caller outside the type system can
+  // still supply a non-canonical string, so the runtime check stays.
+  const rawActivity: unknown = (req as { activity?: unknown }).activity;
+  const activity = rawActivity as Activity;
+  const activityKnown =
+    typeof rawActivity === "string" && ACTIVITY_SET.has(rawActivity);
+  const hasAssertion = req.authorizationAssertion !== undefined;
+  const hasDocumentActivity = req.documentActivityAuthorization !== undefined;
+
+  // Exactly one input form can be resolved. Both is ambiguous and neither has
+  // anything to consult, so neither case produces a context and neither can
+  // authorize anything below.
+  const context: ProjectionContext | null =
+    hasAssertion === hasDocumentActivity
+      ? null
+      : createContext(
+          activity,
+          hasDocumentActivity ? "document_activity" : "caller_asserted",
+          req,
+        );
+
+  const project = (
+    authorization: ProjectionAuthorizationDecision,
+    fields: ProjectionFields,
+  ): AuthorityProjectionWithTrace =>
+    buildProjection(base, context, authorization, fields);
+
+  // Gate 13 validation order, before any document is consulted:
+  //   (a) exactly one authorization input,
+  //   (b) the activity is canonical,
+  //   (c) the as-of date is real,
+  //   (d) the target is resolved.
+  // A request that fails (a) consulted nothing and carries no provenance; one
+  // that passes (a) carries its provenance with an empty or partial trace.
+  if (context === null) {
+    if (hasAssertion) {
+      return project("NOT_CHECKED", {
+        outcome: "UNKNOWN",
+        state: "UNKNOWN",
+        missing: ["AUTHORIZATION_INPUT_CONFLICT"],
+        explanation:
+          "Two authorization inputs were supplied; exactly one is required.",
+        abstained: true,
+      });
+    }
+    return project("NOT_CHECKED", {
+      outcome: "UNKNOWN",
+      state: "UNKNOWN",
+      missing: ["AUTHORIZATION_INPUT_MISSING"],
+      explanation: "No authorization input was supplied.",
+      abstained: true,
+    });
+  }
+
+  if (!activityKnown) {
+    return project("NOT_CHECKED", {
+      outcome: "UNKNOWN",
+      state: "UNKNOWN",
+      missing: ["UNKNOWN_ACTIVITY"],
+      explanation: "The requested activity is not one of the enforceable ones.",
+      abstained: true,
+    });
+  }
+
+  // An invalid date is reported before any authorization question is judged, and
+  // no resolver is asked: the projection has nothing to project, so consulting a
+  // resolver would only manufacture a decision the answer never uses. The trace
+  // is empty rather than absent, and still names where the input came from.
   if (!isRealIsoDate(req.asOf)) {
-    return buildProjection(req, decide(req.authorization, req.documentId), {
+    return project("NOT_CHECKED", {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       missing: ["INVALID_DATE"],
@@ -115,23 +406,23 @@ export function projectAuthorityState(
     });
   }
 
-  const targetDecision = decide(req.authorization, req.documentId);
+  const targetDecision = context.consult(req.documentId, "TARGET").decision;
 
   if (targetDecision === "UNAUTHORIZED") {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "UNAUTHORIZED",
       state: "UNKNOWN",
-      missing: ["NOT_AUTHORIZED"],
+      missing: ["NOT_AUTHORIZED", `activity:${activity}`],
       explanation: "Processing is not authorized for this source or activity.",
       abstained: false,
     });
   }
 
   if (targetDecision === "NOT_CHECKED") {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
-      missing: ["AUTHORIZATION_NOT_CHECKED"],
+      missing: ["AUTHORIZATION_NOT_CHECKED", `activity:${activity}`],
       explanation:
         "Authorization for this document has not been checked; no determination is projected.",
       abstained: true,
@@ -140,7 +431,7 @@ export function projectAuthorityState(
 
   const snapshot = req.snapshot;
   if (!snapshot.documents.some((document) => document.id === req.documentId)) {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       missing: ["MISSING_DOCUMENT"],
@@ -168,7 +459,7 @@ export function projectAuthorityState(
     .sort(compareAssertions);
 
   if (assertions.length === 0) {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       missing: ["NO_ASSERTION"],
@@ -178,16 +469,17 @@ export function projectAuthorityState(
   }
 
   const sourceCodes: string[] = [];
-  // One decision per source document per projection: a resolver that is not
-  // deterministic (cache, side effect, I/O) must not authorize one assertion
-  // from a source and refuse another from the same source in the same answer.
-  const sourceDecisions = new Map<string, ProjectionAuthorizationDecision>();
+  // One decision per (source document, activity) per projection: `consult`
+  // memoises, so a resolver that is not deterministic (cache, side effect, I/O)
+  // must not authorize one assertion from a source and refuse another from the
+  // same source in the same answer. Every source is resolved for the same
+  // activity the projection is for. Supersession above has already run, so
+  // gating can never resurrect an assertion a superseder removed.
   const gatedAssertions = assertions.filter((assertion) => {
-    let decision = sourceDecisions.get(assertion.sourceDocumentId);
-    if (decision === undefined) {
-      decision = decide(req.authorization, assertion.sourceDocumentId);
-      sourceDecisions.set(assertion.sourceDocumentId, decision);
-    }
+    const decision = context.consult(
+      assertion.sourceDocumentId,
+      "SOURCE",
+    ).decision;
     if (decision === "AUTHORIZED") return true;
     sourceCodes.push(
       decision === "UNAUTHORIZED"
@@ -199,7 +491,7 @@ export function projectAuthorityState(
   sourceCodes.sort();
 
   if (gatedAssertions.length === 0) {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       missing: sourceCodes,
@@ -217,7 +509,7 @@ export function projectAuthorityState(
   const activeIds = active.map((review) => review.id).sort();
 
   if (active.length === 0) {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "PARTIALLY_DETERMINED",
       state: "UNKNOWN",
       assertions: assertionIds,
@@ -235,7 +527,7 @@ export function projectAuthorityState(
   );
   const hasRejected = active.some((review) => review.outcome === "REJECTED");
   if (hasConflicted || (hasConfirmed && hasRejected)) {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "CONFLICTED",
       state: "UNKNOWN",
       assertions: assertionIds,
@@ -252,7 +544,7 @@ export function projectAuthorityState(
   );
   if (confirmed.length === 0) {
     if (active.some((review) => review.outcome === "INCONCLUSIVE")) {
-      return buildProjection(req, targetDecision, {
+      return project(targetDecision, {
         outcome: "INSUFFICIENT_EVIDENCE",
         state: "UNKNOWN",
         assertions: assertionIds,
@@ -262,7 +554,7 @@ export function projectAuthorityState(
         abstained: true,
       });
     }
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "UNKNOWN",
       state: "UNKNOWN",
       assertions: assertionIds,
@@ -274,7 +566,16 @@ export function projectAuthorityState(
   }
 
   const satisfied = new Set(req.satisfiedConditions ?? []);
+  // Evidence ids are only collected once every ref of a review has passed
+  // authorization: an id collected early would appear on an
+  // INSUFFICIENT_EVIDENCE projection that says it may not use that evidence.
   const evidenceIds: string[] = [];
+  const evidenceCodes: string[] = [];
+  // Every effect source above has already been consulted, whatever its decision,
+  // so the evidence pass must not consult it a second time.
+  const consultedSourceIds = new Set<string>(
+    assertions.map((assertion) => assertion.sourceDocumentId),
+  );
   const items: Array<{
     assertion: LedgerAssertion;
     review: LegalEffectReview;
@@ -284,7 +585,7 @@ export function projectAuthorityState(
       (candidate) => candidate.id === review.assertionId,
     );
     if (assertion === undefined) {
-      return buildProjection(req, targetDecision, {
+      return project(targetDecision, {
         outcome: "INSUFFICIENT_EVIDENCE",
         state: "UNKNOWN",
         assertions: assertionIds,
@@ -300,6 +601,10 @@ export function projectAuthorityState(
       review.evidenceRefs.length > 0
         ? review.evidenceRefs
         : [assertion.evidenceId];
+    // Scoped to this review: a ref that fails authorization discards the whole
+    // review's evidence base, not just the ref that failed.
+    const reviewEvidenceIds: string[] = [];
+    let reviewAuthorized = true;
     for (const evidenceRef of evidenceRefs) {
       const evidence = snapshot.evidence.find(
         (candidate) => candidate.id === evidenceRef,
@@ -309,7 +614,7 @@ export function projectAuthorityState(
         evidence.assertionId !== review.assertionId ||
         evidence.availability !== "AVAILABLE"
       ) {
-        return buildProjection(req, targetDecision, {
+        return project(targetDecision, {
           outcome: "INSUFFICIENT_EVIDENCE",
           state: "UNKNOWN",
           assertions: assertionIds,
@@ -321,14 +626,54 @@ export function projectAuthorityState(
           abstained: true,
         });
       }
-      if (!evidenceIds.includes(evidence.id)) evidenceIds.push(evidence.id);
+      // Gate 13: the document behind an evidence record is a third party to the
+      // projection. Resolve it for the same activity, unless it is the target or
+      // an effect source — both already consulted above. A version that is null
+      // or unknown names no document, so nothing is resolved and nothing is
+      // recorded for it.
+      if (evidence.documentVersionId !== null) {
+        const evidenceVersion = snapshot.versions.find(
+          (candidate) => candidate.id === evidence.documentVersionId,
+        );
+        if (evidenceVersion !== undefined) {
+          const evidenceDocumentId = evidenceVersion.documentId;
+          if (
+            evidenceDocumentId !== req.documentId &&
+            !consultedSourceIds.has(evidenceDocumentId)
+          ) {
+            const decision = context.consult(
+              evidenceDocumentId,
+              "EVIDENCE",
+            ).decision;
+            if (decision !== "AUTHORIZED") {
+              evidenceCodes.push(
+                decision === "UNAUTHORIZED"
+                  ? `EVIDENCE_NOT_AUTHORIZED:${evidence.id}`
+                  : `EVIDENCE_AUTHORIZATION_NOT_CHECKED:${evidence.id}`,
+              );
+              reviewAuthorized = false;
+              continue;
+            }
+          }
+        }
+      }
+      if (!reviewEvidenceIds.includes(evidence.id)) {
+        reviewEvidenceIds.push(evidence.id);
+      }
+    }
+
+    // Only a review whose every ref passed authorization contributes ids.
+    if (reviewAuthorized) {
+      for (const evidenceId of reviewEvidenceIds) {
+        if (!evidenceIds.includes(evidenceId)) evidenceIds.push(evidenceId);
+      }
     }
 
     if (
       review.outcome === "CONFIRMED_WITH_CONDITIONS" &&
       !review.conditions.every((condition) => satisfied.has(condition))
     ) {
-      return buildProjection(req, targetDecision, {
+      return project(targetDecision, {
         outcome: "INSUFFICIENT_EVIDENCE",
         state: "UNKNOWN",
         assertions: assertionIds,
@@ -341,7 +686,7 @@ export function projectAuthorityState(
     }
 
     if (assertion.claimedEffectiveDate === null) {
-      return buildProjection(req, targetDecision, {
+      return project(targetDecision, {
         outcome: "INSUFFICIENT_EVIDENCE",
         state: "UNKNOWN",
         assertions: assertionIds,
@@ -356,6 +701,24 @@ export function projectAuthorityState(
     items.push({ assertion, review });
   }
 
+  // An evidence base that is not authorized for this activity is not an evidence
+  // base: the determination is withheld rather than grounded on unverified use,
+  // and no evidence id is reported because none of them may be relied on here.
+  if (evidenceCodes.length > 0) {
+    evidenceCodes.sort();
+    return project(targetDecision, {
+      outcome: "INSUFFICIENT_EVIDENCE",
+      state: "UNKNOWN",
+      assertions: assertionIds,
+      reviews: activeIds,
+      evidence: [],
+      missing: [...evidenceCodes, ...sourceCodes],
+      explanation:
+        "Supporting evidence comes from a document whose processing is not authorized for this activity.",
+      abstained: true,
+    });
+  }
+
   const byType = new Map<string, Set<string>>();
   for (const item of items) {
     const groupKey = `${item.assertion.effectType}|${
@@ -367,7 +730,7 @@ export function projectAuthorityState(
   }
   const dateConflict = Array.from(byType.values()).some((set) => set.size > 1);
   if (dateConflict) {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "CONFLICTED",
       state: "UNKNOWN",
       assertions: assertionIds,
@@ -413,7 +776,7 @@ export function projectAuthorityState(
   );
 
   if (applied.length === 0) {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "DETERMINED_WITH_REVIEWED_EVIDENCE",
       state: "NOT_YET_EFFECTIVE",
       assertions: assertionIds,
@@ -432,7 +795,7 @@ export function projectAuthorityState(
   }
 
   if (state === "UNKNOWN") {
-    return buildProjection(req, targetDecision, {
+    return project(targetDecision, {
       outcome: "PARTIALLY_DETERMINED",
       state: "UNKNOWN",
       assertions: assertionIds,
@@ -445,7 +808,7 @@ export function projectAuthorityState(
     });
   }
 
-  return buildProjection(req, targetDecision, {
+  return project(targetDecision, {
     outcome: "DETERMINED_WITH_REVIEWED_EVIDENCE",
     state,
     assertions: assertionIds,
@@ -472,17 +835,24 @@ interface ProjectionFields {
   versionId?: string | null;
 }
 
+interface ProjectionBase {
+  documentId: string;
+  provisionIdentityId?: string | null;
+  asOf: string;
+}
+
 function buildProjection(
-  req: ProjectionRequest,
+  base: ProjectionBase,
+  context: ProjectionContext | null,
   authorization: ProjectionAuthorizationDecision,
   fields: ProjectionFields,
-): AuthorityProjection {
-  return {
+): AuthorityProjectionWithTrace {
+  const projection: AuthorityProjectionWithTrace = {
     outcome: fields.outcome,
-    documentId: req.documentId,
-    provisionIdentityId: req.provisionIdentityId ?? null,
+    documentId: base.documentId,
+    provisionIdentityId: base.provisionIdentityId ?? null,
     versionId: fields.versionId ?? null,
-    asOf: req.asOf,
+    asOf: base.asOf,
     state: fields.state,
     assertions: fields.assertions ?? [],
     reviews: fields.reviews ?? [],
@@ -493,6 +863,13 @@ function buildProjection(
     abstained: fields.abstained,
     authorization,
   };
+  // A request whose shape was rejected consulted nothing, so it carries no
+  // provenance rather than a misleading empty trace.
+  if (context !== null) {
+    projection.authorizationSource = context.authorizationSource;
+    projection.authorizationChecks = context.entries();
+  }
+  return projection;
 }
 
 function compareAssertions(a: LedgerAssertion, b: LedgerAssertion): number {

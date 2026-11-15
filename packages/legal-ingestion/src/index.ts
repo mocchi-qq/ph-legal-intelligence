@@ -15,6 +15,7 @@ export * from "./counsel-determinations";
 export * from "./counsel-projection";
 export * from "./counsel-registry";
 export * from "./d1-types";
+export * from "./document-activity-authorization";
 export * from "./evidence";
 export * from "./extract";
 export * from "./guards";
