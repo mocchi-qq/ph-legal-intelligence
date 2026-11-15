@@ -1,0 +1,42 @@
+{
+  "gate": 10,
+  "title": "Authority-Aware Verification and D1 Ledger Persistence",
+  "date": "2026-11-15",
+  "verdict": "ACCEPTED WITH LIMITATIONS",
+  "baseline": "381ebe4",
+  "implementation": {
+    "verifier_authority_injection": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "authority_bridge": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "d1_authority_store": "IMPLEMENTED_UNVERIFIED_D1",
+    "layer4_version_not_in_effect_guard": "IMPLEMENTED",
+    "legacy_fallback": "PRESERVED",
+    "append_only": true
+  },
+  "tests": {
+    "gate10_new": 23,
+    "full_suite": { "files": 62, "tests": 598, "passed": 588, "failed": 1, "skipped": 9 },
+    "pre_existing_failure": "tests/unit/docs-structure.test.ts",
+    "build": "exit 0",
+    "biome": "0 errors"
+  },
+  "reviews": {
+    "count": 1,
+    "findings": 8,
+    "fixed": 8,
+    "report": "docs/gates/gate-10/03_INDEPENDENT_REVIEW.md"
+  },
+  "limitations": [
+    "D1 store validated on node:sqlite only; no remote D1 or workerd run.",
+    "loadStateFor scopes one target document; multi-target conflict detection is the caller's responsibility.",
+    "Passage support remains the lexical proxy, not entailment.",
+    "No real corpus or counsel determination."
+  ],
+  "boundaries": {
+    "real_documents_acquired": 0,
+    "counsel_determinations": 0,
+    "authorization_cells_unknown": 350,
+    "pilot_documents_blocked": 4,
+    "deployment": false,
+    "push": false
+  }
+}

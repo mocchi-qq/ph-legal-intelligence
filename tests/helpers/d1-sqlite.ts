@@ -19,6 +19,9 @@ export const GATE7_MIGRATIONS = [
   "0006_gate6_counsel_validation.sql",
   "0007_gate7_authorization_audit.sql",
   "0008_gate7_registry_commit.sql",
+  // 0009 is additive (new tables + append-only triggers); it makes this shim
+  // applicable to the Gate 8 authority core and Gate 10 reads.
+  "0009_authority_core.sql",
 ] as const;
 
 class SqlitePreparedStatement implements D1PreparedStatementLike {

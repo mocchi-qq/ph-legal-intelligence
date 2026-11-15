@@ -2,8 +2,10 @@
 // Responsibility: docs/gates/gate-1/04_INGESTION_REPORT.md, docs/gates/gate-2/
 
 export * from "./acquisition";
+export * from "./authority-d1-store";
 export * from "./authority-ledger";
 export * from "./authority-projection";
+export * from "./authority-status-lookup";
 export * from "./authorization";
 export * from "./authorization-audit";
 export * from "./citation-resolver";

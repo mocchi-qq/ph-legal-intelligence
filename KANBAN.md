@@ -277,3 +277,18 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G9-D | Tests                        | DONE — 16 tests   | `tests/retrieval/gate9-passage.test.ts`       |
 | G9-E | Independent review           | DONE (2 blockers) | `docs/gates/gate-9/03_INDEPENDENT_REVIEW.md`  |
 | G9-F | Verdict/status               | DONE — ACCEPTED   | `DECISION.md`, `gate-9-status.json`           |
+
+---
+
+# Gate 10 — Authority-Aware Verification and D1 Ledger Persistence
+
+**Synthetic-only integration. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID    | Task                         | Status                           | Evidence                                         |
+| ----- | ---------------------------- | -------------------------------- | ------------------------------------------------ |
+| G10-A | Verifier authority injection | DONE                             | `citation-engine/src/{types,verifier}.ts`        |
+| G10-B | Authority bridge             | DONE                             | `legal-ingestion/src/authority-status-lookup.ts` |
+| G10-C | D1 authority store           | DONE (shim)                      | `authority-d1-store.ts`; 0009 unchanged          |
+| G10-D | Tests                        | DONE — 23 new                    | `tests/citations/gate10-*`, `tests/authority/*`  |
+| G10-E | Independent review           | DONE (8 findings, 8 fixed)       | `docs/gates/gate-10/03_INDEPENDENT_REVIEW.md`    |
+| G10-F | Verdict/status               | DONE — ACCEPTED WITH LIMITATIONS | `DECISION.md`, `gate-10-status.json`             |

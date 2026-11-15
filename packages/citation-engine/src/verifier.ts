@@ -8,9 +8,11 @@
 // on topical overlap. This limitation is reported, not hidden.
 
 import type {
+  AuthorityStatusView,
   CitationInput,
   CitationState,
   CitationVerificationResult,
+  CitationVerifierOptions,
   LayerResults,
   SupportClass,
   VerificationLayer,
@@ -192,6 +194,7 @@ export function selectVersion(
 
 export function createCitationVerifier(
   corpus: CitationCorpusView,
+  options: CitationVerifierOptions = {},
 ): CitationVerifier {
   return {
     async verify(citation: CitationInput): Promise<CitationVerificationResult> {
@@ -205,6 +208,9 @@ export function createCitationVerifier(
       let supportClass: SupportClass = "INSUFFICIENT_CONTEXT";
       let supportMethod: "lexical_proxy" | "technical_annotation" =
         "lexical_proxy";
+      let temporalSource: "authority_projection" | "legacy_fields" =
+        "legacy_fields";
+      let authorityStatus: AuthorityStatusView | null = null;
 
       // Layer 1 — identity. Collect every match; an identifier that resolves
       // to more than one document is ambiguous and must not be guessed.
@@ -233,6 +239,8 @@ export function createCitationVerifier(
           undefined,
           supportClass,
           supportMethod,
+          temporalSource,
+          authorityStatus,
         );
       }
       if (matches.length > 1) {
@@ -253,6 +261,8 @@ export function createCitationVerifier(
           undefined,
           supportClass,
           supportMethod,
+          temporalSource,
+          authorityStatus,
         );
       }
       const doc = matches[0] as CorpusDocumentView;
@@ -395,7 +405,9 @@ export function createCitationVerifier(
         };
       }
 
-      // Layer 4 — temporal validity.
+      // Layer 4 — temporal validity. When a reviewed authority projection is
+      // supplied it decides the layer; the legacy date fields are only a
+      // fallback and are labelled as such in the result.
       const relevantDate = citation.relevantDate;
       if (!relevantDate) {
         layerResults.TEMPORAL_VALIDITY = {
@@ -403,10 +415,42 @@ export function createCitationVerifier(
           evidence:
             "no relevant date supplied; temporal validity cannot be established",
         };
+      } else if (options.authority) {
+        const status = await options.authority({
+          documentId: doc.id,
+          provisionId: provision?.id ?? null,
+          asOf: relevantDate,
+        });
+        const operative = [
+          "IN_FORCE",
+          "AMENDED",
+          "PARTIALLY_AMENDED",
+          "REINSTATED",
+          "CONSOLIDATED",
+          "RENUMBERED",
+        ].includes(status.state);
+        // A determined, operative state is still not enough: an abstained
+        // projection makes no claim, and a version that does not cover the
+        // as-of date means the cited text is not the one in effect.
+        const missing = status.missing ?? [];
+        const passed =
+          status.outcome === "DETERMINED_WITH_REVIEWED_EVIDENCE" &&
+          operative &&
+          status.abstained === false &&
+          !missing.includes("VERSION_NOT_IN_EFFECT");
+        layerResults.TEMPORAL_VALIDITY = {
+          passed,
+          evidence: `${status.outcome}/${status.state}: ${status.explanation}`,
+        };
+        if (passed) states.push("VERIFIED_TEMPORAL_STATUS");
+        temporalSource = "authority_projection";
+        authorityStatus = status;
       } else {
         const temporal = checkTemporal(doc, provision, relevantDate);
         layerResults.TEMPORAL_VALIDITY = temporal;
         if (temporal.passed) states.push("VERIFIED_TEMPORAL_STATUS");
+        temporalSource = "legacy_fields";
+        authorityStatus = null;
       }
 
       return finish(
@@ -419,6 +463,8 @@ export function createCitationVerifier(
         },
         supportClass,
         supportMethod,
+        temporalSource,
+        authorityStatus,
       );
     },
   };
@@ -497,6 +543,8 @@ function finish(
   ids: { documentId?: string; passageId?: string } | undefined,
   supportClass: SupportClass,
   supportMethod: "lexical_proxy" | "technical_annotation",
+  temporalSource: "authority_projection" | "legacy_fields" = "legacy_fields",
+  authorityStatus: AuthorityStatusView | null = null,
 ): CitationVerificationResult {
   const layers = Object.values(layerResults);
   const passedCount = layers.filter((layer) => layer.passed).length;
@@ -538,6 +586,8 @@ function finish(
     states: [...new Set(states)],
     supportClass,
     supportMethod,
+    temporalSource,
+    authorityStatus,
   };
 }
 

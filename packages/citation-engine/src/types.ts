@@ -117,4 +117,38 @@ export interface CitationVerificationResult {
   supportClass?: SupportClass;
   /** `technical_annotation` when a reviewed label was supplied, else `lexical_proxy`. */
   supportMethod?: "lexical_proxy" | "technical_annotation";
+  /**
+   * Where the temporal layer's answer came from: the authority projection
+   * (Gate 8 reviewed evidence) or the legacy effectivity/repeal fields.
+   */
+  temporalSource?: "authority_projection" | "legacy_fields";
+  /** Authority projection status, when the temporal layer consulted it. */
+  authorityStatus?: AuthorityStatusView | null;
+}
+
+/**
+ * Read-only projection of an authority's reviewed state for a point in time.
+ * Mirrors the Gate 8 projection without importing legal-ingestion.
+ */
+export interface AuthorityStatusView {
+  outcome: string;
+  state: string;
+  explanation: string;
+  abstained: boolean;
+  /** Evidence gaps the projection reported (e.g. `VERSION_NOT_IN_EFFECT`). */
+  missing?: string[];
+  /** Version established for the as-of date, when exactly one covers it. */
+  versionId?: string | null;
+}
+
+/** Resolves the projected authority status for a document/provision at a date. */
+export type AuthorityStatusLookup = (request: {
+  documentId: string;
+  provisionId?: string | null;
+  asOf: string;
+}) => Promise<AuthorityStatusView>;
+
+/** Optional collaborators for the citation verifier. */
+export interface CitationVerifierOptions {
+  authority?: AuthorityStatusLookup;
 }
