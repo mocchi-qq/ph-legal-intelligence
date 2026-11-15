@@ -6,7 +6,11 @@
 // NOT implemented: semantic/vector retrieval and cross-encoder reranking.
 // These are reported as untested rather than implied to work.
 
-import type { CorpusState } from "@phli/legal-ingestion";
+import type {
+  CorpusState,
+  DocumentActivityAuthorization,
+  DocumentActivityDecision,
+} from "@phli/legal-ingestion";
 import type {
   ChunkMetadata,
   SearchFilters,
@@ -43,10 +47,30 @@ export interface IndexEntry {
   charEnd: number | null;
 }
 
+/**
+ * A built, searchable index.
+ *
+ * The index enforces `search_indexing` authorization at BUILD time only:
+ * `buildSearchIndex` asks once per document and indexes the document only when
+ * the answer is `AUTHORIZED`. `retrieve` performs no read-time authorization,
+ * so every chunk in `entries` is searchable and merely holding an index is
+ * sufficient to search it. A caller that needs `viewing` or `citation_display`
+ * enforced must check those activities itself, for its own request, before it
+ * returns or displays results.
+ */
 export interface SearchIndex {
   entries: IndexEntry[];
   docFreq: Map<string, number>;
   total: number;
+  /**
+   * One decision per document that had at least one chunk and whose
+   * `search_indexing` decision was not `AUTHORIZED`, sorted by `documentId`.
+   * A document with no chunks was never evaluated — the build authorizes from
+   * the chunk list — so it does not appear here, and its absence is not a grant.
+   * The decision is kept so a refusal is visible rather than silently skipped;
+   * decisions for authorized documents are not retained.
+   */
+  excludedDocuments: DocumentActivityDecision[];
 }
 
 const RRF_K = 60;
@@ -216,37 +240,143 @@ function matchesFilters(
   return true;
 }
 
-export interface IndexAuthorizationRequest {
-  documentId: string;
-  sourceId: string;
-}
-
-export interface IndexAuthorizationDecision {
-  allowed: boolean;
-  reason?: string;
-}
-
 export interface IndexBuildOptions {
-  /** Required. Called before each document's chunks are indexed. */
-  authorize: (request: IndexAuthorizationRequest) => IndexAuthorizationDecision;
+  /**
+   * Required. Consulted once per document, for the `search_indexing` activity
+   * with role `TARGET`. The activity is fixed by this builder, so a caller
+   * cannot index under a different one, and the answer is a whole
+   * `DocumentActivityDecision` rather than a bare boolean.
+   */
+  authorization: DocumentActivityAuthorization;
 }
 
+/**
+ * A decision a resolver returned in a shape this build cannot read. Exclusion
+ * is the only safe reading of an unreadable answer, and it is still reported.
+ * `reason` names the check that failed; document, activity and role are the
+ * build's own question, never the resolver's claim.
+ */
+function unusableDecision(
+  documentId: string,
+  reason: string,
+): DocumentActivityDecision {
+  return {
+    documentId,
+    activity: "search_indexing",
+    role: "TARGET",
+    decision: "NOT_CHECKED",
+    sourceId: null,
+    status: null,
+    reason,
+    decisionRef: null,
+  };
+}
+
+/** The only decisions the projection vocabulary defines. */
+const CANONICAL_DECISIONS: ReadonlySet<string> = new Set<string>([
+  "AUTHORIZED",
+  "UNAUTHORIZED",
+  "NOT_CHECKED",
+]);
+
+function isCanonicalDecision(
+  value: unknown,
+): value is DocumentActivityDecision["decision"] {
+  return typeof value === "string" && CANONICAL_DECISIONS.has(value);
+}
+
+/**
+ * Normalise whatever the resolver returned into a decision this build may act
+ * on. Gate 13 removed the bare `AUTHORIZED` scalar from the authority
+ * projection; this is the same bypass at the index boundary, so an answer is
+ * usable only when every part of it agrees with the question actually asked:
+ *
+ * - `invalid_decision` — not an object, or `decision` is not a canonical
+ *   literal. Without this, a JavaScript caller (or a cast) hands back
+ *   `{ decision: "AUTHORIZED" }` and the document is indexed with nothing
+ *   checked.
+ * - `unknown_activity` — `activity` is missing or not a string.
+ * - `activity_mismatch` — `activity` is a string but not `search_indexing`.
+ * - `document_mismatch` — `documentId` is missing, not a string, or a
+ *   different document.
+ *
+ * Anything else is a fail-closed NOT_CHECKED. The identity fields of the
+ * returned decision are always the build's, so a resolver cannot relabel which
+ * document and activity it answered.
+ */
+function asDecision(
+  documentId: string,
+  value: unknown,
+): DocumentActivityDecision {
+  if (typeof value !== "object" || value === null)
+    return unusableDecision(documentId, "invalid_decision");
+  const answer = value as Record<string, unknown>;
+  if (!isCanonicalDecision(answer.decision))
+    return unusableDecision(documentId, "invalid_decision");
+  const activity = answer.activity;
+  if (typeof activity !== "string")
+    return unusableDecision(documentId, "unknown_activity");
+  if (activity !== "search_indexing")
+    return unusableDecision(documentId, "activity_mismatch");
+  const claimedDocumentId = answer.documentId;
+  if (
+    typeof claimedDocumentId !== "string" ||
+    claimedDocumentId.trim() === "" ||
+    claimedDocumentId !== documentId
+  )
+    return unusableDecision(documentId, "document_mismatch");
+  return {
+    ...(answer as unknown as DocumentActivityDecision),
+    documentId,
+    activity: "search_indexing",
+    role: "TARGET",
+  };
+}
+
+/**
+ * Build a searchable index from the corpus, asking `search_indexing` for each
+ * document and refusing it unless the answer is `AUTHORIZED`.
+ *
+ * This is the only place that authorization is enforced: `retrieve` does no
+ * read-time check, so the built index is searchable by whoever holds it.
+ *
+ * The per-document memo is keyed by document id because this build fixes the
+ * activity (`search_indexing`) and the role (`TARGET`) for every call, so one
+ * document can only be asked one question here. A build that varied the
+ * activity per call would need a memo keyed by document and activity.
+ */
 export function buildSearchIndex(
   corpus: CorpusState,
   options: IndexBuildOptions,
 ): SearchIndex {
-  if (!options?.authorize) throw new Error("index_authorization_required");
+  if (typeof options?.authorization !== "function")
+    throw new Error("index_authorization_required");
+  const authorization = options.authorization;
   const entries: IndexEntry[] = [];
   const docFreq = new Map<string, number>();
+  // Authorization is a property of a document, not of each of its chunks, so
+  // each document is asked once and every chunk inherits that one answer. A
+  // document is therefore indexed entirely or not at all.
+  const decisions = new Map<string, DocumentActivityDecision>();
+  const decide = (documentId: string): DocumentActivityDecision => {
+    const cached = decisions.get(documentId);
+    if (cached !== undefined) return cached;
+    const decision = asDecision(
+      documentId,
+      authorization({
+        documentId,
+        activity: "search_indexing",
+        role: "TARGET",
+      }),
+    );
+    decisions.set(documentId, decision);
+    return decision;
+  };
 
   for (const chunk of corpus.chunks) {
     const document = corpus.documents.find((d) => d.id === chunk.documentId);
     if (!document) continue;
-    const authorization = options.authorize({
-      documentId: document.id,
-      sourceId: document.sourceId ?? "unknown",
-    });
-    if (!authorization.allowed) continue;
+    if (decide(document.id).decision !== "AUTHORIZED") continue;
     const version = corpus.versions.find((v) => v.id === chunk.versionId);
     const provision = chunk.provisionId
       ? corpus.provisions.find((p) => p.id === chunk.provisionId)
@@ -300,7 +430,15 @@ export function buildSearchIndex(
     });
   }
 
-  return { entries, docFreq, total: entries.length };
+  // Sorted so the report of what was refused is deterministic regardless of the
+  // order chunks happen to arrive in.
+  const excludedDocuments = [...decisions.values()]
+    .filter((decision) => decision.decision !== "AUTHORIZED")
+    .sort((a, b) =>
+      a.documentId < b.documentId ? -1 : a.documentId > b.documentId ? 1 : 0,
+    );
+
+  return { entries, docFreq, total: entries.length, excludedDocuments };
 }
 
 function idf(index: SearchIndex, term: string): number {

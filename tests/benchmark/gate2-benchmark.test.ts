@@ -33,7 +33,7 @@ describe("Gate 2 — benchmark separation and blockers", () => {
   it("keeps exact identifiers exact-only on the synthetic regression corpus", () => {
     const store = buildFixtureCorpus();
     const index = buildSearchIndex(store.state, {
-      authorize: allowSyntheticIndex,
+      authorization: allowSyntheticIndex,
     });
     const missing = retrieve(index, {
       text: "G.R. No. 000000",

@@ -16,18 +16,21 @@ no SLA.
 
 Entry point `packages/legal-search/src/index.ts` re-exports three modules.
 
-| Export                                                                                                      | Kind     | Contract                                                                                                                       |
-| ----------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `buildSearchIndex(corpus, options)`                                                                         | function | Builds `SearchIndex` from `CorpusState`; `options.authorize` is required and throws `index_authorization_required` when absent |
-| `retrieve(index, query, defaultLimit?)`                                                                     | function | Returns `SearchResult[]`; default limit 10                                                                                     |
-| `isIdentifierQuery(text)`                                                                                   | function | True when the query is a bare typed citation rather than a question                                                            |
-| `toCitationInput(result, proposition, relevantDate?)`                                                       | function | Maps a result to `CitationPassageInput` for the verifier                                                                       |
-| `SearchQuery`, `SearchFilters`, `SearchResult`                                                              | types    | Query, constraints and result shape                                                                                            |
-| `ChunkMetadata`, `RetrievalConfig`, `RetrievalMode`, `RankFusionMethod`, `RetrievalScoreBreakdown`          | types    | Metadata, tuning and score breakdown                                                                                           |
-| `IndexEntry`, `SearchIndex`, `IndexBuildOptions`, `IndexAuthorizationRequest`, `IndexAuthorizationDecision` | types    | Index construction surface                                                                                                     |
+| Export                                                                                             | Kind     | Contract                                                                                                                                                                                                                  |
+| -------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `buildSearchIndex(corpus, options)`                                                                | function | Builds `SearchIndex` from `CorpusState`; `options.authorization` is a required `DocumentActivityAuthorization` consulted once per document for `search_indexing`, and a missing one throws `index_authorization_required` |
+| `retrieve(index, query, defaultLimit?)`                                                            | function | Returns `SearchResult[]`; default limit 10                                                                                                                                                                                |
+| `isIdentifierQuery(text)`                                                                          | function | True when the query is a bare typed citation rather than a question                                                                                                                                                       |
+| `toCitationInput(result, proposition, relevantDate?)`                                              | function | Maps a result to `CitationPassageInput` for the verifier                                                                                                                                                                  |
+| `SearchQuery`, `SearchFilters`, `SearchResult`                                                     | types    | Query, constraints and result shape                                                                                                                                                                                       |
+| `ChunkMetadata`, `RetrievalConfig`, `RetrievalMode`, `RankFusionMethod`, `RetrievalScoreBreakdown` | types    | Metadata, tuning and score breakdown                                                                                                                                                                                      |
+| `IndexEntry`, `SearchIndex`, `IndexBuildOptions`                                                   | types    | Index construction surface; `SearchIndex.excludedDocuments` reports every document the build refused and why                                                                                                              |
 
-`buildSearchIndex` is the only place authorization is consulted; a denied
-document is silently excluded from the index rather than reported.
+`buildSearchIndex` is the only place authorization is consulted during indexing.
+A document whose `(documentId, search_indexing)` decision is not `AUTHORIZED` is
+excluded and listed in `SearchIndex.excludedDocuments` with its decision and
+reason, so exclusion is visible rather than silent. `retrieve` performs no
+authorization at read time.
 
 ## 2. `@phli/citation-engine`
 

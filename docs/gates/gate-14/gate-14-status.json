@@ -1,0 +1,52 @@
+{
+  "gate": 14,
+  "title": "Index Build Authorization",
+  "date": "2026-11-15",
+  "verdict": "ACCEPTED",
+  "baseline": "f289e07",
+  "implementation": {
+    "index_requires_document_activity_authorization": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "activity_fixed_by_library": "IMPLEMENTED_TESTED",
+    "per_document_resolution": "IMPLEMENTED_TESTED",
+    "exclusions_reported": "IMPLEMENTED_TESTED",
+    "malformed_answer_fails_closed": "IMPLEMENTED_TESTED",
+    "legacy_authorize_option_removed": "TESTED",
+    "projection_resolver_identity_verified": "IMPLEMENTED_TESTED",
+    "read_time_authorization": "NOT_IMPLEMENTED"
+  },
+  "tests": {
+    "gate14_new": 11,
+    "related_tightening_new": 5,
+    "full_suite": { "files": 69, "tests": 711, "passed": 702, "failed": 0, "skipped": 9 },
+    "build": "exit 0",
+    "biome": "exit 0, 0 errors"
+  },
+  "reviews": {
+    "count": 1,
+    "findings": 8,
+    "fixed": 4,
+    "partly_fixed": 1,
+    "rejected_with_evidence": 2,
+    "accepted_with_comment": 1,
+    "report": "docs/gates/gate-14/03_INDEPENDENT_REVIEW.md"
+  },
+  "limitations": [
+    "Read time is ungated: retrieve performs no authorization; holding an index is sufficient to search it.",
+    "A resolver is trusted to answer truthfully; only the identity of its answer is verified.",
+    "No authorization cell is authorized; all 350 remain UNKNOWN.",
+    "Eight of fourteen activities have no runtime enforcement point.",
+    "A document with no chunks is never evaluated and never reported.",
+    "allowSyntheticIndex bypasses the registry in benchmark and retrieval tests by design.",
+    "authorizeIndexing checks three activities, so wrapping it makes three checks per document.",
+    "D1 remains shim-validated only; no remote D1 or workerd run."
+  ],
+  "boundaries": {
+    "real_documents_acquired": 0,
+    "counsel_determinations": 0,
+    "authorization_cells_unknown": 350,
+    "pilot_documents_blocked": 4,
+    "migrations_changed": 0,
+    "deployment": false,
+    "push": false
+  }
+}

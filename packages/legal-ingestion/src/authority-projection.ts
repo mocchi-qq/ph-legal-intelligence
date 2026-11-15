@@ -165,21 +165,58 @@ function readCallerAssertion(
 }
 
 /**
- * Normalise a resolver answer. The registry adapter always answers in the
- * documented shape, but a hand-written resolver is untrusted input: anything
- * unrecognised becomes NOT_CHECKED, and the identity fields are taken from the
- * question asked rather than from the answer, so a trace entry always names the
- * document and activity it actually covers.
+ * Normalise a resolver answer for the pair that was asked about.
+ *
+ * Gate 13 forbids an adapter from producing AUTHORIZED without identifying the
+ * document and the activity it checked, so an answer is usable only when it
+ * names the same pair the projection asked for. Identity is *checked against*
+ * the answer, never filled in from the question: an answer that omits the pair
+ * says nothing about it, and filling the pair in would attribute that silence to
+ * a document and activity the adapter never considered.
+ *
+ * Every rejection is fail-closed for the asked pair, with the reason naming the
+ * check that failed:
+ *
+ * - `invalid_decision` — not an object, or a decision outside AUTHORIZED /
+ *   UNAUTHORIZED / NOT_CHECKED. A decision that is not a canonical literal
+ *   cannot be read as an answer about anything.
+ * - `unknown_activity` — the answer names no primitive-string activity, so there
+ *   is no activity it could have been made for.
+ * - `activity_mismatch` — the answer names a different activity; a decision made
+ *   for `viewing` says nothing about `citation_display`.
+ * - `document_mismatch` — the answer names no non-empty string document, or a
+ *   different one, so it is an answer about some other document.
  */
 function normalizeResolution(
   answer: unknown,
   documentId: string,
   activity: Activity,
 ): Resolution {
-  const fields: Record<string, unknown> =
-    typeof answer === "object" && answer !== null
-      ? (answer as Record<string, unknown>)
-      : {};
+  const refused = (reason: string): Resolution => ({
+    documentId,
+    activity,
+    decision: "NOT_CHECKED",
+    sourceId: null,
+    status: null,
+    reason,
+    decisionRef: null,
+  });
+
+  if (typeof answer !== "object" || answer === null)
+    return refused("invalid_decision");
+  const fields = answer as Record<string, unknown>;
+  if (!isDecision(fields.decision)) return refused("invalid_decision");
+  const answeredActivity = fields.activity;
+  if (typeof answeredActivity !== "string") return refused("unknown_activity");
+  if (answeredActivity !== activity) return refused("activity_mismatch");
+  const answeredDocumentId = fields.documentId;
+  if (
+    typeof answeredDocumentId !== "string" ||
+    answeredDocumentId.trim() === "" ||
+    answeredDocumentId !== documentId
+  )
+    return refused("document_mismatch");
+
   const sourceId = fields.sourceId;
   const status = fields.status;
   const reason = fields.reason;
@@ -187,7 +224,7 @@ function normalizeResolution(
   return {
     documentId,
     activity,
-    decision: isDecision(fields.decision) ? fields.decision : "NOT_CHECKED",
+    decision: fields.decision,
     sourceId:
       typeof sourceId === "string" && sourceId.trim() !== "" ? sourceId : null,
     status: typeof status === "string" ? (status as ActivityStatus) : null,

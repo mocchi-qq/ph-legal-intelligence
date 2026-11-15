@@ -5,6 +5,7 @@ import { createCitationVerifier } from "../../packages/citation-engine/src/index
 import {
   buildAcquisitionRecord,
   CorpusStore,
+  type DocumentActivityAuthorization,
   extractText,
   fetchLegalDocument,
   ingestArtifact,
@@ -15,9 +16,19 @@ import {
   retrieve,
 } from "../../packages/legal-search/src/index";
 
-const allowSyntheticIndex = () => ({
-  allowed: true,
+const allowSyntheticIndex: DocumentActivityAuthorization = ({
+  documentId,
+  activity,
+  role,
+}) => ({
+  documentId,
+  activity,
+  role,
+  decision: "AUTHORIZED",
+  sourceId: null,
+  status: null,
   reason: "synthetic_pilot_fixture",
+  decisionRef: null,
 });
 
 const LIVE = process.env.PH_LIVE_PILOT === "1";
@@ -200,7 +211,7 @@ describe.skipIf(!LIVE)(
       }
 
       const index = buildSearchIndex(store.state, {
-        authorize: allowSyntheticIndex,
+        authorization: allowSyntheticIndex,
       });
       const docKey = (documentId: string) =>
         store.state.documents.find((d) => d.id === documentId)?.identityKey ??

@@ -61,7 +61,7 @@ describe("Gate 1 — security and privacy controls", () => {
   it("keeps the public index free of private documents by construction", () => {
     const store = buildFixtureCorpus();
     const index = buildSearchIndex(store.state, {
-      authorize: allowSyntheticIndex,
+      authorization: allowSyntheticIndex,
     });
     expect(index.entries.length).toBeGreaterThan(0);
     expect(
@@ -74,7 +74,7 @@ describe("Gate 1 — security and privacy controls", () => {
           (d) => d.sourceId === "private_upload",
         ),
       },
-      { authorize: allowSyntheticIndex },
+      { authorization: allowSyntheticIndex },
     ).entries;
     expect(results).toHaveLength(0);
   });

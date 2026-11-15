@@ -1,15 +1,26 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import type { DocumentActivityAuthorization } from "../../packages/legal-ingestion/src/index";
 import {
   buildSearchIndex,
   retrieve,
 } from "../../packages/legal-search/src/index";
 import { buildPilotCorpus, pilotAvailable } from "./pilot-corpus";
 
-const allowSyntheticIndex = () => ({
-  allowed: true,
+const allowSyntheticIndex: DocumentActivityAuthorization = ({
+  documentId,
+  activity,
+  role,
+}) => ({
+  documentId,
+  activity,
+  role,
+  decision: "AUTHORIZED",
+  sourceId: null,
+  status: null,
   reason: "synthetic_pilot_fixture",
+  decisionRef: null,
 });
 
 interface GoldQuery {
@@ -26,7 +37,7 @@ describe.skipIf(!pilotAvailable())(
     it("evaluates the pre-declared gold set and writes measured results", () => {
       const store = buildPilotCorpus();
       const index = buildSearchIndex(store.state, {
-        authorize: allowSyntheticIndex,
+        authorization: allowSyntheticIndex,
       });
       const gold = JSON.parse(
         readFileSync(

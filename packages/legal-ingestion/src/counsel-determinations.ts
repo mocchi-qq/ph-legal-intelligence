@@ -750,6 +750,13 @@ export interface IndexingAuthorizationOptions
  * Authorization callback for reindexing. It checks the exact activities the
  * index build performs: in-memory processing, text extraction and search
  * indexing. A missing/expired/revoked/conflicting decision denies the document.
+ *
+ * The three are checked together because indexing implies the first two, so a
+ * caller that wraps this as an index authorization triggers three activity
+ * checks per document, not one. That is intentional: a `search_indexing`-only
+ * determination would be weaker than what counsel is being asked to approve,
+ * and a document could otherwise be cleared to index on the strength of a
+ * decision that never covered extracting its text.
  */
 export function authorizeIndexing(
   repository: CounselDeterminationRepository,

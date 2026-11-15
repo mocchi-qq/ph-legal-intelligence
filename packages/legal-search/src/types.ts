@@ -6,6 +6,10 @@
 // filtering by metadata, fusing the ranked lists and reranking the survivors.
 // Nothing here is bound to a provider — the Cloudflare Vectorize / AI Search
 // implementation is an adapter behind `RetrievalConfig` and the search service.
+//
+// The built index type, `SearchIndex`, is declared in `retrieve.ts` rather than
+// here, and that file states the authorization boundary: the build enforces
+// `search_indexing` per document, while retrieval performs no read-time check.
 
 /**
  * The retrieval shape a query asks for. The mode selects the ranking policy,

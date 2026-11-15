@@ -10,6 +10,7 @@ import {
   type CounselDetermination,
   CounselDeterminationRepository,
   type CounselProfessional,
+  type DocumentActivityAuthorization,
   InMemoryAuthorizationAuditSink,
   ingestArtifact,
   syncToAuthorizationRegistry,
@@ -543,6 +544,39 @@ describe("Gate 6 — reindex authorization", () => {
     activityDecision("search_indexing"),
   ];
 
+  /**
+   * The Gate 5/6 projection callback adapted to the typed document/activity
+   * contract the index build now requires. `authorizeIndexing` deliberately
+   * checks all three activities a reindex performs, so this keeps that stricter
+   * intent; the builder's own `search_indexing` request is what it is asked.
+   */
+  function indexAuthority(
+    r: CounselDeterminationRepository,
+    store: CorpusStore,
+  ): DocumentActivityAuthorization {
+    return (request) => {
+      const sourceId =
+        store.state.documents.find((d) => d.id === request.documentId)
+          ?.sourceId ?? null;
+      const result = authorizeIndexing(
+        r,
+        { sourceId: sourceId ?? "", documentId: request.documentId },
+        {},
+        AUDIT,
+      );
+      return {
+        documentId: request.documentId,
+        activity: request.activity,
+        role: request.role,
+        decision: result.allowed ? "AUTHORIZED" : "UNAUTHORIZED",
+        sourceId,
+        status: null,
+        reason: result.reason,
+        decisionRef: null,
+      };
+    };
+  }
+
   it("indexes a synthetic document only with all three required decisions", () => {
     const r = repo();
     r.record(
@@ -550,34 +584,18 @@ describe("Gate 6 — reindex authorization", () => {
       "synthetic-registrar",
       "index authorization",
     );
-    const index = buildSearchIndex(corpus().state, {
-      authorize: (request) =>
-        authorizeIndexing(
-          r,
-          {
-            sourceId: request.sourceId,
-            documentId: request.documentId,
-          },
-          {},
-          AUDIT,
-        ),
+    const store = corpus();
+    const index = buildSearchIndex(store.state, {
+      authorization: indexAuthority(r, store),
     });
     expect(index.entries.length).toBeGreaterThan(0);
   });
 
   it("returns an empty index when no determination exists", () => {
     const r = repo();
-    const index = buildSearchIndex(corpus().state, {
-      authorize: (request) =>
-        authorizeIndexing(
-          r,
-          {
-            sourceId: request.sourceId,
-            documentId: request.documentId,
-          },
-          {},
-          AUDIT,
-        ),
+    const store = corpus();
+    const index = buildSearchIndex(store.state, {
+      authorization: indexAuthority(r, store),
     });
     expect(index.entries).toHaveLength(0);
   });
@@ -592,16 +610,7 @@ describe("Gate 6 — reindex authorization", () => {
     const store = corpus();
     const build = () =>
       buildSearchIndex(store.state, {
-        authorize: (request) =>
-          authorizeIndexing(
-            r,
-            {
-              sourceId: request.sourceId,
-              documentId: request.documentId,
-            },
-            {},
-            AUDIT,
-          ),
+        authorization: indexAuthority(r, store),
       });
     expect(build().entries.length).toBeGreaterThan(0);
     r.revoke(DET_ID, "synthetic-counsel", "withdrawn");
@@ -633,17 +642,9 @@ describe("Gate 6 — reindex authorization", () => {
       "synthetic-registrar",
       "missing in-memory decision",
     );
-    const index = buildSearchIndex(corpus().state, {
-      authorize: (request) =>
-        authorizeIndexing(
-          r,
-          {
-            sourceId: request.sourceId,
-            documentId: request.documentId,
-          },
-          {},
-          AUDIT,
-        ),
+    const store = corpus();
+    const index = buildSearchIndex(store.state, {
+      authorization: indexAuthority(r, store),
     });
     expect(index.entries).toHaveLength(0);
   });

@@ -13,17 +13,22 @@ deterministic, in-memory, lexical index with exact-identifier routing.
 
 ## 1. Entry points
 
-| Function                                              | Behaviour                                                                  |
-| ----------------------------------------------------- | -------------------------------------------------------------------------- |
-| `buildSearchIndex(corpus, { authorize })`             | Builds the index; throws `index_authorization_required` without a callback |
-| `retrieve(index, query, defaultLimit = 10)`           | Returns `SearchResult[]`; deterministic for a given index and query        |
-| `isIdentifierQuery(text)`                             | Distinguishes a bare citation from a question that cites one               |
-| `toCitationInput(result, proposition, relevantDate?)` | Adapts a result to the citation engine's passage input                     |
+| Function                                              | Behaviour                                                                                                                                                                           |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `buildSearchIndex(corpus, { authorization })`         | Builds the index; the authorization is a `DocumentActivityAuthorization` consulted once per document for `search_indexing`, and a missing one throws `index_authorization_required` |
+| `retrieve(index, query, defaultLimit = 10)`           | Returns `SearchResult[]`; deterministic for a given index and query                                                                                                                 |
+| `isIdentifierQuery(text)`                             | Distinguishes a bare citation from a question that cites one                                                                                                                        |
+| `toCitationInput(result, proposition, relevantDate?)` | Adapts a result to the citation engine's passage input                                                                                                                              |
 
 The index is built from `CorpusState` (documents, versions, provisions, chunks).
-`buildSearchIndex` calls `authorize({ documentId, sourceId })` before indexing each
-document's chunks and skips it when the decision is not `allowed`; there is no
-default authorizer and no permissive fallback.
+`buildSearchIndex` fixes the activity to `search_indexing` and the role to `TARGET`,
+resolves each document once, and indexes only documents whose decision is
+`AUTHORIZED`. There is no default authorizer and no permissive fallback: the legacy
+`authorize` boolean callback is not accepted. Excluded documents appear in
+`SearchIndex.excludedDocuments` with their decision and reason.
+
+Read time is not gated: `retrieve` does not consult authorization, so holding an
+index is sufficient to search it.
 
 ## 2. `SearchResult` fields
 

@@ -332,3 +332,16 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G13-D | Test matrix A–E and regression                               | TODO        | `tests/authority/gate13-*.test.ts`            |
 | G13-E | Three independent reviews + remediation                      | TODO        | `docs/gates/gate-13/13_INDEPENDENT_REVIEW.md` |
 | G13-F | Deliverables, KANBAN, decision                               | TODO        | `docs/gates/gate-13/`                         |
+
+---
+
+# Gate 14 — Index Build Authorization
+
+**Synthetic-only authorization gate. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID    | Task                                                 | Status      | Evidence                                             |
+| ----- | ---------------------------------------------------- | ----------- | ---------------------------------------------------- |
+| G14-A | Index build requires document-activity authorization | IN PROGRESS | `legal-search/src/retrieve.ts`                       |
+| G14-B | Call sites and fixture helper migrated               | TODO        | `tests/benchmark/helpers.ts` + 9 test files          |
+| G14-C | Registry-backed tests incl. wrong-activity refusal   | TODO        | `tests/retrieval/gate14-index-authorization.test.ts` |
+| G14-D | Docs, review, decision                               | TODO        | `docs/gates/gate-14/`                                |

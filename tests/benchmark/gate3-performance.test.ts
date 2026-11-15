@@ -2,15 +2,26 @@ import { readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { performance } from "node:perf_hooks";
 import { describe, expect, it } from "vitest";
+import type { DocumentActivityAuthorization } from "../../packages/legal-ingestion/src/index";
 import {
   buildSearchIndex,
   retrieve,
 } from "../../packages/legal-search/src/index";
 import { buildPilotCorpus, pilotAvailable } from "./pilot-corpus";
 
-const allowSyntheticIndex = () => ({
-  allowed: true,
+const allowSyntheticIndex: DocumentActivityAuthorization = ({
+  documentId,
+  activity,
+  role,
+}) => ({
+  documentId,
+  activity,
+  role,
+  decision: "AUTHORIZED",
+  sourceId: null,
+  status: null,
   reason: "synthetic_pilot_fixture",
+  decisionRef: null,
 });
 
 const PILOT_FILES = [
@@ -40,7 +51,7 @@ describe.skipIf(!pilotAvailable())(
 
       const t1 = performance.now();
       const index = buildSearchIndex(store.state, {
-        authorize: allowSyntheticIndex,
+        authorization: allowSyntheticIndex,
       });
       const indexMs = performance.now() - t1;
 

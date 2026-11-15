@@ -26,7 +26,9 @@ import {
 } from "./helpers";
 
 const store = buildFixtureCorpus();
-const index = buildSearchIndex(store.state, { authorize: allowSyntheticIndex });
+const index = buildSearchIndex(store.state, {
+  authorization: allowSyntheticIndex,
+});
 const verifier = createCitationVerifier({
   documents: store.state.documents,
   versions: store.state.versions,

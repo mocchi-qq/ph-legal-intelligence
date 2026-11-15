@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { AuthorityLedger } from "../../packages/legal-ingestion/src/authority-ledger";
 import {
   type Activity,
+  type DocumentActivityAuthorization,
   type DocumentActivityDecision,
   type DocumentActivityRequest,
   type ProjectionAuthorizationDecision,
@@ -802,5 +803,215 @@ describe("Gate 13 remediation — a document is checked once, not twice", () => 
     ).toBe(false);
     expect(projection.authorizationChecks).toHaveLength(1);
     expect(projection.authorizationChecks?.[0]?.role).toBe("TARGET");
+  });
+});
+
+describe("Gate 13 remediation — a resolver answer must name the pair it checked", () => {
+  /**
+   * A resolver that ignores the question and answers with one fixed object.
+   * Cast where the object is not a full decision: the point of these tests is a
+   * resolver that does not honour `DocumentActivityAuthorization`.
+   */
+  function answering(answer: unknown): DocumentActivityAuthorization {
+    return () => answer as DocumentActivityDecision;
+  }
+
+  /** The answer a correct adapter gives for the pair it was asked about. */
+  const correctAnswer: DocumentActivityAuthorization = (
+    request: DocumentActivityRequest,
+  ): DocumentActivityDecision => ({
+    documentId: request.documentId,
+    activity: request.activity,
+    role: request.role,
+    decision: "AUTHORIZED",
+    sourceId: `SYNTH-G13-SRC-${request.documentId}`,
+    status: "AUTHORIZED",
+    reason: "authorized",
+    decisionRef: `SYNTH-G13-DECISION-${request.documentId}-${request.activity}`,
+  });
+
+  /** A bare answered pair, with the identity replaced by the caller's values. */
+  function answerWith(
+    identity: Record<string, unknown>,
+  ): DocumentActivityDecision {
+    return {
+      ...correctAnswer({
+        documentId: TARGET_DOCUMENT_ID,
+        activity: "citation_display",
+        role: "TARGET",
+      }),
+      ...identity,
+    } as unknown as DocumentActivityDecision;
+  }
+
+  it("refuses an answer that names no activity", () => {
+    const ledger = seed();
+    addEffect(ledger, { id: "a1" });
+
+    const projection = projectAuthorityState(
+      request(ledger, "citation_display", {
+        documentActivityAuthorization: answering({ decision: "AUTHORIZED" }),
+      }),
+    );
+
+    // A decision for an unnamed activity says nothing about citation_display.
+    expect(projection.outcome).toBe("UNKNOWN");
+    expect(projection.state).toBe("UNKNOWN");
+    expect(projection.abstained).toBe(true);
+    expect(projection.authorization).toBe("NOT_CHECKED");
+    expect(projection.assertions).toEqual([]);
+    expect(projection.reviews).toEqual([]);
+    expect(projection.missing).toEqual([
+      "AUTHORIZATION_NOT_CHECKED",
+      "activity:citation_display",
+    ]);
+    // The trace names the asked pair, never the answer's absent one.
+    expect(projection.authorizationChecks).toEqual([
+      {
+        documentId: TARGET_DOCUMENT_ID,
+        activity: "citation_display",
+        role: "TARGET",
+        decision: "NOT_CHECKED",
+        sourceId: null,
+        status: null,
+        reason: "unknown_activity",
+        decisionRef: null,
+      },
+    ]);
+  });
+
+  it("refuses an answer made for another activity", () => {
+    const ledger = seed();
+    addEffect(ledger, { id: "a1" });
+
+    const projection = projectAuthorityState(
+      request(ledger, "citation_display", {
+        documentActivityAuthorization: answering(
+          answerWith({ activity: "viewing" }),
+        ),
+      }),
+    );
+
+    expect(projection.outcome).toBe("UNKNOWN");
+    expect(projection.state).toBe("UNKNOWN");
+    expect(projection.abstained).toBe(true);
+    expect(projection.assertions).toEqual([]);
+    expect(projection.missing).toEqual([
+      "AUTHORIZATION_NOT_CHECKED",
+      "activity:citation_display",
+    ]);
+    expect(projection.authorizationChecks).toEqual([
+      {
+        documentId: TARGET_DOCUMENT_ID,
+        activity: "citation_display",
+        role: "TARGET",
+        decision: "NOT_CHECKED",
+        sourceId: null,
+        status: null,
+        reason: "activity_mismatch",
+        decisionRef: null,
+      },
+    ]);
+  });
+
+  it("refuses an answer made for another document", () => {
+    const ledger = seed();
+    addEffect(ledger, { id: "a1" });
+
+    const projection = projectAuthorityState(
+      request(ledger, "citation_display", {
+        documentActivityAuthorization: answering(
+          answerWith({ documentId: OTHER_SOURCE_DOCUMENT_ID }),
+        ),
+      }),
+    );
+
+    expect(projection.outcome).toBe("UNKNOWN");
+    expect(projection.state).toBe("UNKNOWN");
+    expect(projection.abstained).toBe(true);
+    expect(projection.assertions).toEqual([]);
+    expect(projection.authorizationChecks).toEqual([
+      {
+        documentId: TARGET_DOCUMENT_ID,
+        activity: "citation_display",
+        role: "TARGET",
+        decision: "NOT_CHECKED",
+        sourceId: null,
+        status: null,
+        reason: "document_mismatch",
+        decisionRef: null,
+      },
+    ]);
+  });
+
+  it("refuses an answer whose decision is not a canonical literal", () => {
+    const ledger = seed();
+    addEffect(ledger, { id: "a1" });
+
+    const projection = projectAuthorityState(
+      request(ledger, "citation_display", {
+        documentActivityAuthorization: answering(
+          answerWith({
+            decision: "yes" as unknown as ProjectionAuthorizationDecision,
+          }),
+        ),
+      }),
+    );
+
+    expect(projection.outcome).toBe("UNKNOWN");
+    expect(projection.state).toBe("UNKNOWN");
+    expect(projection.abstained).toBe(true);
+    expect(projection.assertions).toEqual([]);
+    expect(projection.authorizationChecks).toEqual([
+      {
+        documentId: TARGET_DOCUMENT_ID,
+        activity: "citation_display",
+        role: "TARGET",
+        decision: "NOT_CHECKED",
+        sourceId: null,
+        status: null,
+        reason: "invalid_decision",
+        decisionRef: null,
+      },
+    ]);
+  });
+
+  it("still determines on a full answer for the asked pair", () => {
+    const ledger = seed();
+    addEffect(ledger, { id: "a1" });
+
+    const projection = projectAuthorityState(
+      request(ledger, "citation_display", {
+        documentActivityAuthorization: correctAnswer,
+      }),
+    );
+
+    expect(projection.outcome).toBe("DETERMINED_WITH_REVIEWED_EVIDENCE");
+    expect(projection.state).toBe("PARTIALLY_AMENDED");
+    expect(projection.abstained).toBe(false);
+    expect(projection.authorization).toBe("AUTHORIZED");
+    expect(projection.missing).toEqual([]);
+    expect(projection.authorizationChecks).toEqual([
+      {
+        documentId: TARGET_DOCUMENT_ID,
+        activity: "citation_display",
+        role: "TARGET",
+        decision: "AUTHORIZED",
+        sourceId: `SYNTH-G13-SRC-${TARGET_DOCUMENT_ID}`,
+        status: "AUTHORIZED",
+        reason: "authorized",
+        decisionRef: `SYNTH-G13-DECISION-${TARGET_DOCUMENT_ID}-citation_display`,
+      },
+      {
+        documentId: SOURCE_DOCUMENT_ID,
+        activity: "citation_display",
+        role: "SOURCE",
+        decision: "AUTHORIZED",
+        sourceId: `SYNTH-G13-SRC-${SOURCE_DOCUMENT_ID}`,
+        status: "AUTHORIZED",
+        reason: "authorized",
+        decisionRef: `SYNTH-G13-DECISION-${SOURCE_DOCUMENT_ID}-citation_display`,
+      },
+    ]);
   });
 });

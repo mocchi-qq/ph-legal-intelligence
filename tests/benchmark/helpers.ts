@@ -3,6 +3,7 @@ import { join } from "node:path";
 import {
   type ArtifactInput,
   CorpusStore,
+  type DocumentActivityAuthorization,
   ingestArtifact,
 } from "../../packages/legal-ingestion/src/index";
 
@@ -18,9 +19,26 @@ export interface FixtureManifest {
   fixtures: ArtifactInput[];
 }
 
-export const allowSyntheticIndex = () => ({
-  allowed: true,
+/**
+ * Test-only fixture: reports `AUTHORIZED` for every request without consulting
+ * a registry, so a benchmark can never fail on authorization. Behaviour under a
+ * real registry adapter — denials, activity mismatches and the per-document
+ * record of what was refused — is exercised in
+ * `tests/retrieval/gate14-index-authorization.test.ts`.
+ */
+export const allowSyntheticIndex: DocumentActivityAuthorization = ({
+  documentId,
+  activity,
+  role,
+}) => ({
+  documentId,
+  activity,
+  role,
+  decision: "AUTHORIZED",
+  sourceId: null,
+  status: null,
   reason: "synthetic_test_fixture",
+  decisionRef: null,
 });
 
 export function loadFixtures(): FixtureManifest {

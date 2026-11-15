@@ -21,7 +21,9 @@ import {
 } from "../benchmark/helpers";
 
 const store = buildFixtureCorpus();
-const index = buildSearchIndex(store.state, { authorize: allowSyntheticIndex });
+const index = buildSearchIndex(store.state, {
+  authorization: allowSyntheticIndex,
+});
 const doc = docByKey(store, "COURT_DECISION:G.R. No. 999001");
 
 function corpusView() {
@@ -139,7 +141,12 @@ function passageIndex(): SearchIndex {
     for (const term of entry.termFreq.keys())
       docFreq.set(term, (docFreq.get(term) ?? 0) + 1);
   }
-  return { entries: [caption, body], docFreq, total: 2 };
+  return {
+    entries: [caption, body],
+    docFreq,
+    total: 2,
+    excludedDocuments: [],
+  };
 }
 
 describe("gate 9 passage retrieval", () => {
@@ -378,6 +385,7 @@ describe("gate 9 passage retrieval", () => {
         ["passage", 1],
       ]),
       total: 1,
+      excludedDocuments: [],
     };
 
     const dayBefore = retrieve(syntheticIndex, {
@@ -435,6 +443,7 @@ describe("gate 9 passage retrieval", () => {
         ["passage", 1],
       ]),
       total: 1,
+      excludedDocuments: [],
     };
 
     const results = retrieve(syntheticIndex, {

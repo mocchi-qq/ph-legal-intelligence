@@ -321,8 +321,10 @@ describe("Gate 12 — target authorization gating", () => {
     expect(projection.missing).toContain("AUTHORIZATION_NOT_CHECKED");
     expect(projection.abstained).toBe(true);
     expect(projection.authorization).toBe("NOT_CHECKED");
+    // Gate 13: a resolver answer whose decision is not a canonical literal is
+    // refused as invalid_decision (an assertion keeps unrecognised_decision).
     expect(projection.authorizationChecks?.[0]?.reason).toBe(
-      "unrecognised_decision",
+      "invalid_decision",
     );
   });
 
