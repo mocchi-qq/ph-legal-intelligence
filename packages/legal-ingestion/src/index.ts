@@ -3,6 +3,7 @@
 
 export * from "./acquisition";
 export * from "./authority-d1-store";
+export * from "./authority-ids";
 export * from "./authority-ledger";
 export * from "./authority-projection";
 export * from "./authority-status-lookup";

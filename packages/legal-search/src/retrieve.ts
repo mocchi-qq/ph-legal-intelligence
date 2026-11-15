@@ -377,7 +377,9 @@ export function retrieve(
 
   // Signal 1: exact identifier match. A document-level match decides whether the
   // document was cited; `exactPassage` records whether this particular passage
-  // restates the identifier, so callers are never told a blank passage is exact.
+  // restates the identifier. It serves only as an ordering tie-breaker — within
+  // the exact ranking, and again in the final fused sort — and is not exposed on
+  // `SearchResult`, so callers see only the document-level `exactMatch`.
   const queryKeySet = new Set(queryNormalized);
   const exactRanking = candidates
     .filter((entry) => entry.exactKeys.some((key) => queryKeySet.has(key)))
@@ -465,10 +467,11 @@ export function retrieve(
         a.entry.chunkId.localeCompare(b.entry.chunkId),
     )
     .slice(0, limit)
-    .map(({ entry, score, lexical, exactPassage }) => {
-      // Document-level: the passage's document matched the identifier, whether
-      // or not this particular passage repeats it. Passage-level truthfulness is
-      // separate: `exactMatch` additionally requires the number in the text.
+    .map(({ entry, score, lexical }) => {
+      // `exactMatch` is document-level: the passage's document matched the
+      // identifier, whether or not this passage repeats it. Passage-level
+      // repetition is tracked separately as `exactPassage` and is used only
+      // for ordering, never returned.
       const exact = exactDocumentIds.has(entry.documentId);
       const metadata: ChunkMetadata = {
         documentId: entry.documentId,

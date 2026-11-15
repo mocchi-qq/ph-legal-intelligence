@@ -1,0 +1,45 @@
+{
+  "gate": 11,
+  "title": "Maintenance and Ingest Idempotence",
+  "date": "2026-11-15",
+  "verdict": "ACCEPTED",
+  "baseline": "bf328c6",
+  "implementation": {
+    "docs_tree_complete": "IMPLEMENTED_VERIFIED",
+    "deterministic_authority_ids": "IMPLEMENTED_SYNTHETIC_TESTED",
+    "canonical_json_guards": "IMPLEMENTED_TESTED",
+    "comment_corrections": "IMPLEMENTED",
+    "unused_binding_removed": "IMPLEMENTED"
+  },
+  "tests": {
+    "gate11_new": 21,
+    "full_suite": { "files": 63, "tests": 619, "passed": 610, "failed": 0, "skipped": 9 },
+    "baseline_failure": "resolved — tests/unit/docs-structure.test.ts now passes",
+    "build": "exit 0",
+    "biome": "exit 0, 0 errors, 84 warnings"
+  },
+  "reviews": {
+    "count": 1,
+    "cross_lane": true,
+    "findings": 8,
+    "fixed": 8,
+    "report": "docs/gates/gate-11/03_INDEPENDENT_REVIEW.md"
+  },
+  "limitations": [
+    "D1 remains shim-validated only; no remote D1 or workerd run.",
+    "Idempotence is id-based, not concurrency-safe; the losing racer lands on the append-only trigger.",
+    "No lifecycle-transition record type: state, reviewStatus, status and availability are immutable in place.",
+    "Mapping review workflow not implemented; reviewStatus is set at insert.",
+    "Support verification remains the lexical proxy, not entailment.",
+    "No real corpus or counsel determination."
+  ],
+  "boundaries": {
+    "real_documents_acquired": 0,
+    "counsel_determinations": 0,
+    "authorization_cells_unknown": 350,
+    "pilot_documents_blocked": 4,
+    "migrations_changed": 0,
+    "deployment": false,
+    "push": false
+  }
+}

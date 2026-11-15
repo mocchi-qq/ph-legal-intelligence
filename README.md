@@ -104,16 +104,47 @@ pnpm db:migrate
 pnpm db:seed
 ```
 
-## Gate 0 Status
+## Status
 
-This repository is currently at **Gate 0: Foundation** — research, specification, and repository initialization complete. No product implementation has begun.
+This repository is at **Gate 11: maintenance and ingest idempotence**. Gates 0–10
+are complete; the authoritative record of each is its `DECISION.md` under
+`docs/gates/`.
 
-See `GATE0_REPORT.md` for the acceptance report.
+What exists is a **synthetic-only** engineering system: deterministic retrieval, a
+four-layer citation verifier, an append-only legal-effects ledger with a
+temporal projection, and a D1 adapter validated against a SQLite shim. Supported
+claims are labelled in each gate decision as implemented, tested, independently
+verified, and legally authorised — those are four different things and the
+repository does not conflate them.
+
+What does not exist: any real Philippine legal document. **Zero** counsel
+determinations have been made, all **350** source-authorisation cells are
+`UNKNOWN`, and the four pilot documents remain `BLOCKED_AUTHORIZATION`. Nothing
+here is a legal authority, a legal opinion, or a deployed service.
+
+| Gate | Subject                                                     | Verdict record                            |
+| ---- | ----------------------------------------------------------- | ----------------------------------------- |
+| 0    | Foundation                                                  | `GATE0_REPORT.md` (repository root)       |
+| 1–4  | Ingestion, retrieval, citation engine, authorisation matrix | `GATE*_REPORT.md` in `docs/gates/gate-N/` |
+| 5    | Counsel registry and determinations                         | ACCEPTED WITH LIMITATIONS                 |
+| 6    | Corpus readiness and execution plan                         | ACCEPTED WITH LIMITATIONS                 |
+| 7    | D1 runtime, migrations, API surface                         | ACCEPTED WITH LIMITATIONS                 |
+| 8    | Authority core: assertions, reviews, projection             | ACCEPTED WITH LIMITATIONS                 |
+| 9    | Passage-level retrieval contract                            | ACCEPTED                                  |
+| 10   | Authority-aware verification and D1 ledger store            | ACCEPTED WITH LIMITATIONS                 |
+| 11   | Maintenance and ingest idempotence                          | in progress — see `docs/gates/gate-11/`   |
+
+Each verdict is a `DECISION.md` in the gate directory, except Gate 0, which
+records it in `GATE0_REPORT.md` at the repository root, and Gates 1–4, which
+record it in their `GATE*_REPORT.md` inside `docs/gates/gate-N/`.
 
 ## Documentation
 
 - [Architecture Decisions](docs/decisions/)
 - [Product Requirements](docs/product/)
+- [Data Governance](docs/data-governance/)
+- [Retrieval Specification](docs/retrieval/)
+- [API Specification](docs/api/)
 - [Security](docs/security/)
 - [Privacy](docs/privacy/)
 - [Implementation Roadmap](docs/architecture/IMPLEMENTATION_ROADMAP.md)
