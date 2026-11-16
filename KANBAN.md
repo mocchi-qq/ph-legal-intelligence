@@ -345,3 +345,23 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G14-B | Call sites and fixture helper migrated               | TODO        | `tests/benchmark/helpers.ts` + 9 test files          |
 | G14-C | Registry-backed tests incl. wrong-activity refusal   | TODO        | `tests/retrieval/gate14-index-authorization.test.ts` |
 | G14-D | Docs, review, decision                               | TODO        | `docs/gates/gate-14/`                                |
+
+---
+
+# Gate 15 — End-to-End Readiness Rehearsal
+
+**Synthetic-only integration rehearsal. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID    | Task                                                  | Status      | Evidence                                               |
+| ----- | ----------------------------------------------------- | ----------- | ------------------------------------------------------ |
+| G15-A | Chain: authorize → ingest → index → retrieve → verify | IN PROGRESS | `tests/integration/gate15-readiness-rehearsal.test.ts` |
+| G15-B | Refusal matrix: six stages fail closed                | TODO        | same file                                              |
+| G15-C | Results, review, decision                             | TODO        | `docs/gates/gate-15/`                                  |
+
+## Backlog (opened by Gate 15)
+
+| ID  | Card                                                                                                         | Why it matters                                          |
+| --- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| B-1 | Analysis-step contract: assertion + evidence + review from an ingested artifact, tested without hand-seeding | the seam between ingest and verify; last wiring gap     |
+| B-2 | Close the `synthetic: true` ingestion exemption (require registry decisions, or a distinct audit marker)     | a caller assertion currently skips four activity checks |
+| B-3 | Read-time authorization for `retrieve`                                                                       | holding an index is currently sufficient to search it   |
