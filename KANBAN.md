@@ -352,19 +352,21 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 **Synthetic-only integration rehearsal. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
 
-| ID    | Task                                                  | Status      | Evidence                                               |
-| ----- | ----------------------------------------------------- | ----------- | ------------------------------------------------------ |
-| G15-A | Chain: authorize → ingest → index → retrieve → verify | IN PROGRESS | `tests/integration/gate15-readiness-rehearsal.test.ts` |
-| G15-B | Refusal matrix: six stages fail closed                | TODO        | same file                                              |
-| G15-C | Results, review, decision                             | TODO        | `docs/gates/gate-15/`                                  |
+| ID    | Task                                                  | Status                           | Evidence                                               |
+| ----- | ----------------------------------------------------- | -------------------------------- | ------------------------------------------------------ |
+| G15-A | Chain: authorize → ingest → index → retrieve → verify | DONE (12 tests)                  | `tests/integration/gate15-readiness-rehearsal.test.ts` |
+| G15-B | Refusal matrix: six stages fail closed                | DONE                             | same file                                              |
+| G15-C | Results, review, decision                             | DONE — ACCEPTED WITH LIMITATIONS | `docs/gates/gate-15/`                                  |
 
 ## Backlog (opened by Gate 15)
 
-| ID  | Card                                                                                                         | Why it matters                                          |
-| --- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| B-1 | Analysis-step contract: assertion + evidence + review from an ingested artifact, tested without hand-seeding | the seam between ingest and verify; last wiring gap     |
-| B-2 | Close the `synthetic: true` ingestion exemption (require registry decisions, or a distinct audit marker)     | a caller assertion currently skips four activity checks |
-| B-3 | Read-time authorization for `retrieve`                                                                       | holding an index is currently sufficient to search it   |
+| ID  | Card                                                                                                         | Why it matters                                                        |
+| --- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| B-1 | Analysis-step contract: assertion + evidence + review from an ingested artifact, tested without hand-seeding | **DONE — Gate 16**                                                    |
+| B-2 | Close the `synthetic: true` ingestion exemption (require registry decisions, or a distinct audit marker)     | a caller assertion currently skips four activity checks               |
+| B-3 | Read-time authorization for `retrieve`                                                                       | holding an index is currently sufficient to search it                 |
+| B-4 | Corpus → canonical D1 writer (five canonical tables, insert-only)                                            | **DONE — Gate 17**                                                    |
+| B-5 | Production D1 reader: `CitationCorpusView` source + multi-document snapshot loader                           | layers 1–3 read the in-memory corpus; callers merge snapshots by hand |
 
 ---
 
@@ -372,12 +374,12 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 **Synthetic-only intake contract. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
 
-| ID    | Task                                                                    | Status      | Evidence                                       |
-| ----- | ----------------------------------------------------------------------- | ----------- | ---------------------------------------------- |
-| G16-A | `recordEffectClaim` — claim + evidence from ingested chunk              | IN PROGRESS | `effect-intake.ts`                             |
-| G16-B | Refusals: unpinnable claims produce no record                           | TODO        | `tests/authority/gate16-effect-intake.test.ts` |
-| G16-C | Chain without hand-seeding (ingest → claim → persist → review → verify) | TODO        | `tests/integration/gate16-*`                   |
-| G16-D | Results, review, decision                                               | TODO        | `docs/gates/gate-16/`                          |
+| ID    | Task                                                                    | Status                           | Evidence                                        |
+| ----- | ----------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------- |
+| G16-A | `recordEffectClaim` — claim + evidence from ingested chunk              | DONE (46 tests)                  | `effect-intake.ts`                              |
+| G16-B | Refusals: unpinnable claims produce no record                           | DONE — 17 reasons                | `tests/authority/gate16-effect-intake.test.ts`  |
+| G16-C | Chain without hand-seeding (ingest → claim → persist → review → verify) | DONE (8 tests)                   | `tests/integration/gate16-effect-chain.test.ts` |
+| G16-D | Results, review, decision                                               | DONE — ACCEPTED WITH LIMITATIONS | `docs/gates/gate-16/`                           |
 
 ---
 
@@ -385,9 +387,9 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 **Synthetic-only persistence gate. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
 
-| ID    | Task                                                   | Status      | Evidence                                       |
-| ----- | ------------------------------------------------------ | ----------- | ---------------------------------------------- |
-| G17-A | `writeCorpusToD1` — five canonical tables, fail-closed | IN PROGRESS | `corpus-d1-writer.ts`                          |
-| G17-B | Idempotence, conflict, injection, FK tests             | TODO        | `tests/authority/gate17-corpus-writer.test.ts` |
-| G17-C | Chain: ingest → write → load from D1 → claim → verify  | TODO        | `tests/integration/gate17-*`                   |
-| G17-D | Results, review, decision                              | TODO        | `docs/gates/gate-17/`                          |
+| ID    | Task                                                   | Status                                | Evidence                                       |
+| ----- | ------------------------------------------------------ | ------------------------------------- | ---------------------------------------------- |
+| G17-A | `writeCorpusToD1` — five canonical tables, fail-closed | DONE (15 tests)                       | `corpus-d1-writer.ts`                          |
+| G17-B | Idempotence, conflict, injection, FK tests             | DONE — batch required, timestamp-safe | `tests/authority/gate17-corpus-writer.test.ts` |
+| G17-C | Chain: ingest → write → load from D1 → claim → verify  | DONE (9 tests, no hand-built rows)    | `tests/integration/gate17-d1-chain.test.ts`    |
+| G17-D | Results, review, decision                              | DONE — ACCEPTED WITH LIMITATIONS      | `docs/gates/gate-17/`                          |
