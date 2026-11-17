@@ -378,3 +378,16 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G16-B | Refusals: unpinnable claims produce no record                           | TODO        | `tests/authority/gate16-effect-intake.test.ts` |
 | G16-C | Chain without hand-seeding (ingest → claim → persist → review → verify) | TODO        | `tests/integration/gate16-*`                   |
 | G16-D | Results, review, decision                                               | TODO        | `docs/gates/gate-16/`                          |
+
+---
+
+# Gate 17 — Corpus → D1 Writer
+
+**Synthetic-only persistence gate. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID    | Task                                                   | Status      | Evidence                                       |
+| ----- | ------------------------------------------------------ | ----------- | ---------------------------------------------- |
+| G17-A | `writeCorpusToD1` — five canonical tables, fail-closed | IN PROGRESS | `corpus-d1-writer.ts`                          |
+| G17-B | Idempotence, conflict, injection, FK tests             | TODO        | `tests/authority/gate17-corpus-writer.test.ts` |
+| G17-C | Chain: ingest → write → load from D1 → claim → verify  | TODO        | `tests/integration/gate17-*`                   |
+| G17-D | Results, review, decision                              | TODO        | `docs/gates/gate-17/`                          |

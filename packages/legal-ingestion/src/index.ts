@@ -10,6 +10,7 @@ export * from "./authority-status-lookup";
 export * from "./authorization";
 export * from "./authorization-audit";
 export * from "./citation-resolver";
+export * from "./corpus-d1-writer";
 export * from "./counsel-d1-store";
 export * from "./counsel-determinations";
 export * from "./counsel-projection";
