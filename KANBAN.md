@@ -360,13 +360,13 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 
 ## Backlog (opened by Gate 15)
 
-| ID  | Card                                                                                                         | Why it matters                                                        |
-| --- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| B-1 | Analysis-step contract: assertion + evidence + review from an ingested artifact, tested without hand-seeding | **DONE — Gate 16**                                                    |
-| B-2 | Close the `synthetic: true` ingestion exemption (require registry decisions, or a distinct audit marker)     | a caller assertion currently skips four activity checks               |
-| B-3 | Read-time authorization for `retrieve`                                                                       | holding an index is currently sufficient to search it                 |
-| B-4 | Corpus → canonical D1 writer (five canonical tables, insert-only)                                            | **DONE — Gate 17**                                                    |
-| B-5 | Production D1 reader: `CitationCorpusView` source + multi-document snapshot loader                           | layers 1–3 read the in-memory corpus; callers merge snapshots by hand |
+| ID  | Card                                                                                                         | Why it matters                                          |
+| --- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| B-1 | Analysis-step contract: assertion + evidence + review from an ingested artifact, tested without hand-seeding | **DONE — Gate 16**                                      |
+| B-2 | Close the `synthetic: true` ingestion exemption (require registry decisions, or a distinct audit marker)     | a caller assertion currently skips four activity checks |
+| B-3 | Read-time authorization for `retrieve`                                                                       | holding an index is currently sufficient to search it   |
+| B-4 | Corpus → canonical D1 writer (five canonical tables, insert-only)                                            | **DONE — Gate 17**                                      |
+| B-5 | Production D1 reader: `CitationCorpusView` source + multi-document snapshot loader                           | **DONE — Gate 18**                                      |
 
 ---
 
@@ -393,3 +393,17 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | G17-B | Idempotence, conflict, injection, FK tests             | DONE — batch required, timestamp-safe | `tests/authority/gate17-corpus-writer.test.ts` |
 | G17-C | Chain: ingest → write → load from D1 → claim → verify  | DONE (9 tests, no hand-built rows)    | `tests/integration/gate17-d1-chain.test.ts`    |
 | G17-D | Results, review, decision                              | DONE — ACCEPTED WITH LIMITATIONS      | `docs/gates/gate-17/`                          |
+
+---
+
+# Gate 18 — Production D1 Reader
+
+**Synthetic-only read gate. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID    | Task                                                              | Status                           | Evidence                                                |
+| ----- | ----------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------- |
+| G18-A | `loadCitationCorpusView` — four tables, fail-closed, read-only    | DONE (10 tests)                  | `corpus-d1-reader.ts`                                   |
+| G18-B | `loadStateForMany` — merge two documents' snapshots in production | DONE                             | `authority-d1-store.ts`                                 |
+| G18-C | Lookup context documents + `EVIDENCE_DOCUMENT_NOT_LOADED` refusal | DONE (4 tests)                   | `authority-status-lookup.ts`, `authority-projection.ts` |
+| G18-D | Chain: verify from D1 only, no in-memory corpus anywhere          | DONE (11 tests)                  | `tests/integration/gate18-d1-only-verification.test.ts` |
+| G18-E | Results, review, decision                                         | DONE — ACCEPTED WITH LIMITATIONS | `docs/gates/gate-18/`                                   |

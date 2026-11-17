@@ -511,9 +511,13 @@ describe("Gate 16 — the effect chain is closed without hand-seeded authority r
     await persistClaim(ledger, claim.records);
 
     // 6. Project and verify, without any review recorded.
+    // Gate 18: the evidence names the source version, so the source document's
+    // rows must be in scope — otherwise the projection reports
+    // EVIDENCE_DOCUMENT_NOT_LOADED rather than silently skipping the check.
     const lookup = createAuthorityStatusLookup(ledger, {
       activity: "citation_display",
       documentActivityAuthorization: authorizationOver(registry, state),
+      contextDocumentIds: [sourceDocument.id],
     });
     const verifier = createCitationVerifier(citationView(state), {
       authority: lookup,
@@ -779,7 +783,11 @@ describe("Gate 16 — the effect chain is closed without hand-seeded authority r
     expect(status.versionId).toBe(chain.targetVersionId);
     expect(status.authorizationSource).toBe("document_activity");
 
-    const snapshot = await ledger.loadStateFor(chain.targetDocumentId);
+    // Gate 18: both documents, because the evidence names the source version.
+    const snapshot = await ledger.loadStateForMany([
+      chain.targetDocumentId,
+      chain.sourceDocumentId,
+    ]);
     const projection = projectAuthorityState({
       snapshot,
       documentId: chain.targetDocumentId,

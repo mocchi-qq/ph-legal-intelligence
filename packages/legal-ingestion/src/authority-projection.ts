@@ -666,13 +666,22 @@ export function projectAuthorityState(
       // Gate 13: the document behind an evidence record is a third party to the
       // projection. Resolve it for the same activity, unless it is the target or
       // an effect source — both already consulted above. A version that is null
-      // or unknown names no document, so nothing is resolved and nothing is
-      // recorded for it.
+      // names no document, so nothing is resolved and nothing is recorded for it.
+      //
+      // Gate 18: a non-null version that is absent from the snapshot is an
+      // under-loaded snapshot, not an absent document. Migration 0009's foreign
+      // key guarantees the version row exists, so silence here would skip the
+      // third-party check this block exists to perform. Name the gap instead.
       if (evidence.documentVersionId !== null) {
         const evidenceVersion = snapshot.versions.find(
           (candidate) => candidate.id === evidence.documentVersionId,
         );
-        if (evidenceVersion !== undefined) {
+        if (evidenceVersion === undefined) {
+          evidenceCodes.push(`EVIDENCE_DOCUMENT_NOT_LOADED:${evidence.id}`);
+          reviewAuthorized = false;
+          continue;
+        }
+        {
           const evidenceDocumentId = evidenceVersion.documentId;
           if (
             evidenceDocumentId !== req.documentId &&

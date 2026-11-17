@@ -154,6 +154,41 @@ function jsonArray(raw: string | null): string[] {
   }
 }
 
+/**
+ * The snapshot `loadStateFor` returns for a document that is not in the
+ * database. Shared so `loadStateForMany` and `loadStateFor` cannot drift on
+ * what "empty" means.
+ */
+function emptyAuthoritySnapshot(): AuthoritySnapshot {
+  return {
+    documents: [],
+    versions: [],
+    provisions: [],
+    provisionIdentities: [],
+    provisionMappings: [],
+    assertions: [],
+    evidence: [],
+    reviews: [],
+  };
+}
+
+function compareStrings(left: string, right: string): number {
+  if (left < right) return -1;
+  if (left > right) return 1;
+  return 0;
+}
+
+/** Union several per-document lists by id; the first row for an id wins. */
+function mergeById<T extends { id: string }>(groups: readonly T[][]): T[] {
+  const merged = new Map<string, T>();
+  for (const group of groups) {
+    for (const item of group) {
+      if (!merged.has(item.id)) merged.set(item.id, item);
+    }
+  }
+  return [...merged.values()];
+}
+
 function toAssertion(row: AssertionRow): EffectAssertion {
   return {
     id: row.id,
@@ -436,16 +471,7 @@ export class D1AuthorityStore {
       .bind(documentId)
       .first<DocumentRow>();
     if (!docRow) {
-      return {
-        documents: [],
-        versions: [],
-        provisions: [],
-        provisionIdentities: [],
-        provisionMappings: [],
-        assertions: [],
-        evidence: [],
-        reviews: [],
-      };
+      return emptyAuthoritySnapshot();
     }
 
     const documents: AuthorityDocumentView[] = [
@@ -578,6 +604,89 @@ export class D1AuthorityStore {
         .all<ReviewRow>();
       reviews.push(...(reviewResult.results ?? []).map(toReview));
     }
+
+    return {
+      documents,
+      versions,
+      provisions,
+      provisionIdentities,
+      provisionMappings,
+      assertions,
+      evidence,
+      reviews,
+    };
+  }
+
+  /**
+   * Load one merged snapshot for several documents.
+   *
+   * Each id is loaded through `loadStateFor`, so per-document semantics are
+   * unchanged: a document that is not in the database contributes nothing
+   * (contrast `loadCitationCorpusView`, which refuses an unknown document with
+   * `corpus_document_not_found:<id>` — the verifier's corpus read must not
+   * silently omit a document, while the ledger read answers "no rows").
+   *
+   * The result is the union by id across those answers. A superseding assertion
+   * can come back from two documents' answers (it targets one and supersedes an
+   * assertion on the other); it appears exactly once. An empty input returns the
+   * same empty snapshot `loadStateFor` returns for an unknown id, without
+   * querying. Output order is deterministic and independent of input order.
+   */
+  async loadStateForMany(documentIds: string[]): Promise<AuthoritySnapshot> {
+    if (documentIds.length === 0) return emptyAuthoritySnapshot();
+
+    const ids = [...new Set(documentIds)].sort(compareStrings);
+    const snapshots: AuthoritySnapshot[] = [];
+    for (const id of ids) {
+      snapshots.push(await this.loadStateFor(id));
+    }
+
+    const documents = mergeById(
+      snapshots.map((snapshot) => snapshot.documents),
+    ).sort((left, right) => compareStrings(left.id, right.id));
+
+    const versions = mergeById(
+      snapshots.map((snapshot) => snapshot.versions),
+    ).sort((left, right) => compareStrings(left.id, right.id));
+
+    // The authority provision view carries no ordinal, so documentId then id is
+    // the only deterministic order available here.
+    const provisions = mergeById(
+      snapshots.map((snapshot) => snapshot.provisions),
+    ).sort(
+      (left, right) =>
+        compareStrings(left.documentId, right.documentId) ||
+        compareStrings(left.id, right.id),
+    );
+
+    const provisionIdentities = mergeById(
+      snapshots.map((snapshot) => snapshot.provisionIdentities),
+    ).sort((left, right) => compareStrings(left.id, right.id));
+
+    const provisionMappings = mergeById(
+      snapshots.map((snapshot) => snapshot.provisionMappings),
+    ).sort((left, right) => compareStrings(left.id, right.id));
+
+    // Same order as `listAssertionsFor`: claimed date, then id, with a missing
+    // claimed date first. The empty-string substitute sorts before any ISO date,
+    // which is the same position SQLite gives NULL under `ORDER BY`.
+    const assertions = mergeById(
+      snapshots.map((snapshot) => snapshot.assertions),
+    ).sort(
+      (left, right) =>
+        compareStrings(
+          left.claimedEffectiveDate ?? "",
+          right.claimedEffectiveDate ?? "",
+        ) || compareStrings(left.id, right.id),
+    );
+
+    const evidence = mergeById(
+      snapshots.map((snapshot) => snapshot.evidence),
+    ).sort((left, right) => compareStrings(left.id, right.id));
+
+    const reviews = mergeById(
+      snapshots.map((snapshot) => snapshot.reviews),
+    ).sort((left, right) => compareStrings(left.id, right.id));
 
     return {
       documents,
