@@ -365,3 +365,16 @@ All three were fixed and re-verified. Final reviewer verdict: **APPROVE**, with 
 | B-1 | Analysis-step contract: assertion + evidence + review from an ingested artifact, tested without hand-seeding | the seam between ingest and verify; last wiring gap     |
 | B-2 | Close the `synthetic: true` ingestion exemption (require registry decisions, or a distinct audit marker)     | a caller assertion currently skips four activity checks |
 | B-3 | Read-time authorization for `retrieve`                                                                       | holding an index is currently sufficient to search it   |
+
+---
+
+# Gate 16 — Effect Claim Intake
+
+**Synthetic-only intake contract. Counsel determinations: 0. 350 cells UNKNOWN. Four pilot documents BLOCKED_AUTHORIZATION.**
+
+| ID    | Task                                                                    | Status      | Evidence                                       |
+| ----- | ----------------------------------------------------------------------- | ----------- | ---------------------------------------------- |
+| G16-A | `recordEffectClaim` — claim + evidence from ingested chunk              | IN PROGRESS | `effect-intake.ts`                             |
+| G16-B | Refusals: unpinnable claims produce no record                           | TODO        | `tests/authority/gate16-effect-intake.test.ts` |
+| G16-C | Chain without hand-seeding (ingest → claim → persist → review → verify) | TODO        | `tests/integration/gate16-*`                   |
+| G16-D | Results, review, decision                                               | TODO        | `docs/gates/gate-16/`                          |
