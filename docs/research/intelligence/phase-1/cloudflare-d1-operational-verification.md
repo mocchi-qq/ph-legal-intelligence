@@ -72,12 +72,14 @@ Per successfully ingested document (from `migrations/d1/` and `packages/legal-in
 | `document_versions` | 1 (initially; +1 per re-ingestion with changed content) |
 | `source_manifestations` | 1 |
 | `ingestion_runs` | 1 per ingestion attempt |
-| `legal_provisions` | N — one per extracted provision; ~20–200+ typical for a Philippine legal document |
-| `document_chunks` | N — one per extracted chunk; typically proportional to provisions |
-| `document_citations` | 0+ — only when the artifact includes citation relationships |
-| `document_relationships` | 0+ — only when explicit relationships with evidence are provided |
+| `extraction_jobs` | 1–3 per ingestion attempt |
+| `verification_records` | 1–5 per ingestion attempt |
+| `legal_provisions` | N — one per extracted provision; ~20–100+ typical |
+| `document_chunks` | N — one per extracted chunk; ~50–300+ typical |
+| `document_citations` | 0–15 — only when the artifact includes citation relationships |
+| `document_relationships` | 0–10 — only when explicit relationships with evidence are provided |
 
-**Working estimate:** ~500 rows written per document (4 fixed rows + ~250 provisions + ~250 chunks), varying by document length/complexity. The four fixed rows are mandatory; provisions/chunks scale with document size.
+**Working estimate:** ~500 rows written per document (~9 fixed rows + provisions/chunks/citations/relationships scaling with document length/complexity). The fixed rows are mandatory per ingestion attempt; provisions/chunks scale with document size.
 
 ### Assumptions
 These estimates are based on official D1 limits/pricing only. They are NOT load-tested. Real-D1 verification (remote HTTP API) is pending.
@@ -118,7 +120,9 @@ D1 remains the correct metadata store for current synthetic scale. Plan per-sour
 4. **Queue depth awareness:** if overload errors exceed a threshold, return 503/backpressure to the client rather than hammering D1.
 5. **Read replication:** use the Sessions API for read-only queries; route writes to the primary.
 
-**Concrete batch() context (from repo):** `packages/legal-ingestion/src/counsel-d1-store.ts` uses `this.db.batch(statements)` in `registerProfessional` (line 264), `recordDetermination` (line 464), and a private batch method (line 925). Migration `0008_gate7_registry_commit.sql` creates `counsel_registry_commits` as the commit marker — the last statement in a determination write batch, making the determination visible to authorization projection only after every related record is written. Per Cloudflare semantics, `db.batch()` runs statements sequentially (recovery-safe, not binding-atomic), so the commit marker is the correct durability mechanism.
+**Concrete batch() context (from repo):** `packages/legal-ingestion/src/counsel-d1-store.ts` uses `this.db.batch(statements)` in `registerProfessional` (line 264), `recordDetermination` (line 464), and a private batch method (line 925). `packages/legal-ingestion/src/corpus-d1-writer.ts` uses `db.batch()` for the 5-table corpus write. Migration `0008_gate7_registry_commit.sql` creates `counsel_registry_commits` as the commit marker — the last statement in a determination write batch, making the determination visible to authorization projection only after every related record is written. Per Cloudflare semantics, `db.batch()` runs statements sequentially (recovery-safe, not binding-atomic), so the commit marker is the correct durability mechanism.
+
+**Ingestion queue context:** `apps/ingestion/wrangler.toml` configures the `legal-ingestion` queue with `max_batch_size = 10`, `max_batch_timeout = 30s`. The pipeline's `chunkIds()` helper batches `IN (...)` clauses in groups of 90 placeholders. Queue consumers write to D1, so ingestion throughput is bounded by D1's single-threaded-per-DB write path and the 100K writes/day free tier.
 
 **Implementation note:** This is a code change routed through the normal gate workflow, not implemented by research.
 
