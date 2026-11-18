@@ -88,6 +88,27 @@ Third-party APIs exist (Open Congress API by BetterGov.ph, BatasWatch) but are c
 
 ---
 
+## 2.2 Preparatory citation-format inventory (public secondary sources only — preparatory for counsel-gated B-13)
+
+**Objective:** Record the known Philippine legal citation conventions so that B-13 (citation-format frequency & conflict map on authorized corpus) has a baseline to compare against when counsel authorizes sampling.
+
+**Court decisions** (Bluebook T2.33 Philippines; GlobaLex/NYU):
+- Supreme Court: `<case name>, <volume> <reporter> <first page> (<date>)` OR `<case name>, G.R. No. <docket> [<parallel citation>] (<date>)`
+- Reporter abbreviations/order of preference: Philippine Reports (Phil. Rep., 1901–date), SCRA, Phil.
+- G.R. No. format: `G.R. No. L-XXXXXX` (older) / `G.R. No. XXXXXX` (modern), eight-digit docket numbers.
+- Court of Appeals: `<case name>, <CA docket and case type>, No. <docket>`.
+
+**Legislation** (Bluebook T2.33 Philippines):
+- Republic Acts: `<statute name or short title>, <legislation type> No. <number>[, <section(s)>]`.
+- Reporter mapping: Republic Acts Nos. 1–6635 (1946–1972) → Rep. Act; Nos. 6636–current (1987–date) → Rep. Act.
+- B.P. (Batas Pambansa) for 1983–1986 acts; Commonwealth Acts (No.) for 1935–1946.
+
+**Reliability:** All above are from public secondary sources (Bluebook T2.33 Philippines, GlobaLex Philippine legal research guide). They are **not** frequency data from an authorized corpus and carry no source link to a PH government document. B-13 remains counsel-gated to verify these formats against real Philippine documents.
+
+**Impact:** The citation-format inventory documents *expected* formats; actual frequency and conflicts (e.g., hybrid G.R./SCRA citations, post-1987 vs pre-1987 Republic Act numbering) can only be measured once counsel authorizes corpus sampling (B-13).
+
+---
+
 ## Boundary confirmation
 
 - No legal corpus downloaded. No production DB populated. No D1 research tables created. No documents ingested. No vector index created for research. No deployment. No push. No authorization state changed.
