@@ -21,7 +21,7 @@
 
 ## In Progress
 
-(none)
+- Phase 1: Cloudflare/D1 operational verification (B-07, B-12, B-14, B-15, B-19)
 
 ## Review
 

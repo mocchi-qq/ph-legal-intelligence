@@ -74,3 +74,23 @@ All nine decisions in `decisions.md` (D-01..D-09) are RECOMMENDED, none implemen
 
 - No legal corpus downloaded. No bulk downloads. No production database populated. No D1 research tables created. No documents ingested. No vector index created for research. No deployment. No authorization state changed. No push.
 - All artifacts are Markdown under `docs/research/intelligence/`.
+
+---
+
+## Phase 1 — Cloudflare/D1 Operational Verification (in progress)
+
+**Created:** `docs/research/intelligence/phase-1/cloudflare-d1-operational-verification.md`
+
+**Completed (documentation only — no live D1 access available):**
+- D1 capacity-and-cost brief (B-07, B-12): estimates at 10k/100k/1M document profiles based on official D1 limits/pricing (NOT load-tested). 10 GB per-DB cap cannot be increased; plan scale-out before ~6–7 GB per DB.
+- D1 overload-handling design (B-14): retry read-only queries with backoff+jitter; do NOT retry writes; surface overload as retryable transient error; use Sessions API for reads; idempotent commit-marker writes.
+- Real-D1 failure-injection test plan (B-15): write-failure mid-batch recovery, overload injection, Time Travel restore, undelete — **blocked** pending remote D1 access (workerd cannot start locally).
+- Horizontal scale-out architecture recommendation (B-19): per-source/per-tenant D1 DBs with scatter-gather in the Worker; shard at ~6–7 GB; FTS5 export workaround; shard rate-limiter DOs.
+
+**Blockers:**
+- Local workerd cannot start (TCMalloc mmap fail on ARM64/PRoot) — real-D1 load/failure testing must be remote via HTTP API only.
+- Remote D1 access credentials not held by this research runway.
+
+**Boundary:** No D1 research tables created. No production DB populated. No deployment. No push. All estimates are documentation-level, based on official docs + independent experience reports (labeled as such), not load-tested.
+
+---
