@@ -62,20 +62,39 @@
 
 ## 3. D1 capacity-and-cost brief (B-07, B-12)
 
+### Row estimates per document (grounded in verified schema)
+
+Per successfully ingested document (from `migrations/d1/` and `packages/legal-ingestion/src/pipeline.ts`):
+
+| Table | Rows per document |
+|-------|-------------------|
+| `legal_documents` | 1 (canonical document identity) |
+| `document_versions` | 1 (initially; +1 per re-ingestion with changed content) |
+| `source_manifestations` | 1 |
+| `ingestion_runs` | 1 per ingestion attempt |
+| `legal_provisions` | N — one per extracted provision; ~20–200+ typical for a Philippine legal document |
+| `document_chunks` | N — one per extracted chunk; typically proportional to provisions |
+| `document_citations` | 0+ — only when the artifact includes citation relationships |
+| `document_relationships` | 0+ — only when explicit relationships with evidence are provided |
+
+**Working estimate:** ~500 rows written per document (4 fixed rows + ~250 provisions + ~250 chunks), varying by document length/complexity. The four fixed rows are mandatory; provisions/chunks scale with document size.
+
 ### Assumptions
 These estimates are based on official D1 limits/pricing only. They are NOT load-tested. Real-D1 verification (remote HTTP API) is pending.
 
-| Document profile scale | Rows read/day (est.) | Rows written/day (est.) | Storage (est.) | D1 plan fit | Monthly cost (est.) |
-|------------------------|----------------------|-------------------------|----------------|-------------|---------------------|
-| 10k profiles | ~50K | ~5K | ~100 MB | Free tier | ~$0 (within free limits) |
-| 100k profiles | ~500K | ~50K | ~1 GB | Free tier | ~$0 (within free limits) |
-| 1M profiles | ~5M | ~500K | ~10 GB | Paid tier (10 GB cap) | ~$5/mo min + storage over 5 GB |
+| Document profile scale | Rows written (one-time ingestion) | Storage (est.) | Ongoing writes/day (est.) | D1 plan fit | Monthly cost (est.) |
+|------------------------|-----------------------------------|----------------|---------------------------|-------------|---------------------|
+| 10k profiles | ~5M | ~100 MB | ~5K | Free tier | ~$0 (within free limits) |
+| 100k profiles | ~50M | ~1 GB | ~50K | Free tier | ~$0 (within free limits) |
+| 1M profiles | ~500M | ~10 GB | ~500K | Paid tier (10 GB cap) | ~$5/mo min + storage over 5 GB |
 
 ### Binding constraints
 1. **10 GB per DB cap cannot be increased.** At ~1M profiles (est. 10 GB), the project hits the hard cap and must scale out to multiple D1 DBs before reaching it.
 2. **Single-threaded per DB.** All queries to one DB serialize. Burst write traffic causes overload errors; independent reports show overload on small DBs.
-3. **50 queries/free Worker invocation (1,000 paid).** A Worker serving a read-heavy research page could burn through the free invocation query budget quickly; paid plan needed at scale.
-4. **50 MB max query result.** Large export/report queries must be paginated.
+3. **100K writes/day free tier.** At 100k profiles, one-time ingestion (~50M rows) exceeds the free daily write budget — ingestion must be spread over days or the paid tier used.
+4. **5M reads/day free tier.** Read-heavy research traffic could approach this at scale; paid plan needed.
+5. **50 queries/free Worker invocation (1,000 paid).** A Worker serving a read-heavy research page could burn through the free invocation query budget quickly; paid plan needed at scale.
+6. **50 MB max query result.** Large export/report queries must be paginated.
 
 ### Cost model (paid)
 - Storage: first 5 GB included, then $0.75/GB-month. At 10 GB: ~$3.75/mo storage + $5/mo Workers minimum ≈ ~$8.75/mo.
@@ -98,6 +117,8 @@ D1 remains the correct metadata store for current synthetic scale. Plan per-sour
 3. **Surface overload as a retryable transient error** with backoff to the caller; do not fail the whole request on a single overload.
 4. **Queue depth awareness:** if overload errors exceed a threshold, return 503/backpressure to the client rather than hammering D1.
 5. **Read replication:** use the Sessions API for read-only queries; route writes to the primary.
+
+**Concrete batch() context (from repo):** `packages/legal-ingestion/src/counsel-d1-store.ts` uses `this.db.batch(statements)` in `registerProfessional` (line 264), `recordDetermination` (line 464), and a private batch method (line 925). Migration `0008_gate7_registry_commit.sql` creates `counsel_registry_commits` as the commit marker — the last statement in a determination write batch, making the determination visible to authorization projection only after every related record is written. Per Cloudflare semantics, `db.batch()` runs statements sequentially (recovery-safe, not binding-atomic), so the commit marker is the correct durability mechanism.
 
 **Implementation note:** This is a code change routed through the normal gate workflow, not implemented by research.
 
