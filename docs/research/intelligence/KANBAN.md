@@ -21,7 +21,8 @@
 
 ## In Progress
 
-- Phase 2: Philippine source & citation research (B-10, B-11, B-13, B-18, B-21) — COUNSEL-GATED; B-21 (government API/structured feed monitoring) and preparatory citation-format research can proceed without counsel.
+- Phase 3: Capability & evaluation research (B-16 blocked, B-20, B-23, B-24)
+- Phase 4: Competitor & technology watch (B-22, Cloudflare D1/Workers watch)
 
 ## Review
 

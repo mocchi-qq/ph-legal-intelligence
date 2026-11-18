@@ -114,3 +114,31 @@ All nine decisions in `decisions.md` (D-01..D-09) are RECOMMENDED, none implemen
 **Boundary:** No legal corpus downloaded. No production DB populated. No D1 research tables created. No documents ingested. No deployment. No push. All research on public pages/documentation only.
 
 ---
+
+## Phase 3 — Capability & Evaluation Research (complete at documentation level)
+
+**Created:** `docs/research/intelligence/phase-3/capability-evaluation-research.md`
+
+**Completed:**
+
+- **B-20 KV usage audit (code inspection):** No KV usage anywhere — no `[[kv_namespaces]]` bindings in wrangler.toml, no KV read/write calls in source. All authorization goes through D1. D-04 (KV only for session/cache, never authorization state) satisfied by current architecture.
+- **B-23 Institutional verification API (F15) feasibility:** CourtListener citation-lookup API (Free Law Project, launched April 2024) is the reference model — free, rate-limited, explicitly built as an AI hallucination guardrail. Project's four-layer verifier maps onto this use case. Institutional API remains post-R3, pending stable verifier.
+- **B-24 Multi-language (Filipino/English):** English is the predominant language of Philippine court decisions and statutes; Filipino translations are rare. Multi-language UI/Filipino text handling deferred per QP-19.
+
+**Blocked:**
+- B-16 Vectorize benchmark — needs authorized corpus/eval set (counsel-gated).
+
+---
+
+## Phase 4 — Competitor & Technology Watch (complete at documentation level)
+
+**Created:** `docs/research/intelligence/phase-4/competitor-tech-watch.md`
+
+**Completed:**
+
+- **B-22 Competitor citator watch:** No competitor (Anycase, BatasDB, Digest AI) has added a citator. Anycase is moving toward verification ("verified authorities," lawyer-vetted across 150+ government sources; IPOPHL/COA issuances added Sept 2026) but no citator yet. Window to authority-state moat remains open.
+- **Cloudflare D1/Workers watch:** D1 read replication in public beta (Oct 2026 changelog) — addresses read throughput but not write overload. JavaScript transactions in sneak peek — would address the `batch()` atomicity gap. Stack decision (D-03: keep Cloudflare/D1/Workers) remains valid.
+
+**Boundary:** All monitoring of public vendor pages/documentation only. No scraping, no crawling, no paywall circumvention.
+
+---
