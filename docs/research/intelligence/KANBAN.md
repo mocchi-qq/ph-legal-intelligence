@@ -21,7 +21,7 @@
 
 ## In Progress
 
-- Phase 1: Cloudflare/D1 operational verification (B-07, B-12, B-14, B-15, B-19)
+- Phase 2: Philippine source & citation research (B-10, B-11, B-13, B-18, B-21) — COUNSEL-GATED; B-21 (government API/structured feed monitoring) and preparatory citation-format research can proceed without counsel.
 
 ## Review
 

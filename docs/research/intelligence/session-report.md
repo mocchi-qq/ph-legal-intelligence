@@ -94,3 +94,23 @@ All nine decisions in `decisions.md` (D-01..D-09) are RECOMMENDED, none implemen
 **Boundary:** No D1 research tables created. No production DB populated. No deployment. No push. All estimates are documentation-level, based on official docs + independent experience reports (labeled as such), not load-tested.
 
 ---
+
+## Phase 2 — Philippine Source & Citation Research (in progress — counsel-gated)
+
+**Created:** `docs/research/intelligence/phase-2/philippine-source-citation-research.md`
+
+**Completed (B-21 — public research, no scraping, no counsel needed):**
+- Searched for Philippine government legislative APIs/structured feeds (Official Gazette, Congress, Senate, PCO, data.gov.ph).
+- **Finding:** No official government API or structured legislative data feed found. Official Gazette returns HTTP 403 (access failure, recorded). Congress and Senate expose web UIs + PDF downloads only. data.gov.ph portal exists but no legislative dataset confirmed.
+- Third-party APIs exist (Open Congress API by BetterGov.ph — manually encoded, public domain; BatasWatch — third-party JSON API) but are not official government sources and carry accuracy risk.
+- **Impact:** Project cannot rely on a government structured feed to drop acquisition cost. Acquisition requires authorized sources + ingestion pipeline (counsel-gated). Moat remains verification/authority tracking, not bulk acquisition — consistent with D-01/D-08.
+
+**Counsel-gated items (blocked — not researchable by this runway):**
+- B-10 OCR quality (needs counsel-authorized source to sample)
+- B-11 lawful storage/serving terms (counsel determination)
+- B-13 citation-format frequency on authorized corpus (needs authorized corpus)
+- B-18 editorial citator defensibility (counsel + named reviewers)
+
+**Boundary:** No legal corpus downloaded. No production DB populated. No D1 research tables created. No documents ingested. No deployment. No push. All research on public pages/documentation only.
+
+---
