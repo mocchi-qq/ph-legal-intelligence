@@ -21,8 +21,7 @@
 
 ## In Progress
 
-- Phase 3: Capability & evaluation research (B-16 blocked, B-20, B-23, B-24)
-- Phase 4: Competitor & technology watch (B-22, Cloudflare D1/Workers watch)
+(none)
 
 ## Review
 
