@@ -40,6 +40,8 @@
 | **Senate of the Philippines** (senate.gov.ph) | **None found (official)** | Senate Bills page (senate.gov.ph/legislative-documents/bills) is a search UI. Issuances Library (issuances-library.senate.gov.ph) hosts PDFs. No public REST API documented. | SECONDARY (web UI observed; no API documented) |
 | **Presidential Communications Office** (pco.gov.ph) | **None found (official)** | Issuances Archive hosts Executive Orders as PDF downloads. No API. | SECONDARY |
 | **data.gov.ph (Open Data Philippines)** | Portal exists; legislative dataset not verified | Official open data portal managed by the Open Data Philippines Task Force. Datasets page exists (data.gov.ph/index/public/dataset/). No legislative/legal dataset confirmed in this research session. | SECONDARY (portal exists; dataset not verified) |
+| **SC E-Library** (elibrary.judiciary.gov.ph) | **None found (official)** | Homepage and search page are web UI only. Monthly decision index has missing/unlinked months (May recurs across years). No citator, no API, no public reuse licence displayed. NPC registration certificate displayed on site. | VERIFIED FACT (direct observation of live page and search page) |
+| **SC main site** (sc.judiciary.gov.ph) | **None found (official)** | SC decisions with G.R. numbers and promulgation dates; court locator. Web UI only. | VERIFIED FACT |
 
 ### Third-party / community legislative APIs (NOT official government)
 
@@ -47,12 +49,15 @@
 |--------|------|---------|-------------|
 | **Open Congress API** (open-congress-api.bettergov.ph) | Third-party REST API | Modern REST API (Deno + Neo4j) for Philippine congressional data: bills, senators, representatives, congresses. OpenAPI 3.0 docs at /api/scalar. Data is **manually encoded** — "may contain inaccuracies." Public domain unless otherwise specified. GitHub: bettergovph/open-congress-api + open-congress-data. | THIRD-PARTY / VENDOR — manually encoded, not official |
 | **BatasWatch** (bills.juris.ph/api) | Third-party JSON API | Public JSON API for Philippine bills, authors, committees, policy areas. | THIRD-PARTY / VENDOR — not verified independently |
+| **LawPhil** (lawphil.net) | Secondary compilation (Arellano Law Foundation) | **Reuse licence displayed:** Creative Commons Attribution-Non-Commercial 4.0 Philippine license (lawphil.net/copyright.html). Acceptable Use Policy: informational only, accuracy disclaimed, no legal advice, grants no legal authority (lawphil.net/usepolicy.html). **No citator or API.** AsianLII mirror noted. Statutes/Issuances/Court Decisions are works of the Philippine Government; the Lawphil collection itself is CC BY-NC 4.0 PH licensed by Arellano Law Foundation. | VERIFIED FACT (copyright + AUP pages read) |
 
 ### Interpretation for B-21
 
-**No official Philippine government API or structured legislative data feed was found.** The Official Gazette, Congress, and Senate expose web UIs and PDF downloads only, not machine-readable APIs. data.gov.ph exists as an open data portal but no legislative dataset was confirmed.
+**No official Philippine government API or structured legislative data feed was found.** The Official Gazette, Congress, Senate, PCO, and SC E-Library expose web UIs and PDF downloads only, not machine-readable APIs. data.gov.ph exists as an open data portal but no legislative dataset was confirmed.
 
 Third-party APIs exist (Open Congress API by BetterGov.ph, BatasWatch) but are community-managed, manually encoded, and not official government sources — so they carry accuracy risk and cannot be treated as authoritative legal data.
+
+**Correction to earlier finding (F-A-4 / F-I-4):** LawPhil **does** display a reuse licence — Creative Commons Attribution-Non-Commercial 4.0 Philippine license (lawphil.net/copyright.html). However, LawPhil is a **secondary** compilation by the Arellano Law Foundation (not an official government source), and it carries an explicit accuracy disclaimer and no citator/API. The broader finding stands: **no official Philippine government source** (Official Gazette, Congress, Senate, SC E-Library, SC main site) displays a reuse licence. Public availability ≠ redistribution permission remains valid for official sources. LawPhil's CC BY-NC 4.0 PH license is non-commercial, so commercial reuse would still require clearance.
 
 **Impact on the project:** The project cannot rely on a government structured feed to drop acquisition cost. Acquisition of Philippine legislative/jurisprudence text will require authorized sources + ingestion pipeline (counsel-gated), consistent with the existing boundary (no real PH text until counsel authorization). The moat remains verification/authority tracking, not bulk acquisition — aligning with D-01/D-08 (reject bulk acquisition; build authority layer).
 

@@ -11,7 +11,7 @@
 
 **F-A-3.** The Official Gazette returned HTTP 403 on homepage at 2026-11-18. (VERIFIED FACT — access failure.) Previously observed as publication-oriented, not a research system; no citation graph or versioning.
 
-**F-A-4.** LawPhil (Arellano Law Foundation) is a secondary compilation with an explicit accuracy disclaimer, no citator, no API, and no reuse licence. (VERIFIED FACT — lawphil.net/usepolicy.html.)
+**F-A-4.** LawPhil (Arellano Law Foundation) is a secondary compilation with an explicit accuracy disclaimer, no citator, no API, and **does display a reuse licence** — Creative Commons Attribution-NonCommercial 4.0 Philippine license (lawphil.net/copyright.html). Statutes, Issuances and Court Decisions are works of the Philippine Government; the Lawphil collection itself is CC BY-NC 4.0 PH licensed by the Arellano Law Foundation. Acceptable Use Policy: informational only, accuracy disclaimed, no legal advice (lawphil.net/usepolicy.html). **VERIFIED FACT — copyright + AUP pages read, 2026-11-18.** **Correction:** earlier finding that LawPhil grants no reuse licence is superseded by direct observation of the CC BY-NC 4.0 PH license.
 
 **F-A-5a.** No Philippine service was found that records positive/negative treatment of jurisprudence at scale (no public citator observed on the pages checked). (VERIFIED FACT — observed gap on pages checked; limitation L-05 applies: absence of evidence is not proof of absence.)
 **F-A-5b.** Anycase.ai, BatasDB, and Digest AI do not claim a citator. (SOURCE CLAIM — vendor pages state no citator; not independently corroborated.)
@@ -80,7 +80,7 @@
 
 **F-I-3.** Publicly available personal data does NOT lose DPA protection merely because it is public. (VERIFIED FACT — NPC decision EA and TA v. EJ.)
 
-**F-I-4.** No Philippine official source (E-Library, Gazette, LawPhil) displays a reuse licence; public availability is not redistribution permission. (VERIFIED FACT — observed.)
+**F-I-4.** No Philippine **official** source (E-Library, Gazette) displays a reuse licence; public availability is not redistribution permission. LawPhil is a **secondary** compilation by the Arellano Law Foundation (not an official government source) and does display a CC BY-NC 4.0 Philippine license (see F-A-4). **VERIFIED FACT — observed on E-Library and Gazette.** **Correction:** LawPhil removed from the "official source" list; it is secondary and carries a CC BY-NC 4.0 PH license (non-commercial, so commercial reuse still requires clearance).
 
 **F-I-5 (RECOMMENDATION).** Flag all Philippine legal-status, reuse, and effectivity questions for qualified Philippine counsel; do not convert research into legal determinations.
 

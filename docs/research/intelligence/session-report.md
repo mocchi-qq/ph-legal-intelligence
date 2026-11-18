@@ -142,3 +142,19 @@ All nine decisions in `decisions.md` (D-01..D-09) are RECOMMENDED, none implemen
 **Boundary:** All monitoring of public vendor pages/documentation only. No scraping, no crawling, no paywall circumvention.
 
 ---
+
+## LawPhil reuse-licence correction (direct verification, verified 2026-11-18)
+
+**Directly verified LawPhil and SC E-Library:**
+
+- **LawPhil** (lawphil.net): **DOES display a reuse licence** — Creative Commons Attribution-NonCommercial 4.0 Philippine license (lawphil.net/copyright.html). Acceptable Use Policy: informational only, accuracy disclaimed, no legal advice (lawphil.net/usepolicy.html). **No citator or API.** This corrects earlier findings F-A-4 and F-I-4 which stated LawPhil grants no reuse licence — superseded by direct observation. LawPhil is a **secondary** compilation by Arellano Law Foundation (not an official government source); its CC BY-NC 4.0 PH license is non-commercial, so commercial reuse still requires clearance.
+- **SC E-Library** (elibrary.judiciary.gov.ph): Homepage and search page are web UI only. Monthly decision index has missing/unlinked months (May recurs across years). No citator, no API, no public reuse licence displayed. NPC registration certificate displayed. Verified via direct page fetch.
+
+**Files corrected:**
+- `research-findings.md` F-A-4 (LawPhil reuse licence corrected), F-I-4 (LawPhil removed from "official source" list)
+- `privacy-licensing-research.md` (LawPhil grants CC BY-NC 4.0 PH, not "no reuse")
+- `source-register.md` PH-01 (reuse licence field updated)
+
+**Boundary:** No legal corpus downloaded. No production DB populated. No D1 research tables created. No documents ingested. No deployment. No push. All research on public pages/documentation only.
+
+---

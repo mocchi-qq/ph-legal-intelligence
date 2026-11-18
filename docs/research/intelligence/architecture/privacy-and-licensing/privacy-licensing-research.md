@@ -34,7 +34,7 @@ Issued 19 December 2024. Applies the DPA, IRR, and NPC issuances to **AI systems
 ## 3. Data scraping advisory
 
 - NPC Advisory No. 2026-01 (reported 2026-06-15): guidelines for lawful data scraping of publicly available personal data. (Secondary report; primary text not read.)
-- LawPhil AUP: informational only; no warranty of accuracy; verify independently; no legal advice; grants no reuse.
+- LawPhil AUP: informational only; no warranty of accuracy; verify independently; no legal advice; **grants a Creative Commons Attribution-NonCommercial 4.0 Philippine license** (lawphil.net/copyright.html), non-commercial — commercial reuse still requires clearance.
 
 ## 4. Relevance to the platform
 
@@ -49,7 +49,7 @@ Issued 19 December 2024. Applies the DPA, IRR, and NPC issuances to **AI systems
 
 ## 5. Licensing / reuse risk (verified)
 
-- **No Philippine official source displays a reuse licence.** LawPhil grants none. The E-Library displays no reuse terms. The Gazette was inaccessible (403).
+- **No Philippine official source (E-Library, Gazette) displays a reuse licence.** LawPhil is a secondary compilation (Arellano Law Foundation) and displays a CC BY-NC 4.0 Philippine license (non-commercial; commercial reuse still requires clearance). The E-Library displays no reuse terms. The Gazette was inaccessible (403).
 - **Public availability ≠ reuse permission.** Publicly posted legal text may still be subject to terms; redistribution, AI training, and commercial reuse require clearance.
 - **AI training restrictions:** model/provider terms may prohibit training on retrieved content; do not train on unlicensed corpus.
 
