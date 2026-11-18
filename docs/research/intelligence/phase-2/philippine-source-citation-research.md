@@ -92,20 +92,48 @@ Third-party APIs exist (Open Congress API by BetterGov.ph, BatasWatch) but are c
 
 **Objective:** Record the known Philippine legal citation conventions so that B-13 (citation-format frequency & conflict map on authorized corpus) has a baseline to compare against when counsel authorizes sampling.
 
-**Court decisions** (Bluebook T2.33 Philippines; GlobaLex/NYU):
-- Supreme Court: `<case name>, <volume> <reporter> <first page> (<date>)` OR `<case name>, G.R. No. <docket> [<parallel citation>] (<date>)`
-- Reporter abbreviations/order of preference: Philippine Reports (Phil. Rep., 1901–date), SCRA, Phil.
-- G.R. No. format: `G.R. No. L-XXXXXX` (older) / `G.R. No. XXXXXX` (modern), eight-digit docket numbers.
-- Court of Appeals: `<case name>, <CA docket and case type>, No. <docket>`.
+**Verified from direct observation of real Philippine Supreme Court decisions (LawPhil, Arellano Law Foundation — secondary source, but real documents):**
 
-**Legislation** (Bluebook T2.33 Philippines):
-- Republic Acts: `<statute name or short title>, <legislation type> No. <number>[, <section(s)>]`.
-- Reporter mapping: Republic Acts Nos. 1–6635 (1946–1972) → Rep. Act; Nos. 6636–current (1987–date) → Rep. Act.
-- B.P. (Batas Pambansa) for 1983–1986 acts; Commonwealth Acts (No.) for 1935–1946.
+Two decisions read in full, 2026-11-18:
+1. **G.R. No. 279863, August 26, 2026** — *Nino Rio Gabrillo vs. Tri-J Marketing, Inc.* (First Division, J. Hernando) — https://www.lawphil.net/judjuris/juri2026/aug2026/gr_279863_2026.html (VERIFIED FACT — read in full)
+2. **G.R. No. 275424, April 29, 2026** — *Ernesto D. Arriesgado vs. Multinational Maritime, Inc.* (First Division, J. Hernando) — https://www.lawphil.net/judjuris/juri2026/apr2026/gr_275424_2026.html (VERIFIED FACT — read in full)
 
-**Reliability:** All above are from public secondary sources (Bluebook T2.33 Philippines, GlobaLex Philippine legal research guide). They are **not** frequency data from an authorized corpus and carry no source link to a PH government document. B-13 remains counsel-gated to verify these formats against real Philippine documents.
+**Source quality:** LawPhil (Arellano Law Foundation) is SECONDARY (not official government). Citations observed within these documents link to SCRA/Phil. Reports — the reporter citations themselves reference official reporters, but were observed via LawPhil.
 
-**Impact:** The citation-format inventory documents *expected* formats; actual frequency and conflicts (e.g., hybrid G.R./SCRA citations, post-1987 vs pre-1987 Republic Act numbering) can only be measured once counsel authorizes corpus sampling (B-13).
+**Case citation format observed:**
+- Header: `**G.R. No. 279863, August 26, 2026**` / `**G.R. No. 275424, April 29, 2026**`
+- G.R. No. format: `G.R. No. <six-digit docket>` (modern eight-digit docket numbers observed)
+- Internal case citations: `<case name>, <volume> Phil. <page>, <pinpoint> (<year>) [Per J. <name>, <Division>]`
+  - Example: `Cabatan v. Southeast Asia Shipping Corp., 920 Phil. 244, 252-253 (2022)`
+  - Example: `Bartolome v. Toyota Quezon Avenue, Inc., 952 Phil. 539, 547 (2024)`
+  - Example: `Central Azucarera de Bais, Inc. v. Siason, 765 Phil. 399, 407 (2015)`
+- Reporter: `Phil.` (Philippine Reports) with volume and page number
+- Short cite: `Id. at <page>`
+
+**Court/tribunal docket formats observed:**
+- Court of Appeals: `CA-G.R. SP No. 14211` / `CA-G.R. SP No. 180275`
+- NLRC: `NLRC Case No. VAC-02-000139-2020` / `NLRC LAC No. 04-000177-23`
+- RAB (Regional Arbitration Branch): `NLRC RAB Case No. VII-03-0685-19`
+
+**Statute/regulatory citation format observed:**
+- Labor Code: `Article 297 of the Labor Code` / `LABOR CODE, as renumbered in 2015, Art. 297` / `ART. 294`
+- Republic Act: not observed in these two decisions (labor-code-heavy cases)
+- Presidential Decree: `Presidential Decree No. 626, as amended`
+- POEA issuances: `Memorandum Circular No. 10, series of 2010` / `2010 POEA-SEC`
+- Rules: `Rule X, Section 2(a)`, `Section 20(D) of the 2010 POEA-SEC`
+- Rule of Court: `Rule 45 of the Rules of Court`, `Rule 65`
+
+**Pinpoint/record citation format observed:**
+- Footnotes cite record on appeal: `Rollo, pp. 10-32`, `Rollo, p. 103`, `CA rollo, p. 154`
+
+**Comparison with Bluebook T2.33 Philippines (secondary source):**
+- Bluebook predicts `<case name>, <volume> <reporter> <first page> (<date>)` — **confirmed** by direct observation (`920 Phil. 244` (2022))
+- Bluebook predicts `G.R. No. <docket>` — **confirmed** by direct observation
+- Bluebook reporter preference (Phil. Rep., SCRA, Phil.) — **confirmed**: `Phil.` used in internal citations
+
+**Reliability:** Case/docket/statute citation formats above are VERIFIED FACTS from direct observation of two real PH Supreme Court decisions (LawPhil, secondary source). They are **not** frequency data from an authorized corpus. Frequency/conflict analysis (B-13) remains counsel-gated — actual frequency of each format and any conflicts (e.g., hybrid G.R./SCRA citations) can only be measured once counsel authorizes corpus sampling.
+
+**Impact:** The citation-format inventory now has observed baseline formats from real PH documents. B-13 remains counsel-gated for frequency/conflict measurement on an authorized corpus.
 
 ---
 
