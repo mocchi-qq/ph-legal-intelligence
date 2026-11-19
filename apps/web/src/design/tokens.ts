@@ -1,10 +1,10 @@
 // Design tokens for the Philippine Legal Intelligence Platform
-// Professional legal research aesthetic: serious, trustworthy, modern, clear
+// Professional legal research aesthetic: serious, trustworthy, clear, authoritative
 
 export const colors = {
-  // Neutral base
+  // Neutral base — warm off-whites and deep inks for print-like readability
   neutral: {
-    50: "#fafafa",
+    50: "#fafaf9",
     100: "#f5f5f4",
     200: "#e7e5e4",
     300: "#d6d3d1",
@@ -16,24 +16,25 @@ export const colors = {
     900: "#292524",
     950: "#1c1a17",
   },
-  // Brand ink - deep navy for seriousness
+  // Brand ink — deep navy/charcoal for seriousness and authority
   ink: {
     light: "#262626",
     DEFAULT: "#0f172a",
     dark: "#020617",
   },
-  // Legal authority colors
+  // Legal authority colors — restrained, professional
   authority: {
     primary: "#0f172a",
     secondary: "#475569",
     accent: "#1e293b",
+    gold: "#854d0e",
   },
   // Semantic colors
   success: "#166534",
   warning: "#92400e",
   error: "#991b1b",
   info: "#1e40af",
-  // Synthetic/demo colors - muted, clearly distinct from real
+  // Synthetic/demo colors — clearly distinct from real, muted
   synthetic: {
     bg: "#f0f9ff",
     border: "#bae6fd",
@@ -58,6 +59,8 @@ export const colors = {
 export const typography = {
   fontFamily:
     'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+  fontSerif:
+    '"Playfair Display", "Georgia", serif',
   fontMono:
     'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", monospace',
   fontSize: {
@@ -69,6 +72,7 @@ export const typography = {
     "2xl": "1.5rem",
     "3xl": "1.875rem",
     "4xl": "2.25rem",
+    "5xl": "3rem",
   },
   fontWeight: {
     normal: 400,
@@ -77,7 +81,7 @@ export const typography = {
     bold: 700,
   },
   lineHeight: {
-    tight: 1.25,
+    tight: 1.2,
     normal: 1.5,
     relaxed: 1.75,
   },
@@ -96,6 +100,7 @@ export const spacing = {
   12: "3rem",
   16: "4rem",
   20: "5rem",
+  24: "6rem",
 };
 
 export const breakpoints = {
@@ -116,6 +121,7 @@ export const shadows = {
   sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
   md: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
   lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+  xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04)",
 };
 
 export const zIndex = {

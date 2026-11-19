@@ -1,133 +1,173 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Nav, Footer, PageHeader, DemoBanner } from "../components/layout";
 
 export default function ResearchPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-foreground">
-      <header className="border-b border-surface-border bg-surface sticky top-0 z-50">
-        <div className="container flex items-center justify-between h-full px-4 py-3">
-          <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-foreground-secondary hover:text-foreground border border-surface-border rounded-md bg-background hover:bg-secondary transition-colors">
-              <span className="sr-only">Back</span>
-              ←
-            </button>
-            <span className="font-serif text-lg font-bold text-accent tracking-tight">
-              PHLI
-            </span>
+      <Nav active="/research" />
+      <main className="flex-1 container pt-12 pb-16">
+        <PageHeader
+          title="Research Workspace"
+          subtitle="Save research sessions, track citations, and organize legal authorities for extended research work."
+        />
+
+        <div className="grid lg:grid-cols-4 gap-6 mb-8">
+          <div className="lg:col-span-3 space-y-6">
+            <ActiveResearchCard />
+            <SavedCitationsCard />
+            <RecentActivityCard />
           </div>
-          <nav className="md:flex items-center gap-6 hidden">
-            <a href="/" className="text-sm font-medium text-foreground-secondary hover:text-foreground px-3 py-2 border-b-2 border-transparent hover:border-accent transition-colors">
-              Home
-            </a>
-            <a href="/search" className="text-sm font-medium text-foreground-secondary hover:text-foreground px-3 py-2 border-b-2 border-transparent hover:border-accent transition-colors">
-              Search
-            </a>
-            <a href="/research" className="text-sm font-medium text-foreground px-3 py-2 border-b-2 border-accent transition-colors">
-              Research
-            </a>
-            <a href="/saved" className="text-sm font-medium text-foreground-secondary hover:text-foreground px-3 py-2 border-b-2 border-transparent hover:border-accent transition-colors">
-              Saved
-            </a>
-          </nav>
+
+          <aside className="lg:col-span-1 space-y-6">
+            <WorkspaceInfoCard />
+          </aside>
         </div>
-      </header>
 
-      <main className="flex-1 container py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
-            <h1 className="font-serif text-3xl font-bold mb-2">Research Workspace</h1>
-            <p className="text-sm text-foreground-secondary">
-              Save research sessions, track citations, and organize legal
-              authorities for extended research work.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <div className="border border-surface-border rounded-lg p-6 bg-surface shadow-sm">
-              <h3 className="font-serif text-lg font-bold mb-4">Active Research</h3>
-              <div className="space-y-4">
-                <ResearchItem title="Synthetic Republic Act No. 99001" preview="Registration duty for covered entities" />
-                <ResearchItem title="Synthetic Court Decision GR-88001" preview="Contract interpretation case" />
-              </div>
-            </div>
-
-            <div className="border border-surface-border rounded-lg p-6 bg-surface shadow-sm">
-              <h3 className="font-serif text-lg font-bold mb-4">Saved Citations</h3>
-              <div className="space-y-4">
-                <CitationItem citation="Synthetic Republic Act No. 99001, §1" />
-                <CitationItem citation="Synthetic GR No. 88001, ¶3" />
-              </div>
-            </div>
-
-            <div className="border border-surface-border rounded-lg p-6 bg-surface shadow-sm">
-              <h3 className="font-serif text-lg font-bold mb-4">Recent Activity</h3>
-              <div className="space-y-4">
-                <ActivityItem action="Viewed document" target="Synthetic Republic Act No. 99001" time="2 hours ago" />
-                <ActivityItem action="Saved citation" target="Synthetic GR No. 88001" time="5 hours ago" />
-              </div>
-            </div>
-          </div>
-
-          <DemoNotice />
-        </div>
+        <DemoBanner />
       </main>
-
-      <footer className="border-t border-surface-border bg-surface py-6 mt-auto">
-        <div className="container px-4">
-          <p className="text-sm text-foreground-muted text-center">
-            Philippine Legal Intelligence Platform — Preview
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
 
-function ResearchItem({ title, preview }: { title: string; preview: string }) {
+function ActiveResearchCard() {
+  const items = [
+    {
+      title: "Synthetic Republic Act No. 99001",
+      preview: "Registration duty for covered entities",
+      type: "Republic Act",
+    },
+    {
+      title: "Synthetic G.R. No. 88001",
+      preview: "Contract interpretation case",
+      type: "Court Decision",
+    },
+  ];
+
   return (
-    <div className="p-3 border border-surface-border rounded-md bg-background">
-      <div className="flex justify-between items-start mb-1">
-        <h4 className="font-semibold text-sm">{title}</h4>
-        <button className="text-xs text-foreground-secondary hover:text-foreground">Open</button>
+    <div className="card">
+      <div className="card-header">
+        <h3 className="font-serif font-semibold text-2xl text-ink">Active Research</h3>
       </div>
-      <p className="text-xs text-foreground-muted">{preview}</p>
+      <div className="card-body space-y-4">
+        {items.map((item) => (
+          <ResearchItem key={item.title} item={item} />
+        ))}
+        <div className="pt-4 border-t border-surface-border">
+          <p className="text-xs text-foreground-muted">
+            No real legal documents in active research.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SavedCitationsCard() {
+  const items = [
+    "Synthetic Republic Act No. 99001, §1",
+    "Synthetic G.R. No. 88001, ¶3",
+  ];
+
+  return (
+    <div className="card">
+      <div className="card-header">
+        <h3 className="font-serif font-semibold text-2xl text-ink">Saved Citations</h3>
+      </div>
+      <div className="card-body space-y-3">
+        {items.map((citation) => (
+          <CitationItem key={citation} citation={citation} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RecentActivityCard() {
+  const items = [
+    { action: "Viewed document", target: "Synthetic Republic Act No. 99001", time: "2 hours ago" },
+    { action: "Saved citation", target: "Synthetic G.R. No. 88001", time: "5 hours ago" },
+    { action: "Opened document", target: "Synthetic Executive Order No. 77001", time: "1 day ago" },
+  ];
+
+  return (
+    <div className="card">
+      <div className="card-header">
+        <h3 className="font-serif font-semibold text-2xl text-ink">Recent Activity</h3>
+      </div>
+      <div className="card-body space-y-3">
+        {items.map((item) => (
+          <ActivityItem key={item.target} item={item} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function WorkspaceInfoCard() {
+  return (
+    <div className="card p-5">
+      <h3 className="font-serif font-semibold text-xl text-ink mb-4">Workspace Info</h3>
+      <div className="space-y-4 text-sm text-foreground-secondary">
+        <div className="flex justify-between items-start">
+          <span className="text-foreground-muted">Synthetic Records:</span>
+          <span className="font-mono text-ink">3</span>
+        </div>
+        <div className="flex justify-between items-start">
+          <span className="text-foreground-muted">Real Documents:</span>
+          <span className="font-mono text-ink">0</span>
+        </div>
+        <div className="flex justify-between items-start">
+          <span className="text-foreground-muted">Authorization State:</span>
+          <span className="badge badge-unknown">UNKNOWN</span>
+        </div>
+        <div className="pt-4 border-t border-surface-border">
+          <p className="text-xs text-foreground-muted">
+            All content in this workspace is explicitly synthetic and isolated
+            from real legal authority.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResearchItem({ item }: { item: { title: string; preview: string; type: string } }) {
+  return (
+    <div className="p-4 border border-surface-border rounded-lg bg-secondary hover:bg-tertiary transition-colors cursor-pointer group">
+      <div className="flex justify-between items-start mb-2">
+        <h4 className="font-serif font-semibold text-sm text-ink group-hover:text-accent transition-colors">
+          {item.title}
+        </h4>
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-accent">
+          {item.type}
+        </span>
+      </div>
+      <p className="text-xs text-foreground-secondary">{item.preview}</p>
     </div>
   );
 }
 
 function CitationItem({ citation }: { citation: string }) {
   return (
-    <div className="flex items-center justify-between p-3 border border-surface-border rounded-md bg-background">
-      <code className="text-xs text-foreground">{citation}</code>
-      <button className="text-xs text-accent hover:text-accent-hover">Remove</button>
+    <div className="flex items-center justify-between p-3 border border-surface-border rounded-md bg-surface">
+      <code className="font-mono text-xs text-ink">{citation}</code>
+      <button className="text-xs text-accent hover:text-accent-hover underline decoration-1 decoration-dashed">
+        Remove
+      </button>
     </div>
   );
 }
 
-function ActivityItem({ action, target, time }: { action: string; target: string; time: string }) {
+function ActivityItem({ item }: { item: { action: string; target: string; time: string } }) {
   return (
-    <div className="flex items-start gap-2 text-xs">
-      <span className="text-foreground-muted">{action}</span>
-      <span className="text-foreground">{target}</span>
-      <span className="ml-auto text-foreground-muted">{time}</span>
-    </div>
-  );
-}
-
-function DemoNotice() {
-  return (
-    <div className="mt-8 p-6 bg-tertiary border border-surface-border rounded-lg">
-      <h3 className="font-semibold mb-2">About this demo</h3>
-      <p className="text-sm text-foreground-secondary mb-4">
-        The research workspace demonstrates the platform architecture with
-        synthetic data. Real legal documents require separate authorization
-        and are not available in this preview.
-      </p>
-      <ul className="text-sm text-foreground-secondary space-y-2 list-disc pl-4">
-        <li>All content shown is explicitly synthetic</li>
-        <li>No real court decisions or statutes are exposed</li>
-        <li>Synthetic content is not legal advice</li>
-        <li>Authorization states remain unchanged</li>
-      </ul>
+    <div className="flex items-start gap-3 text-xs">
+      <div className="w-24 text-foreground-secondary font-medium">
+        {item.action}
+      </div>
+      <div className="flex-1 text-foreground">{item.target}</div>
+      <span className="text-foreground-muted">{item.time}</span>
     </div>
   );
 }
