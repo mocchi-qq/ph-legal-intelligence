@@ -90,13 +90,24 @@ export interface IngestOptions {
   authorizedSourceIds?: readonly string[];
   /** Owner-level risk acceptance for a bounded internal pilot; never legal authorization. */
   ownerAuthorization?: OwnerAuthorization;
-  /** Gate 4 activity-specific decisions. Required when strict enforcement is on. */
+  /**
+   * Gate 4 activity-specific decisions. Required for every synthetic artifact
+   * (Gate 19) and whenever strict enforcement is on for a non-synthetic one.
+   */
   activityAuthorization?: ActivityAuthorizationRegistry;
-  /** When true, non-synthetic ingestion fails unless every required activity is allowed. */
+  /**
+   * When true, non-synthetic ingestion fails unless every required activity is
+   * allowed. Synthetic ingestion always enforces, and accepts only the
+   * SYNTHETIC_FIXTURE basis (Gate 19).
+   */
   enforceActivityAuthorization?: boolean;
   /** Explicit opt-in to the legacy coarse source gate. Never set for new sources. */
   allowLegacySourceGate?: boolean;
-  /** Bases accepted in strict mode. Defaults to counsel determination only. */
+  /**
+   * Bases accepted in strict mode for a non-synthetic artifact. Defaults to
+   * counsel determination only. Ignored for a synthetic artifact, which accepts
+   * SYNTHETIC_FIXTURE only (Gate 19).
+   */
   acceptedAuthorizationBases?: readonly AuthorizationBasis[];
   satisfiedAuthorizationConditions?: readonly string[];
   authorizationNow?: string;

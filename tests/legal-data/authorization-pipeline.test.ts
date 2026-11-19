@@ -6,6 +6,7 @@ import {
   type DecisionInput,
   ingestArtifact,
 } from "../../packages/legal-ingestion/src/index";
+import { fixtureRegistry } from "../helpers/fixture-authorization.ts";
 
 const SOURCE = "sc_elibrary";
 const URL = "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/99999";
@@ -209,24 +210,41 @@ describe("Gate 4 — pipeline activity enforcement", () => {
     expect(result.reason).toContain("unsupported_mime:application/pdf");
   });
 
-  it("does not gate synthetic fixtures on legal-source authorization", () => {
-    const store = CorpusStore.memory();
-    const result = ingestArtifact(
-      store,
-      {
-        ...artifact("90000"),
-        synthetic: true,
-        sourceUrl: "synthetic://gate4-fixture",
-        identityKey: "REPUBLIC_ACT:90000",
-      },
-      {
-        pipelineVersion: "gate4.0.0",
-        extractorVersion: "extract.3",
-        normalizerVersion: "norm.3",
-        enforceActivityAuthorization: true,
-      },
+  it("gates a synthetic fixture on fixture authorization, not the legal-source gate", () => {
+    // Gate 19 removed the implicit exemption: a fixture is checked like anything
+    // else, but against SYNTHETIC_FIXTURE decisions rather than counsel, and the
+    // coarse legal-source list is not what authorizes it.
+    const fixture = {
+      ...artifact("90000"),
+      synthetic: true,
+      sourceUrl: "synthetic://gate4-fixture",
+      identityKey: "REPUBLIC_ACT:90000",
+    };
+    const options = {
+      pipelineVersion: "gate4.0.0",
+      extractorVersion: "extract.3",
+      normalizerVersion: "norm.3",
+      enforceActivityAuthorization: true as const,
+    };
+
+    const unregistered = CorpusStore.memory();
+    const refused = ingestArtifact(unregistered, fixture, options);
+    expect(refused.status).toBe("FAILED");
+    expect(refused.reason).toBe("activity_authorization_registry_missing");
+    expect(unregistered.state.documents).toHaveLength(0);
+
+    // The fixture's source is deliberately absent from `authorizedSourceIds`;
+    // only the fixture decisions authorize it.
+    const authorized = CorpusStore.memory();
+    const accepted = ingestArtifact(authorized, fixture, {
+      ...options,
+      activityAuthorization: fixtureRegistry(fixture.sourceId),
+    });
+    expect(accepted.status, accepted.reason).toBe("SUCCEEDED");
+    expect(authorized.state.documents).toHaveLength(1);
+    expect(authorized.state.runs.at(-1)?.authorizationBasisDetail).toBe(
+      "SYNTHETIC_FIXTURE",
     );
-    expect(result.status, result.reason).toBe("SUCCEEDED");
   });
 
   it("keeps the legacy owner-authorized pilot path working when strict mode is off", () => {

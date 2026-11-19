@@ -8,6 +8,7 @@ import {
 } from "../../packages/legal-ingestion/src/index";
 import { buildSearchIndex } from "../../packages/legal-search/src/index";
 import { allowSyntheticIndex, buildFixtureCorpus } from "../benchmark/helpers";
+import { fixtureRegistry } from "../helpers/fixture-authorization.ts";
 
 const OPTS = {
   pipelineVersion: "gate1.0.0",
@@ -96,7 +97,12 @@ describe("Gate 1 — security and privacy controls", () => {
         sourceUrl: "synthetic://fixture/pdf",
         mimeType: "application/pdf",
       }),
-      OPTS,
+      {
+        ...OPTS,
+        // The locator clears the synthetic guard; the source still has to be
+        // authorized before the MIME check runs.
+        activityAuthorization: fixtureRegistry("private_upload"),
+      },
     );
     expect(result.status).toBe("FAILED");
     expect(result.reason).toContain("unsupported_mime");

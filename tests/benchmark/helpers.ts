@@ -6,12 +6,14 @@ import {
   type DocumentActivityAuthorization,
   ingestArtifact,
 } from "../../packages/legal-ingestion/src/index";
+import { fixtureRegistry } from "../helpers/fixture-authorization.ts";
 
 const OPTS = {
   pipelineVersion: "gate1.0.0",
   extractorVersion: "extract.1",
   normalizerVersion: "norm.1",
   now: () => "2026-11-10T00:00:00Z",
+  activityAuthorization: fixtureRegistry("synthetic_fixture"),
 };
 
 export interface FixtureManifest {

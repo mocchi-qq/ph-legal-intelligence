@@ -15,8 +15,8 @@
 //   separately, as an analysis step would record them. See 01_RESULTS.md §3.1.
 // - `retrieve` performs no activity check; `citation_display` is enforced only
 //   when a citation is verified, after the passage has been returned.
-// - the pipeline skips its activity checks for artifacts flagged `synthetic`,
-//   so the chain's ingestion step runs with the flag set false.
+// - a synthetic artifact runs the same activity checks as any other (Gate 19),
+//   so both fixtures carry their own fixture ingestion decisions.
 // - acquisition is the manifest gate, not a transport; no network call is made.
 //
 // Those gaps are the rehearsal's findings, not its premises.
@@ -58,7 +58,11 @@ import { SqliteD1Database } from "../helpers/d1-sqlite";
 // ---------------------------------------------------------------------------
 
 const PRIMARY_SOURCE_ID = "synthetic_fixture";
-/** A second synthetic source with no decisions at all — the "other" document. */
+/**
+ * A second synthetic source with no decisions in the rehearsal registry — the
+ * "other" document. Its fixture ingestion authorizations are recorded on a
+ * separate registry so the rehearsal registry stays primary-only.
+ */
 const UNREGISTERED_SOURCE_ID = "synthetic_fixture_unregistered";
 
 const FIXED_NOW = "2026-11-16T00:00:00Z";
@@ -108,11 +112,9 @@ const PRIMARY_ARTIFACT: ArtifactInput = {
   sourceUrl: "https://synthetic.invalid/SYNTH-ACT-1001",
   mimeType: "text/plain",
   retrievedAt: "2026-11-16T00:00:00Z",
-  // Fictional material, but not flagged synthetic: the pipeline's Gate 4
-  // activity gate only runs on the non-synthetic path (pinned by
-  // tests/legal-data/authorization-pipeline.test.ts). The host is reserved
-  // .invalid and acquisition performs no request, so nothing is fetched.
-  synthetic: false,
+  // A fixture, and its locator says so. It is authorized by SYNTHETIC_FIXTURE
+  // decisions, so the Gate 4 activity checks run for it like any other artifact.
+  synthetic: true,
   content: PRIMARY_CONTENT,
   documentType: "REPUBLIC_ACT",
   identityKey: "SYNTH-ACT:1001",
@@ -129,7 +131,7 @@ const PRIMARY_ARTIFACT: ArtifactInput = {
 const OTHER_ARTIFACT: ArtifactInput = {
   artifactId: "SYNTH-ACT-2001-v1",
   sourceId: UNREGISTERED_SOURCE_ID,
-  sourceUrl: "synthetic://SYNTH-ACT-2001/v1",
+  sourceUrl: "https://synthetic.invalid/SYNTH-ACT-2001/v1",
   mimeType: "text/plain",
   retrievedAt: "2026-11-16T00:00:00Z",
   synthetic: true,
@@ -151,7 +153,6 @@ const INGEST_OPTIONS = {
   extractorVersion: "extract.3",
   normalizerVersion: "norm.3",
   enforceActivityAuthorization: true as const,
-  acceptedAuthorizationBases: ["SYNTHETIC_FIXTURE"] as const,
   authorizationNow: FIXED_NOW,
   now: () => FIXED_NOW,
 };
@@ -232,6 +233,8 @@ function acquisitionInput(
       evidenceRef: null,
     },
     enforceActivityAuthorization: true as const,
+    // Gate 19 pins the fixture basis in the pipeline; acquisition has its own
+    // option and the rehearsal's decisions are SYNTHETIC_FIXTURE ones.
     acceptedAuthorizationBases: ["SYNTHETIC_FIXTURE"] as const,
     authorizationNow: FIXED_NOW,
   };
@@ -261,7 +264,7 @@ function rehearsalCorpus(): CorpusStore {
   const other = ingest(
     store,
     OTHER_ARTIFACT,
-    new ActivityAuthorizationRegistry(),
+    registryWith(INGEST_ACTIVITIES, UNREGISTERED_SOURCE_ID),
   );
   if (other.status !== "SUCCEEDED")
     throw new Error(`secondary ingest failed: ${other.reason}`);
@@ -537,7 +540,11 @@ describe("Gate 15 — the chain completes when every activity is authorized", ()
     const primary = ingest(store, PRIMARY_ARTIFACT, registry);
     if (primary.status !== "SUCCEEDED")
       throw new Error(`primary ingest failed: ${primary.reason}`);
-    const secondary = ingest(store, OTHER_ARTIFACT, registry);
+    const secondary = ingest(
+      store,
+      OTHER_ARTIFACT,
+      registryWith(INGEST_ACTIVITIES, UNREGISTERED_SOURCE_ID),
+    );
     if (secondary.status !== "SUCCEEDED")
       throw new Error(`secondary ingest failed: ${secondary.reason}`);
 

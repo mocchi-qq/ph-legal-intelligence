@@ -17,6 +17,7 @@ import {
   buildSearchIndex,
   retrieve,
 } from "../../packages/legal-search/src/index";
+import { fixtureRegistry } from "../helpers/fixture-authorization.ts";
 import {
   allowSyntheticIndex,
   buildFixtureCorpus,
@@ -392,11 +393,6 @@ async function run() {
 
   // Recovery after a failed ingestion
   const recoveryStore = CorpusStore.memory();
-  const opts = {
-    pipelineVersion: "gate1.0.0",
-    extractorVersion: "extract.1",
-    normalizerVersion: "norm.1",
-  };
   const fixture = JSON.parse(
     (await import("node:fs")).readFileSync(
       join(
@@ -406,6 +402,12 @@ async function run() {
       "utf8",
     ),
   ).fixtures[0];
+  const opts = {
+    pipelineVersion: "gate1.0.0",
+    extractorVersion: "extract.1",
+    normalizerVersion: "norm.1",
+    activityAuthorization: fixtureRegistry(fixture.sourceId),
+  };
   const failed = ingestArtifact(
     recoveryStore,
     {

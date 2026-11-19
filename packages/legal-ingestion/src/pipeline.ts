@@ -16,6 +16,7 @@ import type {
   LegalProvision,
   SourceManifestation,
 } from "@phli/legal-schema";
+import type { AuthorizationBasis } from "./authorization";
 import type { AuthorizationAuditInput } from "./authorization-audit";
 import { extractText, segmentChunks, segmentProvisions } from "./extract";
 import { type CorpusStore, sha256 } from "./store";
@@ -31,6 +32,22 @@ const ALLOWED_MIME = new Set([
   "text/html",
   "application/xhtml+xml",
 ]);
+
+/**
+ * Gate 19: a fixture must name a source that cannot be fetched. `synthetic://` is
+ * the explicit form; a host under the RFC 2606 reserved `.invalid` TLD is the
+ * other, because acquisition refuses non-HTTP schemes and the end-to-end
+ * rehearsals must exercise the acquisition stage too. Neither resolves.
+ */
+function isSyntheticLocator(url: string): boolean {
+  if (url.startsWith("synthetic://")) return true;
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return host === "invalid" || host.endsWith(".invalid");
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Activities that cannot be skipped by this ingestion path. If ALLOWED_MIME is
@@ -71,12 +88,17 @@ function addRun(
     `${contentHash}:${artifact.sourceId}:${state.runs.length + 1}`,
   );
   const now = options.now?.() ?? new Date().toISOString();
+  // Gate 19: a synthetic artifact is checked like any other, so it is a strict
+  // run too; only the basis accepted for it differs.
   const strictContext =
-    !artifact.synthetic && options.enforceActivityAuthorization === true;
+    artifact.synthetic === true ||
+    options.enforceActivityAuthorization === true;
   const strictBasis =
-    strictContext && (status === "SUCCEEDED" || status === "DUPLICATE")
-      ? "source_authorization"
-      : undefined;
+    extra.authorizationBasisDetail === "SYNTHETIC_FIXTURE"
+      ? "synthetic_fixture"
+      : strictContext && (status === "SUCCEEDED" || status === "DUPLICATE")
+        ? "source_authorization"
+        : undefined;
   state.runs.push({
     id: runId,
     inputContentHash: contentHash,
@@ -93,21 +115,17 @@ function addRun(
     finishedAt: now,
     authorizationBasis: strictContext
       ? strictBasis
-      : artifact.synthetic
-        ? "synthetic_fixture"
-        : (options.authorizedSourceIds ?? []).includes(artifact.sourceId)
-          ? "source_authorization"
-          : options.ownerAuthorization
-            ? "owner_authorization"
-            : undefined,
-    authorizationDecisionRef:
-      extra.authorizationDecisionRef ??
-      (artifact.synthetic ? "synthetic_fixture" : null),
-    authorizationDecisionRefs:
-      extra.authorizationDecisionRefs ?? (artifact.synthetic ? [] : null),
-    authorizationBasisDetail:
-      extra.authorizationBasisDetail ??
-      (artifact.synthetic ? "SYNTHETIC_FIXTURE" : null),
+      : (options.authorizedSourceIds ?? []).includes(artifact.sourceId)
+        ? "source_authorization"
+        : options.ownerAuthorization
+          ? "owner_authorization"
+          : undefined,
+    // Gate 19: a run reports the decisions that were actually consulted. The
+    // artifact's own `synthetic` flag no longer writes a basis, a reference or
+    // an empty reference list into the audit record.
+    authorizationDecisionRef: extra.authorizationDecisionRef ?? null,
+    authorizationDecisionRefs: extra.authorizationDecisionRefs ?? null,
+    authorizationBasisDetail: extra.authorizationBasisDetail ?? null,
   });
   return runId;
 }
@@ -170,9 +188,33 @@ export function ingestArtifact(
   // 1. Authorization guard — the absolute Gate 1 stop condition, in code.
   // In Gate 4 strict mode the activity registry is the authority. The legacy
   // coarse gate is not silently available: it requires an explicit opt-in.
+  const synthetic = artifact.synthetic === true;
+  // Gate 19: a synthetic artifact never skips the gate. It runs the same four
+  // activity checks; `synthetic` only narrows the accepted basis to
+  // SYNTHETIC_FIXTURE, so a fixture cannot borrow a counsel decision and a real
+  // document cannot borrow the fixture basis.
   const strictActivityMode =
-    !artifact.synthetic && options.enforceActivityAuthorization === true;
-  if (!artifact.synthetic && !strictActivityMode) {
+    synthetic || options.enforceActivityAuthorization === true;
+  // Defence in depth: a synthetic flag alone must not bypass the guard.
+  if (synthetic && !isSyntheticLocator(artifact.sourceUrl)) {
+    return fail("synthetic_flag_without_synthetic_locator");
+  }
+  // Gate 19: the locator is a claim about provenance, and the two fields must
+  // agree. A real artifact naming a synthetic locator is contradictory, not a
+  // fixture that forgot its flag.
+  if (!synthetic && artifact.sourceUrl.startsWith("synthetic://")) {
+    return fail("synthetic_locator_without_synthetic_flag");
+  }
+  // Gate 19: the fixture basis is not a legal basis. A caller that asks a real
+  // artifact to accept it is refused even when strict mode is off, so the
+  // request cannot sit in an options object waiting for a later strict run.
+  if (
+    !synthetic &&
+    (options.acceptedAuthorizationBases ?? []).includes("SYNTHETIC_FIXTURE")
+  ) {
+    return fail("synthetic_fixture_basis_not_allowed");
+  }
+  if (!synthetic && !strictActivityMode) {
     if (options.allowLegacySourceGate !== true)
       return fail("activity_authorization_required");
     if (
@@ -180,10 +222,6 @@ export function ingestArtifact(
       !options.ownerAuthorization?.reference
     )
       return fail("source_not_authorized");
-  }
-  // Defence in depth: a synthetic flag alone must not bypass the guard.
-  if (artifact.synthetic && !artifact.sourceUrl.startsWith("synthetic://")) {
-    return fail("synthetic_flag_without_synthetic_locator");
   }
 
   // 1b. Gate 4 activity-specific gate. When strict enforcement is requested,
@@ -213,13 +251,17 @@ export function ingestArtifact(
         return fail("authorization_audit_unavailable");
       return fail("activity_authorization_registry_missing");
     }
+    // A synthetic fixture has no counsel to ask: the only basis that can
+    // authorize one is a recorded SYNTHETIC_FIXTURE decision. A real artifact
+    // accepts counsel determinations by default and cannot opt into the fixture basis.
+    const acceptedBases: readonly AuthorizationBasis[] = synthetic
+      ? ["SYNTHETIC_FIXTURE"]
+      : (options.acceptedAuthorizationBases ?? ["COUNSEL_DETERMINATION"]);
     for (const activity of REQUIRED_INGEST_ACTIVITIES) {
       const check = registry.check(artifact.sourceId, activity, {
         now: options.authorizationNow,
         satisfiedConditions: options.satisfiedAuthorizationConditions,
-        allowedBases: options.acceptedAuthorizationBases ?? [
-          "COUNSEL_DETERMINATION",
-        ],
+        allowedBases: acceptedBases,
       });
       if (!check.allowed) {
         if (

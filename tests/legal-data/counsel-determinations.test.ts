@@ -16,6 +16,7 @@ import {
   syncToAuthorizationRegistry,
 } from "../../packages/legal-ingestion/src/index";
 import { buildSearchIndex } from "../../packages/legal-search/src/index";
+import { fixtureRegistry } from "../helpers/fixture-authorization.ts";
 
 const AUDIT = {
   service: new AuthorizationAuditService(new InMemoryAuthorizationAuditSink()),
@@ -532,6 +533,7 @@ describe("Gate 6 — reindex authorization", () => {
         pipelineVersion: "gate6.0.0",
         extractorVersion: "extract.3",
         normalizerVersion: "norm.3",
+        activityAuthorization: fixtureRegistry(SOURCE),
       },
     );
     expect(result.status, result.reason).toBe("SUCCEEDED");

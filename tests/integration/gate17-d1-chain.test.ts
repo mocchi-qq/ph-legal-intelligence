@@ -24,8 +24,6 @@
 //   record was removed. Nothing is deleted from the recorded history.
 // - `recordEffectClaim` records a claim, never a review: step 7 asserts the
 //   projection abstains until step 8 records one separately.
-// - the pipeline skips its activity checks for artifacts flagged `synthetic`,
-//   so both artifacts are ingested with the flag set false.
 import { beforeAll, describe, expect, it } from "vitest";
 import type {
   AuthorityStatusLookup,
@@ -128,12 +126,11 @@ const TARGET_CONTENT = [
 const SOURCE_ARTIFACT: ArtifactInput = {
   artifactId: "SYNTH-SRC-DOC-v1",
   sourceId: SOURCE_ID,
-  sourceUrl: "https://synthetic.invalid/SYNTH-SRC-DOC",
+  sourceUrl: "synthetic://SYNTH-SRC-DOC",
   mimeType: "text/plain",
   retrievedAt: FIXED_NOW,
-  // Not flagged synthetic: the Gate 4 activity checks only run on this path.
-  // The host is reserved `.invalid` and acquisition performs no request.
-  synthetic: false,
+  // A fixture, and its locator says so: the Gate 4 activity checks run for it too.
+  synthetic: true,
   content: SOURCE_CONTENT,
   documentType: "REPUBLIC_ACT",
   identityKey: SOURCE_IDENTITY_KEY,
@@ -151,10 +148,10 @@ const SOURCE_ARTIFACT: ArtifactInput = {
 const TARGET_ARTIFACT: ArtifactInput = {
   artifactId: "SYNTH-TARGET-DOC-v1",
   sourceId: SOURCE_ID,
-  sourceUrl: "https://synthetic.invalid/SYNTH-TARGET-DOC",
+  sourceUrl: "synthetic://SYNTH-TARGET-DOC",
   mimeType: "text/plain",
   retrievedAt: FIXED_NOW,
-  synthetic: false,
+  synthetic: true,
   content: TARGET_CONTENT,
   documentType: "REPUBLIC_ACT",
   identityKey: TARGET_IDENTITY_KEY,
@@ -173,7 +170,6 @@ const INGEST_OPTIONS = {
   extractorVersion: "extract.3",
   normalizerVersion: "norm.3",
   enforceActivityAuthorization: true as const,
-  acceptedAuthorizationBases: ["SYNTHETIC_FIXTURE"] as const,
   authorizationNow: FIXED_NOW,
   now: () => FIXED_NOW,
 };

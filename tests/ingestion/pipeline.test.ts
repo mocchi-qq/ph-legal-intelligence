@@ -5,12 +5,14 @@ import {
   emptyCorpusState,
   ingestArtifact,
 } from "../../packages/legal-ingestion/src/index";
+import { fixtureRegistry } from "../helpers/fixture-authorization.ts";
 
 const OPTS = {
   pipelineVersion: "gate1.0.0",
   extractorVersion: "extract.1",
   normalizerVersion: "norm.1",
   allowLegacySourceGate: true,
+  activityAuthorization: fixtureRegistry("synthetic_fixture"),
 };
 
 function lawArtifact(overrides: Partial<ArtifactInput> = {}): ArtifactInput {
@@ -70,7 +72,11 @@ describe("Gate 1 — bounded ingestion", () => {
     const store = CorpusStore.memory();
     const result = ingestArtifact(
       store,
-      lawArtifact({ synthetic: false, sourceId: "sc_elibrary" }),
+      lawArtifact({
+        synthetic: false,
+        sourceId: "sc_elibrary",
+        sourceUrl: "https://elibrary.judiciary.gov.ph/synthetic/1001",
+      }),
       OPTS,
     );
 
@@ -86,7 +92,11 @@ describe("Gate 1 — bounded ingestion", () => {
     const store = CorpusStore.memory();
     const result = ingestArtifact(
       store,
-      lawArtifact({ synthetic: false, sourceId: "authorized_test_source" }),
+      lawArtifact({
+        synthetic: false,
+        sourceId: "authorized_test_source",
+        sourceUrl: "https://example.test/synthetic/1001",
+      }),
       { ...OPTS, authorizedSourceIds: ["authorized_test_source"] },
     );
     expect(result.status).toBe("SUCCEEDED");
