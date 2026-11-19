@@ -75,7 +75,7 @@ describe("Gate 1 — bounded ingestion", () => {
       lawArtifact({
         synthetic: false,
         sourceId: "sc_elibrary",
-        sourceUrl: "https://elibrary.judiciary.gov.ph/synthetic/1001",
+        sourceUrl: "https://elibrary.judiciary.gov.ph/RA-1001",
       }),
       OPTS,
     );
@@ -95,7 +95,7 @@ describe("Gate 1 — bounded ingestion", () => {
       lawArtifact({
         synthetic: false,
         sourceId: "authorized_test_source",
-        sourceUrl: "https://example.test/synthetic/1001",
+        sourceUrl: "https://example.test/RA-1001",
       }),
       { ...OPTS, authorizedSourceIds: ["authorized_test_source"] },
     );

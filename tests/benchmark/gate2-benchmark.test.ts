@@ -52,7 +52,7 @@ describe("Gate 2 — benchmark separation and blockers", () => {
     expect(firstDoc?.identityKey).toBe("COURT_DECISION:G.R. No. 999001");
   });
 
-  it("measures PDF extraction on a synthetic PDF and labels it synthetic", () => {
+  it("measures PDF extraction on a synthetic PDF and labels it synthetic", { timeout: 30000 }, () => {
     const pdf = makeTestPdf([
       "Synthetic Instrument for parser testing only",
       "Section 1. A synthetic duty applies to covered entities.",

@@ -226,6 +226,8 @@ function acquisitionInput(
         ? new TextEncoder().encode(artifact.content)
         : artifact.content,
     acquisitionMethod: "synthetic_fixture",
+    // Pass the synthetic flag so acquisition can skip the URL scheme check for fixtures
+    synthetic: artifact.synthetic === true,
     // Deliberately not the authority in strict mode: the registry decides.
     authorization: {
       sourceId: artifact.sourceId,
